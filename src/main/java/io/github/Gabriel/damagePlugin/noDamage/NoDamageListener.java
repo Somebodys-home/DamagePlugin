@@ -1,27 +1,26 @@
-package io.github.Gabriel.damagePlugin;
+package io.github.Gabriel.damagePlugin.noDamage;
 
+import io.github.Gabriel.damagePlugin.DamagePlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.inventory.ItemStack;
 
-public class DamageAttributesListener implements Listener {
-    private DamageAttributesManager manager;
+public class NoDamageListener implements Listener {
+    private NoDamageManager manager;
 
-    public DamageAttributesListener(DamagePlugin damagePlugin) {
+    public NoDamageListener(DamagePlugin damagePlugin) {
         manager = damagePlugin.getDamageAttributesManager();
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent event) {
-        manager.removeAttributes(event.getItem().getItemStack(), event.getPlayer());
+        manager.removeAttributes(event.getItem().getItemStack());
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        manager.removeAttributes(event.getCurrentItem(), (Player) event.getClickedInventory().getHolder());
+        manager.removeAttributes(event.getCurrentItem());
     }
 }

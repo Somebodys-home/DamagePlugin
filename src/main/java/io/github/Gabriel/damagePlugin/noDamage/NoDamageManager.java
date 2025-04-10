@@ -1,27 +1,22 @@
-package io.github.Gabriel.damagePlugin;
+package io.github.Gabriel.damagePlugin.noDamage;
 
-import org.bukkit.Material;
+import io.github.Gabriel.damagePlugin.DamagePlugin;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.EquipmentSlotGroup;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.UUID;
 
-public class DamageAttributesManager {
+public class NoDamageManager {
     private DamagePlugin plugin;
 
-    public DamageAttributesManager(DamagePlugin plugin) {
+    public NoDamageManager(DamagePlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void removeAttributes(ItemStack item, Player player) {
+    public void removeAttributes(ItemStack item) {
         if (item == null || item.getType().isAir()) {
             return;
         }
