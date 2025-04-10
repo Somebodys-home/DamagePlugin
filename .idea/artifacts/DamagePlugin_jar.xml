@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DamagePlugin:jar">
+    <output-path>$PROJECT_DIR$/..</output-path>
+    <root id="archive" name="DamagePlugin.jar">
+      <element id="module-output" name="DamagePlugin" />
+    </root>
+  </artifact>
+</component>
