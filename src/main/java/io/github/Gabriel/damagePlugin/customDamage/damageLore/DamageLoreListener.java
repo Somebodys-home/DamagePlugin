@@ -2,7 +2,6 @@ package io.github.Gabriel.damagePlugin.customDamage.damageLore;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
 import io.github.Gabriel.damagePlugin.customDamage.DamageKeys;
-import io.github.Gabriel.damagePlugin.customDamage.DamageLoreUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;

@@ -28,9 +28,9 @@ public class SetDamageCommand implements CommandExecutor {
         String inputType = args[0].toLowerCase();
         String inputAmount = args[1];
 
-        double damage;
+        int damage;
         try {
-            damage = Double.parseDouble(inputAmount);
+            damage = Integer.parseInt(inputAmount);
         } catch (NumberFormatException e) {
             return true;
         }

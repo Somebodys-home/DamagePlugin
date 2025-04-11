@@ -10,14 +10,14 @@ import java.util.UUID;
 
 public class CustomDamager {
     private final DamagePlugin plugin;
-    public record DamageInstance(DamageType type, double damage) {}
+    public record DamageInstance(DamageType type, int damage) {}
     private final Map<UUID, DamageInstance> customDamageInstance = new HashMap<>();
 
     public CustomDamager(DamagePlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, double damage) {
+    public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, int damage) {
         UUID uuid = target.getUniqueId();
 
         customDamageInstance.put(uuid, new DamageInstance(type, damage));

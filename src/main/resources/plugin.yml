@@ -8,6 +8,3 @@ commands:
   setDamage:
     description: command for testing whatever
     usage: /<command>
-  checkDamage:
-    description: command for testing whatever
-    usage: /<command>

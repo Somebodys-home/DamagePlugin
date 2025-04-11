@@ -31,23 +31,23 @@ public class DamageKeys {
         return new NamespacedKey(plugin, key);
     }
 
-    public void setDamageKey(ItemStack itemStack, DamageType type, double damage) {
+    public void setDamageKey(ItemStack itemStack, DamageType type, int damage) {
         ItemMeta meta = itemStack.getItemMeta();
 
         if (meta != null) {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            pdc.set(damageKey(type), PersistentDataType.DOUBLE, damage);
+            pdc.set(damageKey(type), PersistentDataType.INTEGER, damage);
         }
 
         itemStack.setItemMeta(meta);
     }
 
-    public double getDamageKeyValue(ItemStack itemStack, DamageType type) {
+    public int getDamageKeyValue(ItemStack itemStack, DamageType type) {
         ItemMeta meta = itemStack.getItemMeta();
             assert meta != null;
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        return pdc.get(damageKey(type), PersistentDataType.DOUBLE).doubleValue();
+        return pdc.get(damageKey(type), PersistentDataType.INTEGER).intValue();
     }
 
     public boolean checkForDamageKey(ItemStack itemStack, DamageType type) {
@@ -55,7 +55,7 @@ public class DamageKeys {
 
         if (meta != null) {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            return pdc.has(damageKey(type), PersistentDataType.DOUBLE);
+            return pdc.has(damageKey(type), PersistentDataType.INTEGER);
         }
 
         return false;

@@ -1,6 +1,8 @@
+io\github\Gabriel\damagePlugin\customDamage\damageLore\DamageLoreUtil.class
 io\github\Gabriel\damagePlugin\customDamage\DamageType.class
 io\github\Gabriel\damagePlugin\customDamage\commands\CheckDamageCommand.class
 io\github\Gabriel\damagePlugin\customDamage\DamageKeys.class
+io\github\Gabriel\damagePlugin\customDamage\damageLore\DamageLoreListener.class
 io\github\Gabriel\damagePlugin\customDamage\EntityTookCustomDamageEvent.class
 io\github\Gabriel\damagePlugin\customDamage\commands\SetDamageCommand.class
 io\github\Gabriel\damagePlugin\DamagePlugin.class

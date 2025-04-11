@@ -1,5 +1,7 @@
-package io.github.Gabriel.damagePlugin.customDamage;
+package io.github.Gabriel.damagePlugin.customDamage.damageLore;
 
+import io.github.Gabriel.damagePlugin.customDamage.DamageKeys;
+import io.github.Gabriel.damagePlugin.customDamage.DamageType;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -13,47 +15,54 @@ public class DamageLoreUtil {
     public static void updateLoreWithElementalDamage(ItemStack item, DamageKeys damageKeys) {
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
-        if (item == null || item.getType().isAir()) return;
+        if (item.getType().isAir()) return;
         if (meta == null) return;
 
-        boolean found = false;
         String element = "";
+        boolean found = false;
         ChatColor color = null;
         for (DamageType type : DamageType.values()) {
             switch (type.name()) {
                 case "PHYSICAL" -> {
                     element = "Physical";
-                    color = 'e';
+                    color = ChatColor.DARK_RED;
                 }
-                case "PHYSICAL" -> {
-
+                case "FIRE" -> {
+                    element = "Fire";
+                    color = ChatColor.RED;
                 }
-                case "PHYSICAL" -> {
-
+                case "COLD" -> {
+                    element = "Cold";
+                    color = ChatColor.AQUA;
                 }
-                case "PHYSICAL" -> {
-
+                case "EARTH" -> {
+                    element = "Earth";
+                    color = ChatColor.DARK_GREEN;
                 }
-                case "PHYSICAL" -> {
-
+                case "LIGHTNING" -> {
+                    element = "Lightning";
+                    color = ChatColor.YELLOW;
                 }
-                case "PHYSICAL" -> {
-
+                case "AIR" -> {
+                    element = "Air";
+                    color = ChatColor.GRAY;
                 }
-                case "PHYSICAL" -> {
-
+                case "LIGHT" -> {
+                    element = "Light";
+                    color = ChatColor.WHITE;
                 }
-                case "PHYSICAL" -> {
-
+                case "DARK" -> {
+                    element = "Dark";
+                    color = ChatColor.DARK_PURPLE;
                 }
-                case "PHYSICAL" -> {
-
+                case "PURE" -> {
+                    element = "Pure";
+                    color = ChatColor.WHITE;
                 }
             }
             if (damageKeys.checkForDamageKey(item, type)) {
-                double value = damageKeys.getDamageKeyValue(item, type);
-                lore.add(ChatColor.translateAlternateColorCodes('&', "&7&e"))
-                lore.add("§7• §e" + element + ": §f" + value);
+                int value = damageKeys.getDamageKeyValue(item, type);
+                lore.add(color + "+ " + value + " " + element + " Damage");
                 found = true;
             }
         }
