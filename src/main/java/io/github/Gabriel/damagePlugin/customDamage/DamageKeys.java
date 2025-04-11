@@ -1,0 +1,63 @@
+package io.github.Gabriel.damagePlugin.customDamage;
+
+import io.github.Gabriel.damagePlugin.DamagePlugin;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+
+public class DamageKeys {
+    private DamagePlugin plugin;
+
+    public DamageKeys(DamagePlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public NamespacedKey damageKey(DamageType type) {
+        String key = "";
+        switch (type) {
+            case PHYSICAL -> key = "physical";
+            case FIRE -> key = "fire";
+            case COLD -> key = "cold";
+            case EARTH -> key = "earth";
+            case LIGHTNING -> key = "lightning";
+            case AIR -> key = "air";
+            case LIGHT -> key = "light";
+            case DARK -> key = "dark";
+            case PURE -> key = "pure";
+        }
+
+        return new NamespacedKey(plugin, key);
+    }
+
+    public void setDamageKey(ItemStack itemStack, DamageType type, double damage) {
+        ItemMeta meta = itemStack.getItemMeta();
+
+        if (meta != null) {
+            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+            pdc.set(damageKey(type), PersistentDataType.DOUBLE, damage);
+        }
+
+        itemStack.setItemMeta(meta);
+    }
+
+    public double getDamageKeyValue(ItemStack itemStack, DamageType type) {
+        ItemMeta meta = itemStack.getItemMeta();
+            assert meta != null;
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        return pdc.get(damageKey(type), PersistentDataType.DOUBLE).doubleValue();
+    }
+
+    public boolean checkForDamageKey(ItemStack itemStack, DamageType type) {
+        ItemMeta meta = itemStack.getItemMeta();
+
+        if (meta != null) {
+            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+            return pdc.has(damageKey(type), PersistentDataType.DOUBLE);
+        }
+
+        return false;
+    }
+}

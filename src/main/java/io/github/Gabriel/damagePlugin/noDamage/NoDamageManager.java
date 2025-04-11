@@ -6,6 +6,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,10 +27,12 @@ public class NoDamageManager {
             return;
         }
 
-        AttributeModifier damageModifier = new AttributeModifier(new NamespacedKey(plugin, "no_damage"), 0.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY);
+        // AttributeModifier damageModifier = new AttributeModifier(new NamespacedKey(plugin, "no_damage"), 0.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY);
 
         meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damageModifier);
+        // meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damageModifier);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
     }
 }
