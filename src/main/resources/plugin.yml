@@ -1,0 +1,13 @@
+name: DamagePlugin
+version: '1.0-SNAPSHOT'
+main: io.github.Gabriel.damagePlugin.DamagePlugin
+api-version: '1.21'
+authors: [ Gabriel Nicolas ]
+description: Plugin for my mc server for its abilites
+commands:
+  setDamage:
+    description: command for testing whatever
+    usage: /<command>
+  checkDamage:
+    description: command for testing whatever
+    usage: /<command>
