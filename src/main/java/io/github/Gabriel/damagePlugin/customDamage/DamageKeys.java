@@ -15,20 +15,7 @@ public class DamageKeys {
     }
 
     public NamespacedKey damageKey(DamageType type) {
-        String key = "";
-        switch (type) {
-            case PHYSICAL -> key = "physical";
-            case FIRE -> key = "fire";
-            case COLD -> key = "cold";
-            case EARTH -> key = "earth";
-            case LIGHTNING -> key = "lightning";
-            case AIR -> key = "air";
-            case LIGHT -> key = "light";
-            case DARK -> key = "dark";
-            case PURE -> key = "pure";
-        }
-
-        return new NamespacedKey(plugin, key);
+        return new NamespacedKey(plugin, DamageType.getDamageString(type).toLowerCase());
     }
 
     public void setDamageKey(ItemStack itemStack, DamageType type, int damage) {

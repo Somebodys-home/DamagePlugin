@@ -45,7 +45,7 @@ public class SetDamageCommand implements CommandExecutor {
             case "light"    -> damageKeys.setDamageKey(item, DamageType.LIGHT, damage);
             case "dark"     -> damageKeys.setDamageKey(item, DamageType.DARK, damage);
             case "pure"     -> damageKeys.setDamageKey(item, DamageType.PURE, damage);
-            default         -> { return true; } // silently ignore invalid types
+            default         -> { return true; }
         }
 
         player.getInventory().setItemInMainHand(item);

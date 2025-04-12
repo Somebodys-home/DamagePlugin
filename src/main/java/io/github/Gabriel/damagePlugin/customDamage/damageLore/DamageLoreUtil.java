@@ -2,7 +2,6 @@ package io.github.Gabriel.damagePlugin.customDamage.damageLore;
 
 import io.github.Gabriel.damagePlugin.customDamage.DamageKeys;
 import io.github.Gabriel.damagePlugin.customDamage.DamageType;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,51 +17,11 @@ public class DamageLoreUtil {
         if (item.getType().isAir()) return;
         if (meta == null) return;
 
-        String element = "";
         boolean found = false;
-        ChatColor color = null;
         for (DamageType type : DamageType.values()) {
-            switch (type.name()) {
-                case "PHYSICAL" -> {
-                    element = "Physical";
-                    color = ChatColor.DARK_RED;
-                }
-                case "FIRE" -> {
-                    element = "Fire";
-                    color = ChatColor.RED;
-                }
-                case "COLD" -> {
-                    element = "Cold";
-                    color = ChatColor.AQUA;
-                }
-                case "EARTH" -> {
-                    element = "Earth";
-                    color = ChatColor.DARK_GREEN;
-                }
-                case "LIGHTNING" -> {
-                    element = "Lightning";
-                    color = ChatColor.YELLOW;
-                }
-                case "AIR" -> {
-                    element = "Air";
-                    color = ChatColor.GRAY;
-                }
-                case "LIGHT" -> {
-                    element = "Light";
-                    color = ChatColor.WHITE;
-                }
-                case "DARK" -> {
-                    element = "Dark";
-                    color = ChatColor.DARK_PURPLE;
-                }
-                case "PURE" -> {
-                    element = "Pure";
-                    color = ChatColor.WHITE;
-                }
-            }
             if (damageKeys.checkForDamageKey(item, type)) {
                 int value = damageKeys.getDamageKeyValue(item, type);
-                lore.add(color + "+ " + value + " " + element + " Damage");
+                lore.add(DamageType.getDamageColor(type) + "+ " + value + " " + DamageType.getDamageColor(type) + " Damage");
                 found = true;
             }
         }
