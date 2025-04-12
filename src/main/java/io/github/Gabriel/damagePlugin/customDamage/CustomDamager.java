@@ -1,6 +1,7 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -17,16 +18,23 @@ public class CustomDamager {
         this.plugin = plugin;
     }
 
-    public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, int damage) {
+    public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, double damage, DamageSourceType source) {
         UUID uuid = target.getUniqueId();
 
-        customDamageInstance.put(uuid, new DamageInstance(type, damage));
-        target.damage(damage, damager);
+        // Only fire your custom damage event once here, directly
+        EntityTookCustomDamageEvent event = new EntityTookCustomDamageEvent(target, damager, type, damage);
+        Bukkit.getPluginManager().callEvent(event);
 
-        if (damager instanceof Player player && damage != 0) {
-            player.sendMessage(DamageType.getDamageColor(type) + "You just did " + damage + " " + DamageType.getDamageString(type) + " damage!");
+        if (event.isCancelled()) return;
+
+        customDamageInstance.put(uuid, new DamageInstance(type, damage));
+        target.damage(event.getDamage(), damager); // apply clean damage
+
+        if (damager instanceof Player player && source == DamageSourceType.ABILITY) {
+            player.sendMessage("§c[ABILITY] §fDealt " + event.getDamage() + " " + type.name().toLowerCase() + " damage.");
         }
     }
+
 
     public void clearDamageInstance(UUID uuid) {
         customDamageInstance.remove(uuid);
