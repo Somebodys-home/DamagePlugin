@@ -23,7 +23,7 @@ public class CustomDamager {
         customDamageInstance.put(uuid, new DamageInstance(type, damage));
         target.damage(damage, damager);
 
-        if (damager instanceof Player player) {
+        if (damager instanceof Player player && damage != 0) {
             player.sendMessage(DamageType.getDamageColor(type) + "You just did " + damage + " " + DamageType.getDamageString(type) + " damage!");
         }
     }
