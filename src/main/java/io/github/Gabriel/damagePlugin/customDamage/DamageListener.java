@@ -34,13 +34,11 @@ public class DamageListener implements Listener {
         ItemStack weapon = player.getInventory().getItemInMainHand();
         if (weapon == null || weapon.getType() == Material.AIR) return;
 
-        int totalDamage = 0;
         Map<DamageType, Integer> appliedTypes = new HashMap<>();
 
         for (DamageType type : DamageType.values()) {
             if (damageKeys.checkForDamageKey(weapon, type)) {
                 int value = damageKeys.getDamageKeyValue(weapon, type);
-                totalDamage += value;
                 appliedTypes.put(type, value);
             }
         }
@@ -49,12 +47,8 @@ public class DamageListener implements Listener {
             return;
         }
 
-        // You could fire an event here with full type breakdown if needed
-
-        // Prevent recursion
         damagee.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
-        // Apply each elemental type separately (or summed, depending on how CustomDamager is set up)
         for (Map.Entry<DamageType, Integer> entry : appliedTypes.entrySet()) {
             customDamager.doCustomDamage(damagee, player, entry.getKey(), entry.getValue());
         }
