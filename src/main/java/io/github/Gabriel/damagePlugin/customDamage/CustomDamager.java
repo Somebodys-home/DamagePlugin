@@ -20,11 +20,9 @@ public class CustomDamager {
 
     public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, int damage, DamageSourceType source) {
         UUID uuid = target.getUniqueId();
-
-        // Only fire your custom damage event once here, directly
         EntityTookCustomDamageEvent event = new EntityTookCustomDamageEvent(target, damager, type, damage);
-        Bukkit.getPluginManager().callEvent(event);
 
+        Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return;
 
         customDamageInstance.put(uuid, new DamageInstance(type, damage));
