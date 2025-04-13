@@ -47,7 +47,7 @@ public class DamageListener implements Listener {
             damagee.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
             for (Map.Entry<DamageType, Integer> entry : appliedTypes.entrySet()) {
-                customDamager.doCustomDamage(damagee, player, entry.getKey(), entry.getValue(), DamageSourceType.WEAPON);
+                customDamager.doCustomDamage(damagee, player, entry.getKey(), entry.getValue());
             }
 
             event.setCancelled(true);
