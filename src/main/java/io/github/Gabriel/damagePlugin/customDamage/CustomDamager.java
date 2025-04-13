@@ -18,7 +18,7 @@ public class CustomDamager {
         this.plugin = plugin;
     }
 
-    public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, int damage, DamageSourceType source) {
+    public void doCustomDamage(LivingEntity target, LivingEntity damager, DamageType type, double damage, DamageSourceType source) {
         UUID uuid = target.getUniqueId();
         EntityTookCustomDamageEvent event = new EntityTookCustomDamageEvent(target, damager, type, damage);
 
