@@ -55,4 +55,9 @@ public class DamageKeys {
 
         return false;
     }
+
+    public NamespacedKey getKeyFromDamageType(DamageType type) {
+        return NamespacedKey.fromString(plugin.getName().toLowerCase() + ":" + type.name().toLowerCase());
+    }
+
 }
