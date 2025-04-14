@@ -14,7 +14,7 @@ public class DamageKeys {
         this.plugin = plugin;
     }
 
-    public NamespacedKey damageKey(DamageType type) {
+    public NamespacedKey createDamageKey(DamageType type) {
         return new NamespacedKey(plugin, DamageType.getDamageString(type).toLowerCase());
     }
 
@@ -23,7 +23,7 @@ public class DamageKeys {
 
         if (meta != null) {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            pdc.set(damageKey(type), PersistentDataType.INTEGER, damage);
+            pdc.set(createDamageKey(type), PersistentDataType.INTEGER, damage);
         }
 
         itemStack.setItemMeta(meta);
@@ -34,7 +34,7 @@ public class DamageKeys {
             assert meta != null;
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        return pdc.get(damageKey(type), PersistentDataType.INTEGER).intValue();
+        return pdc.get(createDamageKey(type), PersistentDataType.INTEGER).intValue();
     }
 
     public boolean checkForDamageKey(ItemStack itemStack, DamageType type) {
@@ -42,9 +42,14 @@ public class DamageKeys {
 
         if (meta != null) {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-            return pdc.has(damageKey(type), PersistentDataType.INTEGER);
+            return pdc.has(createDamageKey(type), PersistentDataType.INTEGER);
         }
 
         return false;
     }
+
+    public NamespacedKey getKeyFromDamageType(DamageType type) {
+        return NamespacedKey.fromString(plugin.getName().toLowerCase() + ":" + type.name().toLowerCase());
+    }
+
 }
