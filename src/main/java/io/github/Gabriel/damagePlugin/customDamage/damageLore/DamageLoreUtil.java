@@ -21,7 +21,7 @@ public class DamageLoreUtil {
         for (DamageType type : DamageType.values()) {
             if (damageKeys.checkForDamageKey(item, type)) {
                 int value = damageKeys.getDamageKeyValue(item, type);
-                lore.add(DamageType.getDamageColor(type) + "+ " + value + " " + DamageType.getDamageColor(type) + " Damage");
+                lore.add(DamageType.getDamageColor(type) + "+ " + value + " " + DamageType.getDamageString(type) + " Damage");
                 found = true;
             }
         }
