@@ -1,54 +1,41 @@
 package io.github.Gabriel.damagePlugin.customDamage.commands;
 
-import io.github.Gabriel.damagePlugin.DamagePlugin;
-import io.github.Gabriel.damagePlugin.customDamage.DamageKeys;
-import io.github.Gabriel.damagePlugin.customDamage.DamageType;
+import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
+
 public class SetDamageCommand implements CommandExecutor {
-
-    private final DamageKeys damageKeys;
-
-    public SetDamageCommand(DamagePlugin plugin) {
-        this.damageKeys = plugin.getDamageKeys();
-    }
+    public SetDamageCommand() {}
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player)) return true;
-        if (args.length < 2) return true;
+        if (sender instanceof Player player && args.length < 2) {
+            ItemStack weapon = player.getInventory().getItemInMainHand();
+            DamageKey damageKey = new DamageKey(weapon);
+            String inputType = args[0].toLowerCase();
+            int damage = Integer.parseInt(args[1]);
 
-        ItemStack item = player.getInventory().getItemInMainHand();
-        if (!item.hasItemMeta()) return true;
+            switch (inputType) {
+                case "physical" -> damageKey.setDamage(PHYSICAL, damage);
+                case "fire"     -> damageKey.setDamage(FIRE, damage);
+                case "cold"     -> damageKey.setDamage(COLD, damage);
+                case "earth"    -> damageKey.setDamage(EARTH, damage);
+                case "lightning"-> damageKey.setDamage(LIGHTNING, damage);
+                case "air"      -> damageKey.setDamage(AIR, damage);
+                case "light"    -> damageKey.setDamage(LIGHT, damage);
+                case "dark"     -> damageKey.setDamage(DARK, damage);
+                case "pure"     -> damageKey.setDamage(PURE, damage);
+                default         -> { return true; }
+            }
 
-        String inputType = args[0].toLowerCase();
-        String inputAmount = args[1];
-
-        int damage;
-        try {
-            damage = Integer.parseInt(inputAmount);
-        } catch (NumberFormatException e) {
-            return true;
+            player.getInventory().setItemInMainHand(weapon);
         }
 
-        switch (inputType) {
-            case "physical" -> damageKeys.setDamageKey(item, DamageType.PHYSICAL, damage);
-            case "fire"     -> damageKeys.setDamageKey(item, DamageType.FIRE, damage);
-            case "cold"     -> damageKeys.setDamageKey(item, DamageType.COLD, damage);
-            case "earth"    -> damageKeys.setDamageKey(item, DamageType.EARTH, damage);
-            case "lightning"-> damageKeys.setDamageKey(item, DamageType.LIGHTNING, damage);
-            case "air"      -> damageKeys.setDamageKey(item, DamageType.AIR, damage);
-            case "light"    -> damageKeys.setDamageKey(item, DamageType.LIGHT, damage);
-            case "dark"     -> damageKeys.setDamageKey(item, DamageType.DARK, damage);
-            case "pure"     -> damageKeys.setDamageKey(item, DamageType.PURE, damage);
-            default         -> { return true; }
-        }
-
-        player.getInventory().setItemInMainHand(item);
         return true;
     }
 }

@@ -8,31 +8,31 @@ import io.github.Gabriel.damagePlugin.noDamage.NoDamageManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DamagePlugin extends JavaPlugin {
+    private static DamagePlugin damagePlugin;
     private NoDamageManager noDamageManager;
-    private DamageKeys damageKeys;
     private CustomDamager customDamager;
 
     @Override
     public void onEnable() {
+        damagePlugin = this;
         noDamageManager = new NoDamageManager(this);
-        damageKeys = new DamageKeys(this);
         customDamager = new CustomDamager(this);
 
-        getCommand("setDamage").setExecutor(new SetDamageCommand(this));
+        getCommand("setDamage").setExecutor(new SetDamageCommand());
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
-        getServer().getPluginManager().registerEvents(new DamageLoreListener(this), this);
+        getServer().getPluginManager().registerEvents(new DamageLoreListener(), this);
     }
 
     public NoDamageManager getDamageAttributesManager() {
         return noDamageManager;
     }
 
-    public DamageKeys getDamageKeys() {
-        return damageKeys;
-    }
-
     public CustomDamager getCustomDamager() {
         return customDamager;
+    }
+
+    public static DamagePlugin getInstance() {
+        return damagePlugin;
     }
 }

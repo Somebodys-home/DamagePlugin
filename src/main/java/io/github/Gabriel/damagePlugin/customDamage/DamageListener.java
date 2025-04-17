@@ -15,13 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DamageListener implements Listener {
-    private final DamageKeys damageKeys;
     private final CustomDamager customDamager;
     private final DamagePlugin plugin;
 
     public DamageListener(DamagePlugin plugin) {
         this.plugin = plugin;
-        this.damageKeys = plugin.getDamageKeys();
         this.customDamager = plugin.getCustomDamager();
     }
 
@@ -30,12 +28,12 @@ public class DamageListener implements Listener {
         if (event.getEntity() instanceof LivingEntity damagee && event.getDamager() instanceof Player player && !(damagee.hasMetadata("custom-damage-processing"))) {
             ItemStack weapon = player.getInventory().getItemInMainHand();
             if (weapon.getType() == Material.AIR) return;
-
             Map<DamageType, Integer> appliedTypes = new HashMap<>();
 
+            DamageKey damageKey = new DamageKey(weapon);
             for (DamageType type : DamageType.values()) {
-                if (damageKeys.checkForDamageKey(weapon, type)) {
-                    int value = damageKeys.getDamageKeyValue(weapon, type);
+                if (damageKey.checkForDamageType(type)) {
+                    int value = damageKey.getDamageValue(type);
                     appliedTypes.put(type, value);
                 }
             }

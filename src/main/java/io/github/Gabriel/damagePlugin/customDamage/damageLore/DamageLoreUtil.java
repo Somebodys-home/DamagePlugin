@@ -1,6 +1,6 @@
 package io.github.Gabriel.damagePlugin.customDamage.damageLore;
 
-import io.github.Gabriel.damagePlugin.customDamage.DamageKeys;
+import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
 import io.github.Gabriel.damagePlugin.customDamage.DamageType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -11,16 +11,16 @@ import java.util.List;
 
 public class DamageLoreUtil {
 
-    public static void updateLoreWithElementalDamage(ItemStack item, DamageKeys damageKeys) {
+    public static void updateLoreWithElementalDamage(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
-        if (item.getType().isAir()) return;
-        if (meta == null) return;
-
         boolean found = false;
+        DamageKey damageKey = new DamageKey(item);
+
+        if (item.getType().isAir()) return;
         for (DamageType type : DamageType.values()) {
-            if (damageKeys.checkForDamageKey(item, type)) {
-                int value = damageKeys.getDamageKeyValue(item, type);
+            if (damageKey.checkForDamageType(type)) {
+                int value = damageKey.getDamageValue(type);
                 lore.add(DamageType.getDamageColor(type) + "+ " + value + " " + DamageType.getDamageString(type) + " Damage");
                 found = true;
             }
