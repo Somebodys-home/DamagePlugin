@@ -11,14 +11,19 @@ import java.util.Objects;
 public class DamageKey {
     private final ItemStack weapon;
     private final PersistentDataContainer weaponContainer;
+    private final DamagePlugin plugin;
 
     public DamageKey(ItemStack weapon) {
         this.weapon = weapon;
         this.weaponContainer = Objects.requireNonNull(weapon.getItemMeta()).getPersistentDataContainer();
+        this.plugin = DamagePlugin.getInstance();
+        if (this.plugin == null) {
+            throw new IllegalStateException("DamagePlugin instance is not available");
+        }
     }
 
     private NamespacedKey getKeyFor(DamageType type) {
-        return new NamespacedKey(DamagePlugin.getInstance(), DamageType.getDamageString(type));
+        return new NamespacedKey(plugin, DamageType.getDamageString(type));
     }
 
     public void setDamage(DamageType type, int damage) {
@@ -61,6 +66,6 @@ public class DamageKey {
     }
 
     private NamespacedKey getMetaKey() {
-        return new NamespacedKey(DamagePlugin.getInstance(), "damage_type");
+        return new NamespacedKey(plugin, "damage_type");
     }
 }
