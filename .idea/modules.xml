@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DamagePlugin.iml" filepath="$PROJECT_DIR$/DamagePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/DamagePlugin.iml" filepath="$PROJECT_DIR$/.idea/DamagePlugin.iml" />
     </modules>
   </component>
 </project>

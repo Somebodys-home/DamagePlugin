@@ -9,47 +9,58 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.Objects;
 
 public class DamageKey {
-    private static NamespacedKey damageKey = new NamespacedKey(DamagePlugin.getInstance(), "no_damage_set");
     private final ItemStack weapon;
-    private PersistentDataContainer weaponContainer;
+    private final PersistentDataContainer weaponContainer;
 
     public DamageKey(ItemStack weapon) {
         this.weapon = weapon;
-        weaponContainer = Objects.requireNonNull(weapon.getItemMeta()).getPersistentDataContainer();
+        this.weaponContainer = Objects.requireNonNull(weapon.getItemMeta()).getPersistentDataContainer();
+    }
+
+    private NamespacedKey getKeyFor(DamageType type) {
+        return new NamespacedKey(DamagePlugin.getInstance(), DamageType.getDamageString(type));
     }
 
     public void setDamage(DamageType type, int damage) {
-        damageKey = new NamespacedKey(DamagePlugin.getInstance(), DamageType.getDamageString(type));
-        weaponContainer.set(damageKey, PersistentDataType.INTEGER, damage);
+        NamespacedKey key = getKeyFor(type);
+        weaponContainer.set(key, PersistentDataType.INTEGER, damage);
+        // Store damage type as string too
+        weaponContainer.set(getMetaKey(), PersistentDataType.STRING, DamageType.getDamageString(type));
     }
 
     public int getDamageValue(DamageType type) {
+        NamespacedKey key = getKeyFor(type);
         if (checkForDamageType(type)) {
-            return weaponContainer.get(damageKey, PersistentDataType.INTEGER).intValue();
+            return weaponContainer.get(key, PersistentDataType.INTEGER);
         }
         return -1;
     }
 
     public DamageType getDamageType() {
-        switch (weaponContainer.get(damageKey, PersistentDataType.STRING)) {
-            case "Physical" -> {return DamageType.PHYSICAL;}
-            case "Fire" -> {return DamageType.FIRE;}
-            case "Cold" -> {return DamageType.COLD;}
-            case "Earth" -> {return DamageType.EARTH;}
-            case "Lightning" -> {return DamageType.LIGHTNING;}
-            case "Air" -> {return DamageType.AIR;}
-            case "Light" -> {return DamageType.LIGHT;}
-            case "Dark" -> {return DamageType.DARK;}
-            case "Pure" -> {return DamageType.PURE;}
-            case null, default -> {return null;}
-        }
+        String storedType = weaponContainer.get(getMetaKey(), PersistentDataType.STRING);
+        if (storedType == null) return null;
+
+        return switch (storedType) {
+            case "Physical" -> DamageType.PHYSICAL;
+            case "Fire"     -> DamageType.FIRE;
+            case "Cold"     -> DamageType.COLD;
+            case "Earth"    -> DamageType.EARTH;
+            case "Lightning"-> DamageType.LIGHTNING;
+            case "Air"      -> DamageType.AIR;
+            case "Light"    -> DamageType.LIGHT;
+            case "Dark"     -> DamageType.DARK;
+            case "Pure"     -> DamageType.PURE;
+            default         -> null;
+        };
     }
+
     public boolean checkForDamageType(DamageType type) {
         String typeString = DamageType.getDamageString(type);
+        String stored = weaponContainer.get(getMetaKey(), PersistentDataType.STRING);
+        return typeString.equals(stored);
+    }
 
-        if (weaponContainer.has(damageKey)) {
-            return weaponContainer.get(damageKey, PersistentDataType.STRING).equals(typeString);
-        }
-        return false;
+    private NamespacedKey getMetaKey() {
+        return new NamespacedKey(DamagePlugin.getInstance(), "damage_type");
     }
 }
