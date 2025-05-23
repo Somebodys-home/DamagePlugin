@@ -30,7 +30,7 @@ public class DamageListener implements Listener {
             if (weapon.getType() == Material.AIR) return;
             Map<DamageType, Integer> appliedTypes = new HashMap<>();
 
-            DamageKey damageKey = new DamageKey(weapon, plugin);
+            DamageKey damageKey = new DamageKey(weapon);
             for (DamageType type : DamageType.values()) {
                 if (damageKey.checkForDamageType(type)) {
                     int value = damageKey.getDamageValue(type);

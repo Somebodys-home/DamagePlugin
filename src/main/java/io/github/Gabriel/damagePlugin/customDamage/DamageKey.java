@@ -13,10 +13,13 @@ public class DamageKey {
     private final PersistentDataContainer weaponContainer;
     private final DamagePlugin plugin;
 
-    public DamageKey(ItemStack weapon, DamagePlugin plugin) {
+    public DamageKey(ItemStack weapon) {
         this.weapon = weapon;
         this.weaponContainer = Objects.requireNonNull(weapon.getItemMeta()).getPersistentDataContainer();
-        this.plugin = plugin;
+        this.plugin = DamagePlugin.getInstance();
+        if (this.plugin == null) {
+            throw new IllegalStateException("DamagePlugin instance is not available");
+        }
     }
 
     private NamespacedKey getKeyFor(DamageType type) {
@@ -26,6 +29,7 @@ public class DamageKey {
     public void setDamage(DamageType type, int damage) {
         NamespacedKey key = getKeyFor(type);
         weaponContainer.set(key, PersistentDataType.INTEGER, damage);
+        // Store damage type as string too
         weaponContainer.set(getMetaKey(), PersistentDataType.STRING, DamageType.getDamageString(type));
     }
 
