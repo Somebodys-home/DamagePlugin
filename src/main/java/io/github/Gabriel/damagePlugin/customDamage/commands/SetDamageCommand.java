@@ -1,5 +1,6 @@
 package io.github.Gabriel.damagePlugin.customDamage.commands;
 
+import io.github.Gabriel.damagePlugin.DamagePlugin;
 import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,13 +11,16 @@ import org.bukkit.inventory.ItemStack;
 import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
 
 public class SetDamageCommand implements CommandExecutor {
-    public SetDamageCommand() {}
+    private DamagePlugin plugin;
+    public SetDamageCommand(DamagePlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player && args.length < 2) {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageKey damageKey = new DamageKey(weapon);
+            DamageKey damageKey = new DamageKey(weapon, plugin);
             String inputType = args[0].toLowerCase();
             int damage = Integer.parseInt(args[1]);
 

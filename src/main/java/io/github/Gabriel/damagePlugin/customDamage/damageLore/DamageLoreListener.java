@@ -1,5 +1,6 @@
 package io.github.Gabriel.damagePlugin.customDamage.damageLore;
 
+import io.github.Gabriel.damagePlugin.DamagePlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -9,6 +10,11 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class DamageLoreListener implements Listener {
+    private DamagePlugin plugin;
+
+    public DamageLoreListener(DamagePlugin plugin) {
+        this.plugin = plugin;
+    }
     public DamageLoreListener() {}
 
     @EventHandler
@@ -37,6 +43,6 @@ public class DamageLoreListener implements Listener {
 
     private void update(ItemStack item) {
         if (item == null || item.getType().isAir()) return;
-        DamageLoreUtil.updateLoreWithElementalDamage(item);
+        DamageLoreUtil.updateLoreWithElementalDamage(item, plugin);
     }
 }
