@@ -10,21 +10,28 @@ import java.util.UUID;
 
 public class CustomDamager {
     private final DamagePlugin plugin;
-    public record DamageInstance(DamageType type, int damage) {}
+    public record DamageInstance(DamageType type, double damage) {}
     private final Map<UUID, DamageInstance> customDamageInstance = new HashMap<>();
 
     public CustomDamager(DamagePlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void doDamage(LivingEntity target, LivingEntity damager, DamageType type, int damage) {
+    public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         UUID uuid = target.getUniqueId();
+        double totalDamage = 0;
 
-        customDamageInstance.put(uuid, new DamageInstance(type, damage));
-        target.damage(damage, damager);
+        for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+            customDamageInstance.put(uuid, new DamageInstance(entry.getKey(), entry.getValue()));
+            totalDamage += entry.getValue();
 
-        if (damager instanceof Player player && damage != 0) {
-            player.sendMessage(DamageType.getDamageColor(type) + "You just did " + damage + " " + DamageType.getDamageString(type) + " damage!");
+            if (damager instanceof Player player) {
+                player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " damage!");
+            }
+        }
+
+        if (totalDamage > 0) {
+            target.damage(totalDamage, damager);
         }
     }
 

@@ -1,37 +1,42 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
+import io.github.Gabriel.damagePlugin.customDamage.damageLore.DamageLoreUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Objects;
 
 public class DamageKey {
     private final DamagePlugin plugin;
     private final ItemStack weapon;
+    private final ItemMeta meta;
     private final PersistentDataContainer weaponContainer;
 
     public DamageKey(ItemStack weapon) {
         this.plugin = DamagePlugin.getInstance();
         this.weapon = weapon;
-        this.weaponContainer = Objects.requireNonNull(weapon.getItemMeta()).getPersistentDataContainer();
+        this.meta = weapon.getItemMeta();
+        assert meta != null;
+        this.weaponContainer = meta.getPersistentDataContainer();
     }
 
     private NamespacedKey getKeyFor(DamageType type) {
         return new NamespacedKey(plugin, DamageType.getDamageString(type));
     }
 
-    public void setDamage(DamageType type, int damage) {
+    public void setDamage(DamageType type, double damage) {
         NamespacedKey key = getKeyFor(type);
-        weaponContainer.set(key, PersistentDataType.INTEGER, damage);
-        // Store damage type as string too
-        weaponContainer.set(getMetaKey(), PersistentDataType.STRING, DamageType.getDamageString(type));
+
+        weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
+        weapon.setItemMeta(meta);
         DamageLoreUtil.updateLoreWithElementalDamage(weapon);
     }
 
-    public int getDamageValue(DamageType type) {
+
+
+    public double getDamageValue(DamageType type) {
         NamespacedKey key = getKeyFor(type);
         if (checkForDamageType(type)) {
             return weaponContainer.get(key, PersistentDataType.INTEGER);
@@ -58,9 +63,8 @@ public class DamageKey {
     }
 
     public boolean checkForDamageType(DamageType type) {
-        String typeString = DamageType.getDamageString(type);
-        String stored = weaponContainer.get(getMetaKey(), PersistentDataType.STRING);
-        return typeString.equals(stored);
+        NamespacedKey key = getKeyFor(type);
+        return weaponContainer.has(key, PersistentDataType.INTEGER);
     }
 
     private NamespacedKey getMetaKey() {

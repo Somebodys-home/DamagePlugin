@@ -6,5 +6,8 @@ authors: [ Gabriel Nicolas ]
 description: Plugin for my mc server for its abilites
 commands:
   setDamage:
-    description: command for testing whatever
+    description: set the damage on an item
+    usage: /<command>
+  checkDamages:
+    description: check the elemental damages on an item
     usage: /<command>

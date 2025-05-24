@@ -27,10 +27,7 @@ public class NoDamageManager {
             return;
         }
 
-        // AttributeModifier damageModifier = new AttributeModifier(new NamespacedKey(plugin, "no_damage"), 0.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.ANY);
-
         meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
-        // meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, damageModifier);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         item.setItemMeta(meta);
