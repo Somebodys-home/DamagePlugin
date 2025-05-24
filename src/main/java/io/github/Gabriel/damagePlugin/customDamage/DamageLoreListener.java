@@ -1,4 +1,4 @@
-package io.github.Gabriel.damagePlugin.customDamage.damageLore;
+package io.github.Gabriel.damagePlugin.customDamage;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -9,17 +9,14 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.Objects;
 
 public class DamageKey {
+    private final DamagePlugin plugin;
     private final ItemStack weapon;
     private final PersistentDataContainer weaponContainer;
-    private final DamagePlugin plugin;
 
     public DamageKey(ItemStack weapon) {
+        this.plugin = DamagePlugin.getInstance();
         this.weapon = weapon;
         this.weaponContainer = Objects.requireNonNull(weapon.getItemMeta()).getPersistentDataContainer();
-        this.plugin = DamagePlugin.getInstance();
-        if (this.plugin == null) {
-            throw new IllegalStateException("DamagePlugin instance is not available");
-        }
     }
 
     private NamespacedKey getKeyFor(DamageType type) {
@@ -31,6 +28,7 @@ public class DamageKey {
         weaponContainer.set(key, PersistentDataType.INTEGER, damage);
         // Store damage type as string too
         weaponContainer.set(getMetaKey(), PersistentDataType.STRING, DamageType.getDamageString(type));
+        DamageLoreUtil.updateLoreWithElementalDamage(weapon);
     }
 
     public int getDamageValue(DamageType type) {

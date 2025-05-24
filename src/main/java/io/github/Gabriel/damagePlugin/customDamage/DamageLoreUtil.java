@@ -1,11 +1,8 @@
-package io.github.Gabriel.damagePlugin.customDamage.damageLore;
+package io.github.Gabriel.damagePlugin.customDamage;
 
-import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
-import io.github.Gabriel.damagePlugin.customDamage.DamageType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +24,11 @@ public class DamageLoreUtil {
         }
 
         if (found) {
+            lore.add("bleh");
             meta.setLore(lore);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             item.setItemMeta(meta);
         }
+
     }
 }

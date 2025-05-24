@@ -27,28 +27,25 @@ public class DamageListener implements Listener {
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof LivingEntity damagee && event.getDamager() instanceof Player player && !(damagee.hasMetadata("custom-damage-processing"))) {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            if (weapon.getType() == Material.AIR) return;
             Map<DamageType, Integer> appliedTypes = new HashMap<>();
 
-            DamageKey damageKey = new DamageKey(weapon);
-            for (DamageType type : DamageType.values()) {
-                if (damageKey.checkForDamageType(type)) {
-                    int value = damageKey.getDamageValue(type);
-                    appliedTypes.put(type, value);
+            if (weapon.getType() == Material.AIR) {
+                appliedTypes.put(DamageType.PHYSICAL, 1);
+            } else {
+                DamageKey damageKey = new DamageKey(weapon);
+                for (DamageType type : DamageType.values()) {
+                    if (damageKey.checkForDamageType(type)) {
+                        int value = damageKey.getDamageValue(type);
+                        appliedTypes.put(type, value);
+                    }
                 }
             }
 
-            if (appliedTypes.isEmpty()) {
-                return;
+            for (Map.Entry<DamageType, Integer> entry : appliedTypes.entrySet()) {
+                customDamager.doDamage(damagee, player, entry.getKey(), entry.getValue());
             }
 
             damagee.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
-
-            for (Map.Entry<DamageType, Integer> entry : appliedTypes.entrySet()) {
-                customDamager.doCustomDamage(damagee, player, entry.getKey(), entry.getValue());
-            }
-
-            event.setCancelled(true);
             Bukkit.getScheduler().runTask(plugin, () -> damagee.removeMetadata("custom-damage-processing", plugin));
         }
     }
