@@ -3,7 +3,7 @@ package io.github.Gabriel.damagePlugin;
 import io.github.Gabriel.damagePlugin.customDamage.*;
 import io.github.Gabriel.damagePlugin.customDamage.commands.CheckDamageCommand;
 import io.github.Gabriel.damagePlugin.customDamage.commands.SetDamageCommand;
-import io.github.Gabriel.damagePlugin.customDamage.damageLore.DamageLoreListener;
+import io.github.Gabriel.damagePlugin.customDamage.lore.DamageLoreListener;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageListener;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageManager;
 import org.bukkit.plugin.java.JavaPlugin;

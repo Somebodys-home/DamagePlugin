@@ -1,7 +1,7 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
-import io.github.Gabriel.damagePlugin.customDamage.damageLore.DamageLoreUtil;
+import io.github.Gabriel.damagePlugin.customDamage.lore.DamageLoreUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -39,7 +39,7 @@ public class DamageKey {
     public double getDamageValue(DamageType type) {
         NamespacedKey key = getKeyFor(type);
         if (checkForDamageType(type)) {
-            return weaponContainer.get(key, PersistentDataType.INTEGER);
+            return weaponContainer.get(key, PersistentDataType.DOUBLE);
         }
         return -1;
     }
@@ -64,10 +64,22 @@ public class DamageKey {
 
     public boolean checkForDamageType(DamageType type) {
         NamespacedKey key = getKeyFor(type);
-        return weaponContainer.has(key, PersistentDataType.INTEGER);
+        return weaponContainer.has(key, PersistentDataType.DOUBLE);
     }
 
     private NamespacedKey getMetaKey() {
         return new NamespacedKey(plugin, "damage_type");
+    }
+
+    private double getTotalDamageOfWeapon() {
+        double totalDamage = 0;
+
+        for (DamageType type : DamageType.values()) {
+            if (checkForDamageType(type)) {
+                totalDamage += getDamageValue(type);
+            }
+        }
+
+        return totalDamage;
     }
 }

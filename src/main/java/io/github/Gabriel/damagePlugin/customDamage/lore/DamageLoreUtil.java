@@ -1,4 +1,4 @@
-package io.github.Gabriel.damagePlugin.customDamage.damageLore;
+package io.github.Gabriel.damagePlugin.customDamage.lore;
 
 import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
 import io.github.Gabriel.damagePlugin.customDamage.DamageType;

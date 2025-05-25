@@ -24,9 +24,9 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity damagee) || !(event.getDamager() instanceof Player player) || damagee.hasMetadata("custom-damage-processing")) {return;}
+        if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player) || target.hasMetadata("custom-damage-processing")) {return;}
 
-        damagee.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
+        target.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
@@ -47,10 +47,10 @@ public class DamageListener implements Listener {
                 event.setCancelled(true);
             }
 
-            customDamager.doDamage(damagee, player, damageMap);
+            customDamager.doDamage(target, player, damageMap, null);
 
         } finally {
-            damagee.removeMetadata("custom-damage-processing", plugin);
+            target.removeMetadata("custom-damage-processing", plugin);
         }
     }
 }
