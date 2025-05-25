@@ -71,7 +71,7 @@ public class DamageKey {
         return new NamespacedKey(plugin, "damage_type");
     }
 
-    private double getTotalDamageOfWeapon() {
+    public double getTotalDamageOfWeapon() {
         double totalDamage = 0;
 
         for (DamageType type : DamageType.values()) {
