@@ -19,33 +19,28 @@ public class CustomDamager {
     }
 
     // todo: get rid of damage messages here eventually, theyre just debug anyways
-    public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, DamageType overrideDamageType) {
-        UUID uuid = target.getUniqueId();
+    public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         double totalDamage = 0;
 
-        if (overrideDamageType == null) {
-            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-                damageInstance.put(uuid, new DamageInstance(entry.getKey(), entry.getValue()));
-                totalDamage += entry.getValue();
+        for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+            damageInstance.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
+            totalDamage += entry.getValue();
 
-                if (damager instanceof Player player) {
-                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
-                }
-            }
-        } else {
-            for (double value : damageSplits.values()) {
-                totalDamage += value;
-            }
-
-            damageInstance.put(uuid, new DamageInstance(overrideDamageType, totalDamage));
-
-            // ✅ Only send **one** message here
             if (damager instanceof Player player) {
-                player.sendMessage(DamageType.getDamageColor(overrideDamageType) + "You did " + totalDamage + " " + DamageType.getDamageString(overrideDamageType) + " damage!");
+                player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
             }
         }
 
         target.damage(totalDamage, damager);
     }
 
+    public void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
+        damageInstance.put(target.getUniqueId(), new DamageInstance(damageType, damage));
+
+        if (damager instanceof Player player) {
+            player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
+        }
+
+        target.damage(damage, damager);
+    }
 }

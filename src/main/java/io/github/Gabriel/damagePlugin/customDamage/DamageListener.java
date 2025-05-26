@@ -47,7 +47,7 @@ public class DamageListener implements Listener {
                 event.setCancelled(true);
             }
 
-            customDamager.doDamage(target, player, damageMap, null);
+            customDamager.doDamage(target, player, damageMap);
 
         } finally {
             target.removeMetadata("custom-damage-processing", plugin);
