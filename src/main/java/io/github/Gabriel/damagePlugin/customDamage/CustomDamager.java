@@ -12,43 +12,37 @@ import java.util.UUID;
 public class CustomDamager {
     private final DamagePlugin plugin;
     public record DamageInstance(DamageType type, double damage) {}
-    private final Map<UUID, DamageInstance> customDamageInstance = new HashMap<>();
+    private final Map<UUID, DamageInstance> damageInstance = new HashMap<>();
 
     public CustomDamager(DamagePlugin plugin) {
         this.plugin = plugin;
     }
 
     public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, DamageType overrideDamageType) {
-        if (damageSplits == null || damageSplits.isEmpty()) {
-            return;
-        }
-
         UUID uuid = target.getUniqueId();
-        double totalDamage = damageSplits.values().stream().mapToDouble(Double::doubleValue).sum();
+        double totalDamage = 0;
 
-        // Determine the damage type to use
-        DamageType damageTypeToUse = overrideDamageType != null ? overrideDamageType : damageSplits.size() == 1 ? damageSplits.keySet().iterator().next() :
-                DamageType.PHYSICAL; // Default fallback
+        if (overrideDamageType == null) {
+            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+                damageInstance.put(uuid, new DamageInstance(entry.getKey(), entry.getValue()));
+                totalDamage += entry.getValue();
 
-        // Store damage instance
-        customDamageInstance.put(uuid, new DamageInstance(damageTypeToUse, totalDamage));
+                if (damager instanceof Player player) {
+                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
+                }
+            }
+        } else {
+            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+                totalDamage += entry.getValue();
+            }
 
-        // Send damage message if damager is a player
-        if (damager instanceof Player player) {
-            String message = DamageType.getDamageColor(damageTypeToUse) +
-                    "You did " + totalDamage + " " +
-                    DamageType.getDamageString(damageTypeToUse) + " damage!";
-            player.sendMessage(message);
-        }
+            damageInstance.put(uuid, new DamageInstance(overrideDamageType, totalDamage));
 
-        // Apply the damage
-        if (totalDamage > 0 && !target.hasMetadata("custom-damage-processing")) {
-            try {
-                target.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
-                target.damage(totalDamage, damager);
-            } finally {
-                target.removeMetadata("custom-damage-processing", plugin);
+            if (damager instanceof Player player) {
+                player.sendMessage(DamageType.getDamageColor(overrideDamageType) + "You did " + totalDamage + " " + DamageType.getDamageString(overrideDamageType) + " damage!");
             }
         }
+
+        target.damage(totalDamage, damager);
     }
 }
