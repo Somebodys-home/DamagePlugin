@@ -18,6 +18,7 @@ public class CustomDamager {
         this.plugin = plugin;
     }
 
+    // todo: get rid of damage messages here eventually, theyre just debug anyways
     public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, DamageType overrideDamageType) {
         UUID uuid = target.getUniqueId();
         double totalDamage = 0;
@@ -32,12 +33,13 @@ public class CustomDamager {
                 }
             }
         } else {
-            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-                totalDamage += entry.getValue();
+            for (double value : damageSplits.values()) {
+                totalDamage += value;
             }
 
             damageInstance.put(uuid, new DamageInstance(overrideDamageType, totalDamage));
 
+            // ✅ Only send **one** message here
             if (damager instanceof Player player) {
                 player.sendMessage(DamageType.getDamageColor(overrideDamageType) + "You did " + totalDamage + " " + DamageType.getDamageString(overrideDamageType) + " damage!");
             }
@@ -45,4 +47,5 @@ public class CustomDamager {
 
         target.damage(totalDamage, damager);
     }
+
 }
