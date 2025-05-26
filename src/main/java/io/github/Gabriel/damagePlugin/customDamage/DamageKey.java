@@ -8,6 +8,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.HashMap;
+
 public class DamageKey {
     private final DamagePlugin plugin;
     private final ItemStack weapon;
@@ -33,8 +35,6 @@ public class DamageKey {
         weapon.setItemMeta(meta);
         DamageLoreUtil.updateLoreWithElementalDamage(weapon);
     }
-
-
 
     public double getDamageValue(DamageType type) {
         NamespacedKey key = getKeyFor(type);
@@ -81,5 +81,17 @@ public class DamageKey {
         }
 
         return totalDamage;
+    }
+
+    public HashMap<DamageType, Double> getAllDamageStats() {
+        HashMap<DamageType, Double> damageStats = new HashMap<>();
+
+        for (DamageType type : DamageType.values()) {
+            if (checkForDamageType(type)) {
+                damageStats.put(type, getDamageValue(type));
+            } 
+        }
+
+        return damageStats;
     }
 }
