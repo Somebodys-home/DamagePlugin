@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class DamageKey {
     private final DamagePlugin plugin;
@@ -93,5 +94,16 @@ public class DamageKey {
         }
 
         return damageStats;
+    }
+
+    public HashMap<DamageType, Double> multiplyAllDamageStats(double multiplier) {
+        HashMap<DamageType, Double> damageStats = getAllDamageStats();
+        HashMap<DamageType, Double> multipliedStats = new HashMap<>();
+
+        for (Map.Entry<DamageType, Double> entry : damageStats.entrySet()) {
+            multipliedStats.put(entry.getKey(), entry.getValue() * multiplier);
+        }
+
+        return multipliedStats;
     }
 }
