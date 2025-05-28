@@ -1,5 +1,6 @@
 package io.github.Gabriel.damagePlugin.customDamage.lore;
 
+import io.github.Gabriel.damagePlugin.DamagePlugin;
 import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
 import io.github.Gabriel.damagePlugin.customDamage.DamageType;
 import org.bukkit.inventory.ItemFlag;
@@ -9,9 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DamageLoreUtil {
+    private static DamagePlugin plugin;
+
+    public DamageLoreUtil(DamagePlugin plugin) {
+        this.plugin = plugin;
+    }
 
     public static void updateLoreWithElementalDamage(ItemStack item) {
-        DamageKey damageKey = new DamageKey(item);
+        DamageKey damageKey = new DamageKey(item, plugin);
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
         boolean found = false;

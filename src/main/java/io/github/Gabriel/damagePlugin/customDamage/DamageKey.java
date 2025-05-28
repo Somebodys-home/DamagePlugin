@@ -17,8 +17,8 @@ public class DamageKey {
     private final ItemMeta meta;
     private final PersistentDataContainer weaponContainer;
 
-    public DamageKey(ItemStack weapon) {
-        this.plugin = DamagePlugin.getInstance();
+    public DamageKey(ItemStack weapon, DamagePlugin plugin) {
+        this.plugin = plugin;
         this.weapon = weapon;
         this.meta = weapon.getItemMeta();
         assert meta != null;

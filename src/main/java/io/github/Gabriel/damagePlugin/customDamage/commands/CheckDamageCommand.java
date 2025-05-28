@@ -1,5 +1,6 @@
 package io.github.Gabriel.damagePlugin.customDamage.commands;
 
+import io.github.Gabriel.damagePlugin.DamagePlugin;
 import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
 import io.github.Gabriel.damagePlugin.customDamage.DamageType;
 import org.bukkit.command.Command;
@@ -9,12 +10,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class CheckDamageCommand implements CommandExecutor {
+    private static DamagePlugin plugin;
+
+    public CheckDamageCommand(DamagePlugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageKey damageKey = new DamageKey(weapon);
+            DamageKey damageKey = new DamageKey(weapon, plugin);
 
             if (weapon.hasItemMeta()) {
                 double totalDamage = damageKey.getTotalDamageOfWeapon();
