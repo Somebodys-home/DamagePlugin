@@ -35,7 +35,7 @@ public class DamageListener implements Listener {
             if (weapon.getType() == Material.AIR) {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
-                DamageKey damageKey = new DamageKey(weapon, plugin);
+                DamageKey damageKey = new DamageKey(weapon);
                 for (DamageType type : DamageType.values()) {
                     if (damageKey.checkForDamageType(type) && damageKey.getDamageValue(type) > 0) {
                         damageMap.put(type, damageKey.getDamageValue(type));

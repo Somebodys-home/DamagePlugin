@@ -10,14 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DamageLoreUtil {
-    private static DamagePlugin plugin;
-
-    public DamageLoreUtil(DamagePlugin plugin) {
-        this.plugin = plugin;
-    }
-
     public static void updateLoreWithElementalDamage(ItemStack item) {
-        DamageKey damageKey = new DamageKey(item, plugin);
+        DamageKey damageKey = new DamageKey(item);
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
         boolean found = false;

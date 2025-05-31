@@ -21,8 +21,8 @@ public final class DamagePlugin extends JavaPlugin {
         noDamageManager = new NoDamageManager(this);
         customDamager = new CustomDamager(this);
 
-        getCommand("setDamage").setExecutor(new SetDamageCommand(this));
-        getCommand("checkDamages").setExecutor(new CheckDamageCommand(this));
+        getCommand("setDamage").setExecutor(new SetDamageCommand());
+        getCommand("checkDamages").setExecutor(new CheckDamageCommand());
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageLoreListener(), this);

@@ -10,17 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class CheckDamageCommand implements CommandExecutor {
-    private static DamagePlugin plugin;
-
-    public CheckDamageCommand(DamagePlugin plugin) {
-        this.plugin = plugin;
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player player) {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageKey damageKey = new DamageKey(weapon, plugin);
+            DamageKey damageKey = new DamageKey(weapon);
 
             if (weapon.hasItemMeta()) {
                 double totalDamage = damageKey.getTotalDamageOfWeapon();
