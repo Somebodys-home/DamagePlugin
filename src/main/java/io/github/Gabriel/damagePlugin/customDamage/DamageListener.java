@@ -15,11 +15,9 @@ import java.util.Map;
 
 public class DamageListener implements Listener {
     private final DamagePlugin plugin;
-    private final CustomDamager customDamager;
 
     public DamageListener(DamagePlugin plugin) {
         this.plugin = plugin;
-        this.customDamager = plugin.getCustomDamager();
     }
 
     @EventHandler
@@ -30,12 +28,12 @@ public class DamageListener implements Listener {
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
+            DamageKey damageKey = new DamageKey(weapon);
             Map<DamageType, Double> damageMap = new HashMap<>();
 
-            if (weapon.getType() == Material.AIR) {
+            if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats()) {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
-                DamageKey damageKey = new DamageKey(weapon);
                 for (DamageType type : DamageType.values()) {
                     if (damageKey.checkForDamageType(type) && damageKey.getDamageValue(type) > 0) {
                         damageMap.put(type, damageKey.getDamageValue(type));
@@ -47,7 +45,7 @@ public class DamageListener implements Listener {
                 event.setCancelled(true);
             }
 
-            customDamager.doDamage(target, player, damageMap);
+            CustomDamager.doDamage(target, player, damageMap);
 
         } finally {
             target.removeMetadata("custom-damage-processing", plugin);

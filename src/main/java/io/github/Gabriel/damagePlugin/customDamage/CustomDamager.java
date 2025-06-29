@@ -12,14 +12,15 @@ import java.util.UUID;
 public class CustomDamager {
     private final DamagePlugin plugin;
     public record DamageInstance(DamageType type, double damage) {}
-    private final Map<UUID, DamageInstance> damageInstance = new HashMap<>();
+    private static final Map<UUID, DamageInstance> damageInstance = new HashMap<>();
 
     public CustomDamager(DamagePlugin plugin) {
         this.plugin = plugin;
     }
 
     // todo: get rid of damage messages here eventually, theyre just debug anyways
-    public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    // for multiple damage types
+    public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         double totalDamage = 0;
 
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
@@ -34,6 +35,7 @@ public class CustomDamager {
         target.damage(totalDamage, damager);
     }
 
+    // for single type damage
     public void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
         damageInstance.put(target.getUniqueId(), new DamageInstance(damageType, damage));
 
@@ -41,6 +43,6 @@ public class CustomDamager {
             player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
         }
 
-        target.damage(damage, damager);
+        target.setHealth(target.getHealth() - damage);
     }
 }

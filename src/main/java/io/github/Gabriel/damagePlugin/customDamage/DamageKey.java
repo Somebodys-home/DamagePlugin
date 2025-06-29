@@ -24,8 +24,12 @@ public class DamageKey {
         }
         this.weapon = weapon;
         this.meta = weapon.getItemMeta();
-        assert meta != null;
-        this.weaponContainer = meta.getPersistentDataContainer();
+
+        if (meta == null) {
+            this.weaponContainer = null;
+        } else {
+            this.weaponContainer = meta.getPersistentDataContainer();
+        }
     }
 
     private NamespacedKey getKeyFor(DamageType type) {
@@ -95,18 +99,25 @@ public class DamageKey {
                 damageStats.put(type, getDamageValue(type));
             } 
         }
-
         return damageStats;
     }
 
-    public HashMap<DamageType, Double> multiplyAllDamageStats(double multiplier) {
-        HashMap<DamageType, Double> damageStats = getAllDamageStats();
-        HashMap<DamageType, Double> multipliedStats = new HashMap<>();
+    public boolean doesHaveDamageStats() {
+        return !getAllDamageStats().isEmpty();
+    }
 
-        for (Map.Entry<DamageType, Double> entry : damageStats.entrySet()) {
-            multipliedStats.put(entry.getKey(), entry.getValue() * multiplier);
+    public HashMap<DamageType, Double> multiplyAllDamageStats(double multiplier) {
+        if (doesHaveDamageStats()) {
+            HashMap<DamageType, Double> damageStats = getAllDamageStats();
+            HashMap<DamageType, Double> multipliedStats = new HashMap<>();
+
+            for (Map.Entry<DamageType, Double> entry : damageStats.entrySet()) {
+                multipliedStats.put(entry.getKey(), entry.getValue() * multiplier);
+            }
+
+            return multipliedStats;
         }
 
-        return multipliedStats;
+        return null;
     }
 }
