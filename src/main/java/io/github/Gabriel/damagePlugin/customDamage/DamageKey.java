@@ -19,6 +19,9 @@ public class DamageKey {
 
     public DamageKey(ItemStack weapon) {
         this.plugin = DamagePlugin.getInstance();
+        if (plugin == null) {
+            System.out.println("null plugin");
+        }
         this.weapon = weapon;
         this.meta = weapon.getItemMeta();
         assert meta != null;

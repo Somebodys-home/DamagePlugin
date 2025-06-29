@@ -19,25 +19,27 @@ public class SetDamageCommand implements CommandExecutor {
             DamageKey damageKey = new DamageKey(item);
             String inputType = args[0].toLowerCase();
             int damage = Integer.parseInt(args[1]);
+            DamageType damageType = null;
 
             switch (inputType) {
-                case "physical" -> damageKey.setDamage(PHYSICAL, damage);
-                case "fire"     -> damageKey.setDamage(FIRE, damage);
-                case "cold"     -> damageKey.setDamage(COLD, damage);
-                case "earth"    -> damageKey.setDamage(EARTH, damage);
-                case "lightning"-> damageKey.setDamage(LIGHTNING, damage);
-                case "air"      -> damageKey.setDamage(AIR, damage);
-                case "light"    -> damageKey.setDamage(LIGHT, damage);
-                case "dark"     -> damageKey.setDamage(DARK, damage);
-                case "pure"     -> damageKey.setDamage(PURE, damage);
+                case "physical" -> damageType = PHYSICAL;
+                case "fire"     -> damageType = FIRE;
+                case "cold"     -> damageType = COLD;
+                case "earth"    -> damageType = EARTH;
+                case "lightning"-> damageType = LIGHTNING;
+                case "air"      -> damageType = AIR;
+                case "light"    -> damageType = LIGHT;
+                case "dark"     -> damageType = DARK;
+                case "pure"     -> damageType = PURE;
                 default         -> {
                     player.sendMessage("Invalid damage type.");
                     return true;
                 }
             }
 
+            damageKey.setDamage(damageType, damage);
             player.getInventory().setItemInMainHand(item);
-            player.sendMessage("Set " + DamageType.getDamageString(damageKey.getDamageType()) + " damage to " + damage + "!");
+            player.sendMessage("Set " + DamageType.getDamageString(damageType) + " damage to " + damage + "!");
         } else {
             sender.sendMessage("Usage: /setdamage <type> <amount>");
         }

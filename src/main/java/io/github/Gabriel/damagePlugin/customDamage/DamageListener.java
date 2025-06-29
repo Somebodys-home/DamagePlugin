@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DamageListener implements Listener {
-    private final CustomDamager customDamager;
     private final DamagePlugin plugin;
+    private final CustomDamager customDamager;
 
     public DamageListener(DamagePlugin plugin) {
         this.plugin = plugin;
