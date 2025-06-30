@@ -32,8 +32,9 @@ public class CustomDamager {
             }
         }
 
-        System.out.println("total damage: " + totalDamage); // test
-        target.damage(totalDamage, damager);
+        double finalHealth = target.getHealth() - totalDamage;
+        target.damage(0);
+        target.setHealth(Math.max(finalHealth, 0));
     }
 
     // for single type damage
@@ -44,6 +45,8 @@ public class CustomDamager {
             player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
         }
 
-        target.setHealth(target.getHealth() - damage);
+        double finalHealth = target.getHealth() - damage;
+        target.damage(0);
+        target.setHealth(Math.max(finalHealth, 0));
     }
 }
