@@ -32,6 +32,7 @@ public class CustomDamager {
             }
         }
 
+        System.out.println("total damage: " + totalDamage); // test
         target.damage(totalDamage, damager);
     }
 
