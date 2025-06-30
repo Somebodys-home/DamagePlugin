@@ -51,4 +51,17 @@ public class DamageListener implements Listener {
             target.removeMetadata("custom-damage-processing", plugin);
         }
     }
+
+    @EventHandler
+    public void onApplyCustomDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity target)) return;
+
+        if (target.hasMetadata("custom_damage")) {
+            double realDamage = target.getMetadata("custom_damage").get(0).asDouble();
+            event.setDamage(realDamage);
+
+            target.removeMetadata("custom_damage", plugin);
+        }
+    }
+
 }
