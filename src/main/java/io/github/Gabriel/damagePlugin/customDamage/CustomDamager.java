@@ -33,8 +33,8 @@ public class CustomDamager {
         }
 
         double finalHealth = target.getHealth() - totalDamage;
-        target.damage(0.1);
-        target.setHealth(Math.max(finalHealth, 0));
+        target.damage(totalDamage);
+        //target.setHealth(Math.max(finalHealth, 0));
     }
 
     // for single type damage
@@ -46,7 +46,7 @@ public class CustomDamager {
         }
 
         double finalHealth = target.getHealth() - damage;
-        target.damage(0.1);
-        target.setHealth(Math.max(finalHealth, 0));
+        target.damage(damage);
+        // target.setHealth(Math.max(finalHealth, 0));
     }
 }
