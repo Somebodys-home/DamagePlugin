@@ -32,9 +32,9 @@ public class CustomDamager {
             }
         }
 
-        // Store the final damage to be applied in metadata
-        target.setMetadata("custom_damage", new FixedMetadataValue(DamagePlugin.getInstance(), totalDamage));
-        target.damage(0.1, damager); // ping to trigger the event and effects
+        double finalHealth = target.getHealth() - totalDamage;
+        target.damage(0);
+        target.setHealth(Math.max(finalHealth, 0));
     }
 
     // for single type damage
