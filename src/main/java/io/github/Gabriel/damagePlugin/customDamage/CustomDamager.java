@@ -36,7 +36,7 @@ public class CustomDamager {
     }
 
     // for single type damage
-    public void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
+    public static void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
         damageInstance.put(target.getUniqueId(), new DamageInstance(damageType, damage));
 
         if (damager instanceof Player player) {
