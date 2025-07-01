@@ -27,7 +27,7 @@ public class CustomDamager {
             damageInstance.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
             totalDamage += entry.getValue();
 
-            if (damager instanceof Player player) {
+            if (damager instanceof Player player && entry.getValue() > 0) {
                 player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
             }
         }
