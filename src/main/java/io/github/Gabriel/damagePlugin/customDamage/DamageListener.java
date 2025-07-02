@@ -22,7 +22,21 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player) || target.hasMetadata("custom-damage-processing")) {return;}
+        if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player)) return;
+
+        // Check for custom pre-calculated damage
+        if (target.hasMetadata("custom_damage")) {
+            double custom = target.getMetadata("custom_damage").get(0).asDouble();
+            event.setDamage(custom);
+            event.setCancelled(false);
+            target.removeMetadata("custom_damage", plugin);
+            return;
+        }
+
+        // Avoid processing our own synthetic damage
+        if (event.getDamager().hasMetadata("custom_damager")) return;
+
+        if (target.hasMetadata("custom-damage-processing")) return;
 
         target.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
