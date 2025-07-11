@@ -9,7 +9,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
 
 public class DamageKey {
     private final DamagePlugin plugin;
@@ -44,6 +48,15 @@ public class DamageKey {
         DamageLoreUtil.updateLoreWithElementalDamage(weapon);
     }
 
+    public void setRandomTypeOfDamage(double damage) {
+        List<DamageType> damageTypes = List.of(PHYSICAL, FIRE, COLD, EARTH, LIGHTNING, AIR, LIGHT, DARK, PURE);
+        NamespacedKey key = getKeyFor(damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size())));
+
+        weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
+        weapon.setItemMeta(meta);
+        DamageLoreUtil.updateLoreWithElementalDamage(weapon);
+    }
+
     public double getDamageValue(DamageType type) {
         NamespacedKey key = getKeyFor(type);
         if (checkForDamageType(type)) {
@@ -58,14 +71,14 @@ public class DamageKey {
 
         return switch (storedType) {
             case "Physical" -> DamageType.PHYSICAL;
-            case "Fire"     -> DamageType.FIRE;
-            case "Cold"     -> DamageType.COLD;
+            case "Fire"     -> FIRE;
+            case "Cold"     -> COLD;
             case "Earth"    -> DamageType.EARTH;
             case "Lightning"-> DamageType.LIGHTNING;
             case "Air"      -> DamageType.AIR;
             case "Light"    -> DamageType.LIGHT;
             case "Dark"     -> DamageType.DARK;
-            case "Pure"     -> DamageType.PURE;
+            case "Pure"     -> PURE;
             default         -> null;
         };
     }

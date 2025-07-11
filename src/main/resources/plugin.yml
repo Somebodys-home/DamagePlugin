@@ -4,7 +4,3 @@ main: io.github.Gabriel.damagePlugin.DamagePlugin
 api-version: '1.21'
 authors: [ Gabriel Nicolas ]
 description: Plugin for No Man's Land for its custom damage types
-commands:
-  setDamage:
-    description: set the damage on an item
-    usage: /<command>

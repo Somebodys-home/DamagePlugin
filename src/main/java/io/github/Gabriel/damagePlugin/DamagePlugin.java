@@ -1,7 +1,6 @@
 package io.github.Gabriel.damagePlugin;
 
 import io.github.Gabriel.damagePlugin.customDamage.*;
-import io.github.Gabriel.damagePlugin.customDamage.commands.SetDamageCommand;
 import io.github.Gabriel.damagePlugin.customDamage.lore.DamageLoreListener;
 import io.github.Gabriel.damagePlugin.customDamage.lore.DamageLoreUtil;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageListener;
@@ -20,7 +19,6 @@ public final class DamagePlugin extends JavaPlugin {
         noDamageManager = new NoDamageManager(this);
         customDamager = new CustomDamager(this);
 
-        getCommand("setDamage").setExecutor(new SetDamageCommand());
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageLoreListener(), this);
