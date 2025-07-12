@@ -39,23 +39,11 @@ public class DamageKey {
 
     public void setRandomDamages(ItemStack weapon, double damage, int instances) {
         List<DamageType> damageTypes = new ArrayList<>(List.of(PHYSICAL, FIRE, COLD, EARTH, LIGHTNING, AIR, LIGHT, DARK, PURE));
-        ItemMeta meta = weapon.getItemMeta();
-        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
 
-        if (instances == 1) {
-            NamespacedKey key = getKeyFor(damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size())));
-            weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
-        } else {
-            for (int i = 0; i < instances - 1; i++) {
-                int random = ThreadLocalRandom.current().nextInt(damageTypes.size());
-                NamespacedKey key = getKeyFor(damageTypes.get(random));
-                weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
-                damageTypes.remove(random);
-            }
+        for (int i = 0; i < instances - 1; i++) {
+            DamageType randomDamageType = damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size()));
+            setDamage(weapon, randomDamageType, damage);
         }
-
-        weapon.setItemMeta(meta);
-        DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
     public double getDamageValue(ItemStack weapon, DamageType type) {
