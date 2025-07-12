@@ -67,6 +67,23 @@ public class DamageKey {
         DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
+    public void setRandomDamages(double damage, int instances, ItemMeta meta) {
+        List<DamageType> damageTypes = new ArrayList<>(List.of(PHYSICAL, FIRE, COLD, EARTH, LIGHTNING, AIR, LIGHT, DARK, PURE));
+
+        if (instances == 1) {
+            NamespacedKey key = getKeyFor(damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size())));
+            weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
+        } else {
+            for (int i = 0; i < instances - 1; i++) {
+                int random = ThreadLocalRandom.current().nextInt(damageTypes.size());
+                NamespacedKey key = getKeyFor(damageTypes.get(random));
+                weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
+                damageTypes.remove(random);
+            }
+        }
+
+        DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
+    }
 
     public double getDamageValue(DamageType type) {
         NamespacedKey key = getKeyFor(type);
