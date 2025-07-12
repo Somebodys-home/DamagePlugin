@@ -37,15 +37,6 @@ public class DamageKey {
         DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
-    public void setRandomDamages(ItemStack weapon, double damage, int instances) {
-        List<DamageType> damageTypes = new ArrayList<>(List.of(PHYSICAL, FIRE, COLD, EARTH, LIGHTNING, AIR, LIGHT, DARK, PURE));
-
-        for (int i = 0; i < instances - 1; i++) {
-            DamageType randomDamageType = damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size()));
-            setDamage(weapon, randomDamageType, damage);
-        }
-    }
-
     public double getDamageValue(ItemStack weapon, DamageType type) {
         NamespacedKey key = getKeyFor(type);
         ItemMeta meta = weapon.getItemMeta();
