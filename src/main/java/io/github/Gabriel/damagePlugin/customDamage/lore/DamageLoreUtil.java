@@ -36,4 +36,27 @@ public class DamageLoreUtil {
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
+
+    public static void updateLoreWithElementalDamage(ItemStack item, ItemMeta meta) {
+        DamageKey damageKey = new DamageKey(item);
+        List<String> lore = new ArrayList<>();
+        boolean found = false;
+
+        if (item.getType().isAir()) return;
+        if (meta == null) return;
+
+        for (DamageType type : DamageType.values()) {
+            if (damageKey.checkForDamageType(type) && damageKey.getDamageValue(type) > 0) {
+                int value = (int) damageKey.getDamageValue(type);
+                lore.add(DamageType.getDamageColor(type) + "+ " + value + " " + DamageType.getDamageString(type) + " Damage");
+                found = true;
+            }
+        }
+
+        if (found) {
+            meta.setLore(lore);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        }
+    }
+
 }

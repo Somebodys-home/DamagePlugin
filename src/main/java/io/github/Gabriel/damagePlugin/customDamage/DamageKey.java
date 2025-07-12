@@ -46,7 +46,7 @@ public class DamageKey {
 
         weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
         weapon.setItemMeta(meta);
-        DamageLoreUtil.updateLoreWithElementalDamage(weapon);
+        DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
     public void setRandomDamages(double damage, int instances) {
@@ -64,9 +64,9 @@ public class DamageKey {
             }
         }
 
-        weapon.setItemMeta(meta);
-        DamageLoreUtil.updateLoreWithElementalDamage(weapon);
+        DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
+
 
     public double getDamageValue(DamageType type) {
         NamespacedKey key = getKeyFor(type);
