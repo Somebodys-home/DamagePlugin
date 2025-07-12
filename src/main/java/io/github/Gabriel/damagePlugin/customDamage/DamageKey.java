@@ -18,39 +18,29 @@ import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
 
 public class DamageKey {
     private final DamagePlugin plugin;
-    private final ItemStack weapon;
-    private final ItemMeta meta;
-    private final PersistentDataContainer weaponContainer;
 
-    public DamageKey(ItemStack weapon) {
+    public DamageKey() {
         this.plugin = DamagePlugin.getInstance();
-        if (plugin == null) {
-            System.out.println("null plugin");
-        }
-        this.weapon = weapon;
-        this.meta = weapon.getItemMeta();
-
-        if (meta == null) {
-            this.weaponContainer = null;
-        } else {
-            this.weaponContainer = meta.getPersistentDataContainer();
-        }
     }
 
     private NamespacedKey getKeyFor(DamageType type) {
         return new NamespacedKey(plugin, DamageType.getDamageString(type));
     }
 
-    public void setDamage(DamageType type, double damage) {
+    public void setDamage(ItemStack weapon, DamageType type, double damage) {
         NamespacedKey key = getKeyFor(type);
+        ItemMeta meta = weapon.getItemMeta();
+        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
 
         weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
         weapon.setItemMeta(meta);
         DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
-    public void setRandomDamages(double damage, int instances) {
+    public void setRandomDamages(ItemStack weapon, double damage, int instances) {
         List<DamageType> damageTypes = new ArrayList<>(List.of(PHYSICAL, FIRE, COLD, EARTH, LIGHTNING, AIR, LIGHT, DARK, PURE));
+        ItemMeta meta = weapon.getItemMeta();
+        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
 
         if (instances == 1) {
             NamespacedKey key = getKeyFor(damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size())));
@@ -67,33 +57,20 @@ public class DamageKey {
         DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
-    public void setRandomDamages(double damage, int instances, ItemMeta meta) {
-        List<DamageType> damageTypes = new ArrayList<>(List.of(PHYSICAL, FIRE, COLD, EARTH, LIGHTNING, AIR, LIGHT, DARK, PURE));
-
-        if (instances == 1) {
-            NamespacedKey key = getKeyFor(damageTypes.get(ThreadLocalRandom.current().nextInt(damageTypes.size())));
-            weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
-        } else {
-            for (int i = 0; i < instances - 1; i++) {
-                int random = ThreadLocalRandom.current().nextInt(damageTypes.size());
-                NamespacedKey key = getKeyFor(damageTypes.get(random));
-                weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
-                damageTypes.remove(random);
-            }
-        }
-
-        DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
-    }
-
-    public double getDamageValue(DamageType type) {
+    public double getDamageValue(ItemStack weapon, DamageType type) {
         NamespacedKey key = getKeyFor(type);
-        if (checkForDamageType(type)) {
+        ItemMeta meta = weapon.getItemMeta();
+        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
+
+        if (checkForDamageType(weapon, type)) {
             return weaponContainer.get(key, PersistentDataType.DOUBLE);
         }
         return -1;
     }
 
-    public DamageType getDamageType() {
+    public DamageType getDamageType(ItemStack weapon) {
+        ItemMeta meta = weapon.getItemMeta();
+        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
         String storedType = weaponContainer.get(getMetaKey(), PersistentDataType.STRING);
         if (storedType == null) return null;
 
@@ -111,8 +88,10 @@ public class DamageKey {
         };
     }
 
-    public boolean checkForDamageType(DamageType type) {
+    public boolean checkForDamageType(ItemStack weapon, DamageType type) {
         NamespacedKey key = getKeyFor(type);
+        ItemMeta meta = weapon.getItemMeta();
+        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
         return weaponContainer.has(key, PersistentDataType.DOUBLE);
     }
 
@@ -120,36 +99,36 @@ public class DamageKey {
         return new NamespacedKey(plugin, "damage_type");
     }
 
-    public double getTotalDamageOfWeapon() {
+    public double getTotalDamageOfWeapon(ItemStack weapon) {
         double totalDamage = 0;
 
         for (DamageType type : DamageType.values()) {
-            if (checkForDamageType(type)) {
-                totalDamage += getDamageValue(type);
+            if (checkForDamageType(weapon, type)) {
+                totalDamage += getDamageValue(weapon, type);
             }
         }
 
         return totalDamage;
     }
 
-    public HashMap<DamageType, Double> getAllDamageStats() {
+    public HashMap<DamageType, Double> getAllDamageStats(ItemStack weapon) {
         HashMap<DamageType, Double> damageStats = new HashMap<>();
 
         for (DamageType type : DamageType.values()) {
-            if (checkForDamageType(type)) {
-                damageStats.put(type, getDamageValue(type));
+            if (checkForDamageType(weapon, type)) {
+                damageStats.put(type, getDamageValue(weapon, type));
             } 
         }
         return damageStats;
     }
 
-    public boolean doesHaveDamageStats() {
-        return !getAllDamageStats().isEmpty();
+    public boolean doesHaveDamageStats(ItemStack weapon) {
+        return !getAllDamageStats(weapon).isEmpty();
     }
 
-    public HashMap<DamageType, Double> multiplyAllDamageStats(double multiplier) {
-        if (doesHaveDamageStats()) {
-            HashMap<DamageType, Double> damageStats = getAllDamageStats();
+    public HashMap<DamageType, Double> multiplyAllDamageStats(ItemStack weapon, double multiplier) {
+        if (doesHaveDamageStats(weapon)) {
+            HashMap<DamageType, Double> damageStats = getAllDamageStats(weapon);
             HashMap<DamageType, Double> multipliedStats = new HashMap<>();
 
             for (Map.Entry<DamageType, Double> entry : damageStats.entrySet()) {

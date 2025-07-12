@@ -42,15 +42,15 @@ public class DamageListener implements Listener {
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageKey damageKey = new DamageKey(weapon);
+            DamageKey damageKey = new DamageKey();
             Map<DamageType, Double> damageMap = new HashMap<>();
 
-            if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats()) {
+            if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats(weapon)) {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
                 for (DamageType type : DamageType.values()) {
-                    if (damageKey.checkForDamageType(type) && damageKey.getDamageValue(type) > 0) {
-                        damageMap.put(type, damageKey.getDamageValue(type));
+                    if (damageKey.checkForDamageType(weapon, type) && damageKey.getDamageValue(weapon, type) > 0) {
+                        damageMap.put(type, damageKey.getDamageValue(weapon, type));
                     }
                 }
             }
