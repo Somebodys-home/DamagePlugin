@@ -54,6 +54,7 @@ public class DamageKey {
             }
         }
 
+        weapon.setItemMeta(meta);
         DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 

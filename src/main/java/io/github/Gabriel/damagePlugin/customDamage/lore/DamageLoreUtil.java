@@ -57,5 +57,4 @@ public class DamageLoreUtil {
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         }
     }
-
 }
