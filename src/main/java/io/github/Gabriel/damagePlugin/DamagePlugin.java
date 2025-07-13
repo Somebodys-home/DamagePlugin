@@ -21,7 +21,7 @@ public final class DamagePlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
-        getServer().getPluginManager().registerEvents(new DamageLoreListener(), this);
+        //getServer().getPluginManager().registerEvents(new DamageLoreListener(), this);
     }
 
     public static DamagePlugin getInstance() {
