@@ -33,14 +33,6 @@ public class DamageKey {
         DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
-    public void setDamageWithoutUpdatingLore(ItemStack weapon, DamageType type, double damage) {
-        NamespacedKey key = getKeyFor(type);
-        ItemMeta meta = weapon.getItemMeta();
-        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
-
-        weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
-    }
-
     public double getDamageValue(ItemStack weapon, DamageType type) {
         NamespacedKey key = getKeyFor(type);
         ItemMeta meta = weapon.getItemMeta();
