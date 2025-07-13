@@ -1,7 +1,5 @@
-package io.github.Gabriel.damagePlugin.customDamage.lore;
+package io.github.Gabriel.damagePlugin.customDamage;
 
-import io.github.Gabriel.damagePlugin.customDamage.DamageKey;
-import io.github.Gabriel.damagePlugin.customDamage.DamageType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

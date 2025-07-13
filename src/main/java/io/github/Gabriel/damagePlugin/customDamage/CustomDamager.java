@@ -3,7 +3,6 @@ package io.github.Gabriel.damagePlugin.customDamage;
 import io.github.Gabriel.damagePlugin.DamagePlugin;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;

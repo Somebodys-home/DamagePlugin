@@ -1,18 +1,14 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
-import io.github.Gabriel.damagePlugin.customDamage.lore.DamageLoreUtil;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
 
