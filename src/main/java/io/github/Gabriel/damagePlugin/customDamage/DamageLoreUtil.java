@@ -15,12 +15,6 @@ public class DamageLoreUtil {
         List<String> damageLore = new ArrayList<>();
         HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
 
-//        for (DamageType type : DamageType.values()) {
-//            if (damageKey.checkForDamageType(weapon, type)) {
-//                int value = (int) damageKey.getDamageValue(weapon, type);
-//                damageLore.add(DamageType.getDamageColor(type) + "+ " + value + " " + DamageType.getDamageString(type) + " Damage");
-//            }
-//        }
         for (Map.Entry<DamageType, Double> damageEntry : damageStats.entrySet()) {
             double value = damageEntry.getValue();
             int valueInt = (int) value;

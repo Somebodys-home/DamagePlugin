@@ -30,7 +30,6 @@ public class DamageKey {
 
         weaponContainer.set(key, PersistentDataType.DOUBLE, damage);
         weapon.setItemMeta(meta);
-        DamageLoreUtil.updateLoreWithElementalDamage(weapon, meta);
     }
 
     public double getDamageValue(ItemStack weapon, DamageType type) {
