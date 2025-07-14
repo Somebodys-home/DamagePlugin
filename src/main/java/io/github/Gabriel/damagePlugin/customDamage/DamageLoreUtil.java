@@ -15,11 +15,14 @@ public class DamageLoreUtil {
         List<String> damageLore = new ArrayList<>();
         HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
 
-        for (Map.Entry<DamageType, Double> damageEntry : damageStats.entrySet()) {
-            double value = damageEntry.getValue();
-            int valueInt = (int) value;
-            damageLore.add(DamageType.getDamageColor(damageEntry.getKey()) + "+ " + valueInt + " " + DamageType.getDamageString(damageEntry.getKey()) + " Damage");
-        }
+        damageStats.entrySet().stream()
+                .sorted((a, b) -> Double.compare(b.getValue(), a.getValue())) // Descending sort
+                .forEachOrdered(entry -> {
+                    double value = entry.getValue();
+                    int valueInt = (int) value;
+                    damageLore.add(DamageType.getDamageColor(entry.getKey()) + "+ " + valueInt + " " + DamageType.getDamageString(entry.getKey()) + " Damage");
+                });
+
 
         // Combine existing lore with damage lore
         originalLore.addAll(damageLore);
