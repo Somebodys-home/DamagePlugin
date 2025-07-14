@@ -48,11 +48,10 @@ public class DamageListener implements Listener {
             if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats(weapon)) {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
-                for (DamageType type : DamageType.values()) {
-                    if (damageKey.checkForDamageType(weapon, type) && damageKey.getDamageValue(weapon, type) > 0) {
-                        damageMap.put(type, damageKey.getDamageValue(weapon, type));
-                    }
-                }
+                HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
+                damageStats.forEach((type, value) -> {
+                    damageMap.put(type, value);
+                });
             }
 
             if (!damageMap.isEmpty()) {

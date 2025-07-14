@@ -18,7 +18,7 @@ public class CustomDamager {
         CustomDamager.plugin = plugin;
     }
 
-    // todo: get rid of damage messages here eventually, theyre just debug anyways
+    // todo: get rid of damage messages eventually
     // for multiple damage types
     public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         double totalDamage = 0;
