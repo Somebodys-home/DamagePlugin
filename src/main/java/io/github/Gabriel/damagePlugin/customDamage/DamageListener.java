@@ -24,7 +24,7 @@ public class DamageListener implements Listener {
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player)) return;
 
-//        // Check for custom pre-calculated damage
+        // Check for custom pre-calculated damage
 //        if (target.hasMetadata("custom_damage")) {
 //            double custom = target.getMetadata("custom_damage").get(0).asDouble();
 //            event.setDamage(custom);
