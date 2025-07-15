@@ -24,20 +24,14 @@ public class DamageListener implements Listener {
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player)) return;
 
-        if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.BAD_RESPAWN_POINT) {
-            player.sendMessage("canceled cuz of main attack");
-            event.setCancelled(true);
-            return;
-        }
-
-        // Check for custom pre-calculated damage
-        if (target.hasMetadata("custom_damage")) {
-            double custom = target.getMetadata("custom_damage").get(0).asDouble();
-            event.setDamage(custom);
-            event.setCancelled(false);
-            target.removeMetadata("custom_damage", plugin);
-            return;
-        }
+//        // Check for custom pre-calculated damage
+//        if (target.hasMetadata("custom_damage")) {
+//            double custom = target.getMetadata("custom_damage").get(0).asDouble();
+//            event.setDamage(custom);
+//            event.setCancelled(false);
+//            target.removeMetadata("custom_damage", plugin);
+//            return;
+//        }
 
         target.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
