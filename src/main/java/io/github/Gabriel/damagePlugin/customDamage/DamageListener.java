@@ -25,6 +25,7 @@ public class DamageListener implements Listener {
         if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player)) return;
 
         if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.BAD_RESPAWN_POINT) {
+            player.sendMessage("canceled cuz of main attack");
             event.setCancelled(true);
             return;
         }
