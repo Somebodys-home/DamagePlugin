@@ -24,6 +24,11 @@ public class DamageListener implements Listener {
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player)) return;
 
+        if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.BAD_RESPAWN_POINT) {
+            event.setCancelled(true);
+            return;
+        }
+
         // Check for custom pre-calculated damage
         if (target.hasMetadata("custom_damage")) {
             double custom = target.getMetadata("custom_damage").get(0).asDouble();
@@ -32,11 +37,6 @@ public class DamageListener implements Listener {
             target.removeMetadata("custom_damage", plugin);
             return;
         }
-
-        // Avoid processing our own synthetic damage
-        if (event.getDamager().hasMetadata("custom_damager")) return;
-
-        if (target.hasMetadata("custom-damage-processing")) return;
 
         target.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
