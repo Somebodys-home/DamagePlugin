@@ -26,19 +26,19 @@ public class DamageListener implements Listener {
         if (!(event.getEntity() instanceof LivingEntity livingEntity) || !(event.getDamager() instanceof Player player)) return;
 
         // Stops recursive loops in their tracks
-//        if (livingEntity.hasMetadata("recursive_block")) {
-//            event.setDamage(livingEntity.getMetadata("recursive_block").get(0).asDouble());
-//            livingEntity.removeMetadata("recursive_block", plugin);
-//            event.setCancelled(true);
-//            return;
-//        }
-        if (livingEntity.hasMetadata("custom_damage")) {
-            double custom = livingEntity.getMetadata("custom_damage").get(0).asDouble();
-            event.setDamage(custom);
-            event.setCancelled(false);
-            livingEntity.removeMetadata("custom_damage", plugin);
+        if (livingEntity.hasMetadata("recursive_block")) {
+            event.setDamage(livingEntity.getMetadata("recursive_block").get(0).asDouble());
+            livingEntity.removeMetadata("recursive_block", plugin);
+            event.setCancelled(true);
             return;
         }
+//        if (livingEntity.hasMetadata("custom_damage")) {
+//            double custom = livingEntity.getMetadata("custom_damage").get(0).asDouble();
+//            event.setDamage(custom);
+//            event.setCancelled(false);
+//            livingEntity.removeMetadata("custom_damage", plugin);
+//            return;
+//        }
 
         livingEntity.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
