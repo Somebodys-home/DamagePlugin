@@ -44,9 +44,7 @@ public class DamageListener implements Listener {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
                 HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
-                damageStats.forEach((type, value) -> {
-                    damageMap.put(type, value);
-                });
+                damageMap.putAll(damageStats);
             }
 
             if (!damageMap.isEmpty()) {
