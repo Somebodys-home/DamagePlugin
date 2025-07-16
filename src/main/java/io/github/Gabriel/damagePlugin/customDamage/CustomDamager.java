@@ -31,8 +31,12 @@ public class CustomDamager {
             }
         }
 
-        target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-        target.damage(totalDamage, damager);
+//        target.setMetadata("recursive_block", new FixedMetadataValue(plugin, totalDamage));
+//        target.damage(.000000000000000000001, damager);
+        target.setMetadata("custom_damage", new FixedMetadataValue(plugin, totalDamage));
+        damager.setMetadata("custom_damager", new FixedMetadataValue(plugin, true));
+        target.damage(0.1, damager);
+        damager.removeMetadata("custom_damager", plugin);
     }
 
     // for single type damage

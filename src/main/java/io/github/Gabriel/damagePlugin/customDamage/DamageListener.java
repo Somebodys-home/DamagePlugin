@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -20,14 +21,22 @@ public class DamageListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity livingEntity) || !(event.getDamager() instanceof Player player)) return;
 
         // Stops recursive loops in their tracks
-        if (livingEntity.hasMetadata("recursive_block")) {
-            livingEntity.removeMetadata("recursive_block", plugin);
-            event.setCancelled(true);
+//        if (livingEntity.hasMetadata("recursive_block")) {
+//            event.setDamage(livingEntity.getMetadata("recursive_block").get(0).asDouble());
+//            livingEntity.removeMetadata("recursive_block", plugin);
+//            event.setCancelled(true);
+//            return;
+//        }
+        if (livingEntity.hasMetadata("custom_damage")) {
+            double custom = livingEntity.getMetadata("custom_damage").get(0).asDouble();
+            event.setDamage(custom);
+            event.setCancelled(false);
+            livingEntity.removeMetadata("custom_damage", plugin);
             return;
         }
 
