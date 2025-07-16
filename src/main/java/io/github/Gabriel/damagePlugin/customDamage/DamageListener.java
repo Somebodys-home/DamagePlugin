@@ -22,18 +22,16 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity target) || !(event.getDamager() instanceof Player player)) return;
+        if (!(event.getEntity() instanceof LivingEntity livingEntity) || !(event.getDamager() instanceof Player player)) return;
 
-        // Check for custom pre-calculated damage
-//        if (target.hasMetadata("custom_damage")) {
-//            double custom = target.getMetadata("custom_damage").get(0).asDouble();
-//            event.setDamage(custom);
-//            event.setCancelled(false);
-//            target.removeMetadata("custom_damage", plugin);
-//            return;
-//        }
+        // Stops recursive loops in their tracks
+        if (livingEntity.hasMetadata("recursive_block")) {
+            livingEntity.removeMetadata("recursive_block", plugin);
+            event.setCancelled(true);
+            return;
+        }
 
-        target.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
+        livingEntity.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
@@ -44,17 +42,19 @@ public class DamageListener implements Listener {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
                 HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
-                damageMap.putAll(damageStats);
+                damageStats.forEach((type, value) -> {
+                    damageMap.put(type, value);
+                });
             }
 
             if (!damageMap.isEmpty()) {
                 event.setCancelled(true);
             }
 
-            CustomDamager.doDamage(target, player, damageMap);
+            CustomDamager.doDamage(livingEntity, player, damageMap);
 
         } finally {
-            target.removeMetadata("custom-damage-processing", plugin);
+            livingEntity.removeMetadata("custom-damage-processing", plugin);
         }
     }
 }

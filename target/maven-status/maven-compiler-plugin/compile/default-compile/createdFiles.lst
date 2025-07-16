@@ -5,5 +5,6 @@ io\github\Gabriel\damagePlugin\customDamage\CustomDamager.class
 io\github\Gabriel\damagePlugin\customDamage\DamageListener.class
 io\github\Gabriel\damagePlugin\customDamage\DamageLoreUtil.class
 io\github\Gabriel\damagePlugin\noDamage\NoDamageListener.class
+io\github\Gabriel\damagePlugin\customDamage\CustomDamageEvent.class
 io\github\Gabriel\damagePlugin\noDamage\NoDamageManager.class
 io\github\Gabriel\damagePlugin\customDamage\CustomDamager$DamageInstance.class

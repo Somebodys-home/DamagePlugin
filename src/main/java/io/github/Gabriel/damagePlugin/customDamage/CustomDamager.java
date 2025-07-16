@@ -4,18 +4,17 @@ import io.github.Gabriel.damagePlugin.DamagePlugin;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class CustomDamager {
-    private static DamagePlugin plugin = null;
+    private static DamagePlugin plugin;
     public record DamageInstance(DamageType type, double damage) {}
     private static final Map<UUID, DamageInstance> damageInstance = new HashMap<>();
 
     public CustomDamager(DamagePlugin plugin) {
-        CustomDamager.plugin = plugin;
+        this.plugin = plugin;
     }
 
     // todo: get rid of damage messages eventually
@@ -32,14 +31,12 @@ public class CustomDamager {
             }
         }
 
-        target.setMetadata("custom_damage", new FixedMetadataValue(plugin, totalDamage));
-        damager.setMetadata("custom_damager", new FixedMetadataValue(plugin, true));
-        target.damage(0.1, damager);
-        damager.removeMetadata("custom_damager", plugin);
+        target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
+        target.damage(totalDamage, damager);
     }
 
     // for single type damage
-    public static void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
+    public static void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType, String source) {
         damageInstance.put(target.getUniqueId(), new DamageInstance(damageType, damage));
 
         if (damager instanceof Player player) {
