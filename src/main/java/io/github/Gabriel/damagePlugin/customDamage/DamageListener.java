@@ -28,17 +28,10 @@ public class DamageListener implements Listener {
         // Stops recursive loops in their tracks
         if (livingEntity.hasMetadata("recursive_block")) {
             event.setDamage(livingEntity.getMetadata("recursive_block").get(0).asDouble());
+            event.setCancelled(false);
             livingEntity.removeMetadata("recursive_block", plugin);
-            event.setCancelled(true);
             return;
         }
-//        if (livingEntity.hasMetadata("custom_damage")) {
-//            double custom = livingEntity.getMetadata("custom_damage").get(0).asDouble();
-//            event.setDamage(custom);
-//            event.setCancelled(false);
-//            livingEntity.removeMetadata("custom_damage", plugin);
-//            return;
-//        }
 
         livingEntity.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
@@ -50,10 +43,10 @@ public class DamageListener implements Listener {
             if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats(weapon)) {
                 damageMap.put(DamageType.PHYSICAL, 1.0);
             } else {
-                HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
-                damageStats.forEach((type, value) -> {
-                    damageMap.put(type, value);
-                });
+//                HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
+//                damageStats.forEach((type, value) -> {
+//                    damageMap.put(type, value);
+//                });
             }
 
             if (!damageMap.isEmpty()) {
