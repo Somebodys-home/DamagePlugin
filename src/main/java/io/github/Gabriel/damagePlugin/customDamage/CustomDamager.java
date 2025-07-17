@@ -1,6 +1,7 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -31,25 +32,23 @@ public class CustomDamager {
             }
         }
 
-        target.setMetadata("recursive_block", new FixedMetadataValue(plugin, totalDamage));
-        target.damage(.000000000000000000001, damager);
-//        target.setMetadata("custom_damage", new FixedMetadataValue(plugin, totalDamage));
-//        damager.setMetadata("custom_damager", new FixedMetadataValue(plugin, true));
-//        target.damage(0.1, damager);
-//        damager.removeMetadata("custom_damager", plugin);
+        target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
+        damager.sendMessage("damage: " + totalDamage);
+        target.damage(totalDamage, damager);
+        damager.sendMessage("damaged for: " + totalDamage);
     }
 
     // for single type damage
-    public static void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType, String source) {
+    public static void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
         damageInstance.put(target.getUniqueId(), new DamageInstance(damageType, damage));
 
         if (damager instanceof Player player) {
             player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
         }
 
-        target.setMetadata("custom_damage", new FixedMetadataValue(plugin, damage));
-        damager.setMetadata("custom_damager", new FixedMetadataValue(plugin, true));
-        target.damage(0.1, damager);
-        damager.removeMetadata("custom_damager", plugin);
+        target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
+        damager.sendMessage("damage: " + damage);
+        target.damage(damage, damager);
+        damager.sendMessage("damaged for: " + damage);
     }
 }

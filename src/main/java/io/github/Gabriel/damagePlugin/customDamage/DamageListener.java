@@ -21,13 +21,13 @@ public class DamageListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityDamageByPlayer(EntityDamageByEntityEvent event) {
+    @EventHandler()
+    public void onEntityDamageByPlayerWithoutWeapon(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity livingEntity) || !(event.getDamager() instanceof Player player)) return;
+        if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.DRY_OUT) return;
 
         // Stops recursive loops in their tracks
         if (livingEntity.hasMetadata("recursive_block")) {
-            event.setDamage(livingEntity.getMetadata("recursive_block").get(0).asDouble());
             event.setCancelled(false);
             livingEntity.removeMetadata("recursive_block", plugin);
             return;
@@ -38,22 +38,12 @@ public class DamageListener implements Listener {
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
             DamageKey damageKey = new DamageKey();
-            Map<DamageType, Double> damageMap = new HashMap<>();
+
+            event.setCancelled(true);
 
             if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats(weapon)) {
-                damageMap.put(DamageType.PHYSICAL, 1.0);
-            } else {
-//                HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
-//                damageStats.forEach((type, value) -> {
-//                    damageMap.put(type, value);
-//                });
+                CustomDamager.doDamage(livingEntity, player, 1, DamageType.PHYSICAL);
             }
-
-            if (!damageMap.isEmpty()) {
-                event.setCancelled(true);
-            }
-
-            CustomDamager.doDamage(livingEntity, player, damageMap);
 
         } finally {
             livingEntity.removeMetadata("custom-damage-processing", plugin);
