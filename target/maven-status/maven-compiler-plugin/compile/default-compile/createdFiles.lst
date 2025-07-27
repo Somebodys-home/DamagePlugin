@@ -1,10 +1,11 @@
 io\github\Gabriel\damagePlugin\customDamage\DamageType.class
+io\github\Gabriel\damagePlugin\customDamage\CustomDamageEvent.class
+io\github\Gabriel\damagePlugin\customDamage\DamageManager.class
 io\github\Gabriel\damagePlugin\DamagePlugin.class
 io\github\Gabriel\damagePlugin\customDamage\DamageLore.class
+io\github\Gabriel\damagePlugin\customDamage\CustomDamager$1.class
 io\github\Gabriel\damagePlugin\customDamage\CustomDamager.class
 io\github\Gabriel\damagePlugin\customDamage\DamageListener.class
 io\github\Gabriel\damagePlugin\noDamage\NoDamageListener.class
-io\github\Gabriel\damagePlugin\customDamage\CustomDamageEvent.class
 io\github\Gabriel\damagePlugin\noDamage\NoDamageManager.class
-io\github\Gabriel\damagePlugin\customDamage\DamageManager.class
 io\github\Gabriel\damagePlugin\customDamage\CustomDamager$DamageInstance.class
