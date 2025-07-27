@@ -33,9 +33,7 @@ public class CustomDamager {
         }
 
         target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-        damager.sendMessage("damage: " + totalDamage);
         target.damage(totalDamage, damager);
-        damager.sendMessage("damaged for: " + totalDamage);
     }
 
     // for single type damage
@@ -47,8 +45,7 @@ public class CustomDamager {
         }
 
         target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-        damager.sendMessage("damage: " + damage);
+        damager.sendMessage("damage: " + damage); // test msg
         target.damage(damage, damager);
-        damager.sendMessage("damaged for: " + damage);
     }
 }

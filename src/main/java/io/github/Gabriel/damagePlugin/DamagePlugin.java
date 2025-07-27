@@ -2,7 +2,7 @@ package io.github.Gabriel.damagePlugin;
 
 import io.github.Gabriel.damagePlugin.customDamage.*;
 import io.github.Gabriel.damagePlugin.customDamage.CustomDamager;
-import io.github.Gabriel.damagePlugin.customDamage.DamageLoreUtil;
+import io.github.Gabriel.damagePlugin.customDamage.DamageLore;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageListener;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +11,7 @@ public final class DamagePlugin extends JavaPlugin {
     private static DamagePlugin damagePlugin;
     private NoDamageManager noDamageManager;
     private CustomDamager customDamager;
-    private DamageLoreUtil damageLoreUtil;
+    private DamageLore damageLore;
 
     @Override
     public void onEnable() {
@@ -35,5 +35,5 @@ public final class DamagePlugin extends JavaPlugin {
         return customDamager;
     }
 
-    public DamageLoreUtil getDamageLoreUtil() {return damageLoreUtil;}
+    public DamageLore getDamageLoreUtil() {return damageLore;}
 }

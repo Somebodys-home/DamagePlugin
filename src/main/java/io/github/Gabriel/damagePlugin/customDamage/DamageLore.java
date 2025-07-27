@@ -6,14 +6,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class DamageLoreUtil {
+public class DamageLore {
     public static void updateLoreWithElementalDamage(ItemStack weapon, ItemMeta meta) {
-        DamageKey damageKey = new DamageKey();
+        DamageManager damageManager = new DamageManager();
         List<String> originalLore = meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
         List<String> damageLore = new ArrayList<>();
-        HashMap<DamageType, Double> damageStats = damageKey.getAllDamageStats(weapon);
+        HashMap<DamageType, Double> damageStats = damageManager.getAllDamageStats(weapon);
 
         damageStats.entrySet().stream()
                 .sorted((a, b) -> Double.compare(b.getValue(), a.getValue())) // Descending sort

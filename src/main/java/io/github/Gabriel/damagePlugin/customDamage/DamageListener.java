@@ -5,14 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class DamageListener implements Listener {
     private final DamagePlugin plugin;
@@ -37,11 +33,11 @@ public class DamageListener implements Listener {
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageKey damageKey = new DamageKey();
+            DamageManager damageManager = new DamageManager();
 
             event.setCancelled(true);
 
-            if (weapon.getType() == Material.AIR || !damageKey.doesHaveDamageStats(weapon)) {
+            if (weapon.getType() == Material.AIR || !damageManager.doesHaveDamageStats(weapon)) {
                 CustomDamager.doDamage(livingEntity, player, 1, DamageType.PHYSICAL);
             }
 

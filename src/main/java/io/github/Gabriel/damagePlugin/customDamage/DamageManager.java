@@ -12,10 +12,10 @@ import java.util.Map;
 
 import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
 
-public class DamageKey {
+public class DamageManager {
     private final DamagePlugin plugin;
 
-    public DamageKey() {
+    public DamageManager() {
         this.plugin = DamagePlugin.getInstance();
     }
 
@@ -43,35 +43,11 @@ public class DamageKey {
         return -1;
     }
 
-    public DamageType getDamageType(ItemStack weapon) {
-        ItemMeta meta = weapon.getItemMeta();
-        PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
-        String storedType = weaponContainer.get(getMetaKey(), PersistentDataType.STRING);
-        if (storedType == null) return null;
-
-        return switch (storedType) {
-            case "Physical" -> DamageType.PHYSICAL;
-            case "Fire"     -> FIRE;
-            case "Cold"     -> COLD;
-            case "Earth"    -> DamageType.EARTH;
-            case "Lightning"-> DamageType.LIGHTNING;
-            case "Air"      -> DamageType.AIR;
-            case "Light"    -> DamageType.LIGHT;
-            case "Dark"     -> DamageType.DARK;
-            case "Pure"     -> PURE;
-            default         -> null;
-        };
-    }
-
     public boolean checkForDamageType(ItemStack weapon, DamageType type) {
         NamespacedKey key = getKeyFor(type);
         ItemMeta meta = weapon.getItemMeta();
         PersistentDataContainer weaponContainer = meta.getPersistentDataContainer();
         return weaponContainer.has(key, PersistentDataType.DOUBLE);
-    }
-
-    private NamespacedKey getMetaKey() {
-        return new NamespacedKey(plugin, "damage_type");
     }
 
     public double getTotalDamageOfWeapon(ItemStack weapon) {
