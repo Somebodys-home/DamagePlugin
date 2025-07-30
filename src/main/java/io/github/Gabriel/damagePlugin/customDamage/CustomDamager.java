@@ -30,7 +30,6 @@ public class CustomDamager {
         Profile profile = new ProfileManager(plugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
 
         if (profile == null) {
-            System.out.println("profile does not exist");
             double totalDamage = 0;
             for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
                 damageInstance.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
