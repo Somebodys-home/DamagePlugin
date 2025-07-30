@@ -102,6 +102,19 @@ public class CustomDamager {
                 target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
                 target.damage(totalDamage, damager);
             }
+        } else { // if the target doesnt have stats
+            double totalDamage = 0;
+            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+                damageInstance.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
+                totalDamage += entry.getValue();
+
+                if (damager instanceof Player player && entry.getValue() > 0) {
+                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
+                }
+            }
+
+            target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
+            target.damage(totalDamage, damager);
         }
     }
 
@@ -172,6 +185,13 @@ public class CustomDamager {
                 target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
                 target.damage(damage, damager);
             }
+        } else { // if they dont have stats
+            if (damager instanceof Player player) {
+                player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
+            }
+
+            target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
+            target.damage(damage, damager);
         }
     }
 }
