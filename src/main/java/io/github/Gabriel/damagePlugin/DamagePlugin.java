@@ -18,6 +18,7 @@ public final class DamagePlugin extends JavaPlugin {
     private DamageLore damageLore;
     private static NMLPlayerStats nmlPlayerStats;
     private ProfileManager profileManager;
+    private DamageManager damageManager;
 
     @Override
     public void onEnable() {
@@ -25,6 +26,7 @@ public final class DamagePlugin extends JavaPlugin {
         noDamageManager = new NoDamageManager(this);
         customDamager = new CustomDamager(this);
         damageLore = new DamageLore();
+        damageManager = new DamageManager();
 
         Plugin plugin = Bukkit.getPluginManager().getPlugin("NMLPlayerStats");
         if (plugin instanceof NMLPlayerStats statsPlugin) {
@@ -44,7 +46,7 @@ public final class DamagePlugin extends JavaPlugin {
         return damagePlugin;
     }
 
-    public NoDamageManager getDamageAttributesManager() {
+    public NoDamageManager getNoDamageManager() {
         return noDamageManager;
     }
 
@@ -62,5 +64,9 @@ public final class DamagePlugin extends JavaPlugin {
 
     public ProfileManager getProfileManager() {
         return profileManager;
+    }
+
+    public DamageManager getDamageManager() {
+        return damageManager;
     }
 }
