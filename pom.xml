@@ -92,8 +92,8 @@
         </dependency>
         <dependency>
             <groupId>com.github.Somebodys-home</groupId>
-            <artifactId>NMLDefenses</artifactId>
-            <version>27a0ffc837</version>
+            <artifactId>NMLItems</artifactId>
+            <version>f4c744a93c</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -1,16 +1,13 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
-import io.github.NoOne.nMLDefenses.DefenseType;
+import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
-import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,7 +44,7 @@ public class CustomDamager {
 
         Stats targetStats = profile.getStats();
 
-        HashMap<DefenseType, Integer> resistedTypes = new HashMap<>();
+        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         if (targetStats != null) {
             int evasion = targetStats.getEvasion();
@@ -57,31 +54,31 @@ public class CustomDamager {
                 target.sendMessage("your evasion triggered! (" + evasion + "%)");
             } else {
                 if (targetStats.getDefense() != 0) {
-                    resistedTypes.put(DefenseType.DEFENSE, targetStats.getDefense());
+                    resistedTypes.put(ItemStat.DEFENSE, targetStats.getDefense());
                 }
                 if (targetStats.getPhysicalResist() != 0) {
-                    resistedTypes.put(DefenseType.PHYSICALRESIST, targetStats.getPhysicalResist());
+                    resistedTypes.put(ItemStat.PHYSICALRESIST, targetStats.getPhysicalResist());
                 }
                 if (targetStats.getFireResist() != 0) {
-                    resistedTypes.put(DefenseType.FIRERESIST, targetStats.getFireResist());
+                    resistedTypes.put(ItemStat.FIRERESIST, targetStats.getFireResist());
                 }
                 if (targetStats.getColdResist() != 0) {
-                    resistedTypes.put(DefenseType.COLDRESIST, targetStats.getColdResist());
+                    resistedTypes.put(ItemStat.COLDRESIST, targetStats.getColdResist());
                 }
                 if (targetStats.getEarthResist() != 0) {
-                    resistedTypes.put(DefenseType.EARTHRESIST, targetStats.getEarthResist());
+                    resistedTypes.put(ItemStat.EARTHRESIST, targetStats.getEarthResist());
                 }
                 if (targetStats.getLightningResist() != 0) {
-                    resistedTypes.put(DefenseType.LIGHTNINGRESIST, targetStats.getLightningResist());
+                    resistedTypes.put(ItemStat.LIGHTNINGRESIST, targetStats.getLightningResist());
                 }
                 if (targetStats.getAirResist() != 0) {
-                    resistedTypes.put(DefenseType.AIRRESIST, targetStats.getAirResist());
+                    resistedTypes.put(ItemStat.AIRRESIST, targetStats.getAirResist());
                 }
                 if (targetStats.getLightResist() != 0) {
-                    resistedTypes.put(DefenseType.LIGHTRESIST, targetStats.getLightResist());
+                    resistedTypes.put(ItemStat.LIGHTRESIST, targetStats.getLightResist());
                 }
                 if (targetStats.getDarkResist() != 0) {
-                    resistedTypes.put(DefenseType.DARKRESIST, targetStats.getDarkResist());
+                    resistedTypes.put(ItemStat.DARKRESIST, targetStats.getDarkResist());
                 }
 
                 double totalDamage = 0;
@@ -90,18 +87,18 @@ public class CustomDamager {
                         double value = entry.getValue();
 
                         if (entry.getKey() != DamageType.PURE) {
-                            value -= resistedTypes.getOrDefault(DefenseType.DEFENSE, 0);
+                            value -= resistedTypes.getOrDefault(ItemStat.DEFENSE, 0);
                         }
 
                         switch (entry.getKey()) {
-                            case PHYSICAL -> value -= resistedTypes.getOrDefault(DefenseType.PHYSICALRESIST, 0);
-                            case FIRE -> value -= resistedTypes.getOrDefault(DefenseType.FIRERESIST, 0);
-                            case COLD -> value -= resistedTypes.getOrDefault(DefenseType.COLDRESIST, 0);
-                            case EARTH -> value -= resistedTypes.getOrDefault(DefenseType.EARTHRESIST, 0);
-                            case LIGHTNING -> value -= resistedTypes.getOrDefault(DefenseType.LIGHTNINGRESIST, 0);
-                            case AIR -> value -= resistedTypes.getOrDefault(DefenseType.AIRRESIST, 0);
-                            case LIGHT -> value -= resistedTypes.getOrDefault(DefenseType.LIGHTRESIST, 0);
-                            case DARK -> value -= resistedTypes.getOrDefault(DefenseType.DARKRESIST, 0);
+                            case PHYSICAL -> value -= resistedTypes.getOrDefault(ItemStat.PHYSICALRESIST, 0);
+                            case FIRE -> value -= resistedTypes.getOrDefault(ItemStat.FIRERESIST, 0);
+                            case COLD -> value -= resistedTypes.getOrDefault(ItemStat.COLDRESIST, 0);
+                            case EARTH -> value -= resistedTypes.getOrDefault(ItemStat.EARTHRESIST, 0);
+                            case LIGHTNING -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTNINGRESIST, 0);
+                            case AIR -> value -= resistedTypes.getOrDefault(ItemStat.AIRRESIST, 0);
+                            case LIGHT -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTRESIST, 0);
+                            case DARK -> value -= resistedTypes.getOrDefault(ItemStat.DARKRESIST, 0);
                         }
 
                         value = Math.max(0, value); // Ensure no negative damage
@@ -138,7 +135,7 @@ public class CustomDamager {
             return;
         }
 
-        HashMap<DefenseType, Integer> resistedTypes = new HashMap<>();
+        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         // if damaging a player / has playerstats
         Stats targetStats = targetProfile.getStats();
@@ -149,47 +146,47 @@ public class CustomDamager {
             target.sendMessage("your evasion triggered! (" + evasion + "%)");
         } else {
             if (targetStats.getDefense() != 0) {
-                resistedTypes.put(DefenseType.DEFENSE, targetStats.getDefense());
+                resistedTypes.put(ItemStat.DEFENSE, targetStats.getDefense());
             }
             if (targetStats.getPhysicalResist() != 0) {
-                resistedTypes.put(DefenseType.PHYSICALRESIST, targetStats.getPhysicalResist());
+                resistedTypes.put(ItemStat.PHYSICALRESIST, targetStats.getPhysicalResist());
             }
             if (targetStats.getFireResist() != 0) {
-                resistedTypes.put(DefenseType.FIRERESIST, targetStats.getFireResist());
+                resistedTypes.put(ItemStat.FIRERESIST, targetStats.getFireResist());
             }
             if (targetStats.getColdResist() != 0) {
-                resistedTypes.put(DefenseType.COLDRESIST, targetStats.getColdResist());
+                resistedTypes.put(ItemStat.COLDRESIST, targetStats.getColdResist());
             }
             if (targetStats.getEarthResist() != 0) {
-                resistedTypes.put(DefenseType.EARTHRESIST, targetStats.getEarthResist());
+                resistedTypes.put(ItemStat.EARTHRESIST, targetStats.getEarthResist());
             }
             if (targetStats.getLightningResist() != 0) {
-                resistedTypes.put(DefenseType.LIGHTNINGRESIST, targetStats.getLightningResist());
+                resistedTypes.put(ItemStat.LIGHTNINGRESIST, targetStats.getLightningResist());
             }
             if (targetStats.getAirResist() != 0) {
-                resistedTypes.put(DefenseType.AIRRESIST, targetStats.getAirResist());
+                resistedTypes.put(ItemStat.AIRRESIST, targetStats.getAirResist());
             }
             if (targetStats.getLightResist() != 0) {
-                resistedTypes.put(DefenseType.LIGHTRESIST, targetStats.getLightResist());
+                resistedTypes.put(ItemStat.LIGHTRESIST, targetStats.getLightResist());
             }
             if (targetStats.getDarkResist() != 0) {
-                resistedTypes.put(DefenseType.DARKRESIST, targetStats.getDarkResist());
+                resistedTypes.put(ItemStat.DARKRESIST, targetStats.getDarkResist());
             }
 
             if (!resistedTypes.isEmpty()) { // has A resistance
                 if (damageType != DamageType.PURE) {
-                    damage -= resistedTypes.get(DefenseType.DEFENSE);
+                    damage -= resistedTypes.get(ItemStat.DEFENSE);
                 }
 
                 switch (damageType) {
-                    case PHYSICAL -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case FIRE -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case COLD -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case EARTH -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case LIGHTNING -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case AIR -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case LIGHT -> damage -= resistedTypes.get(DefenseType.DEFENSE);
-                    case DARK -> damage -= resistedTypes.get(DefenseType.DEFENSE);
+                    case PHYSICAL -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case FIRE -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case COLD -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case EARTH -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case LIGHTNING -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case AIR -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case LIGHT -> damage -= resistedTypes.get(ItemStat.DEFENSE);
+                    case DARK -> damage -= resistedTypes.get(ItemStat.DEFENSE);
                 }
             }
 
