@@ -2,7 +2,6 @@ package io.github.Gabriel.damagePlugin;
 
 import io.github.Gabriel.damagePlugin.customDamage.*;
 import io.github.Gabriel.damagePlugin.customDamage.CustomDamager;
-import io.github.Gabriel.damagePlugin.customDamage.DamageLore;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageListener;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageManager;
 import io.github.NoOne.nMLPlayerStats.NMLPlayerStats;
@@ -15,7 +14,6 @@ public final class DamagePlugin extends JavaPlugin {
     private static DamagePlugin damagePlugin;
     private NoDamageManager noDamageManager;
     private CustomDamager customDamager;
-    private DamageLore damageLore;
     private static NMLPlayerStats nmlPlayerStats;
     private ProfileManager profileManager;
     private DamageManager damageManager;
@@ -25,7 +23,6 @@ public final class DamagePlugin extends JavaPlugin {
         damagePlugin = this;
         noDamageManager = new NoDamageManager(this);
         customDamager = new CustomDamager(this);
-        damageLore = new DamageLore();
         damageManager = new DamageManager();
 
         Plugin plugin = Bukkit.getPluginManager().getPlugin("NMLPlayerStats");
@@ -52,10 +49,6 @@ public final class DamagePlugin extends JavaPlugin {
 
     public CustomDamager getCustomDamager() {
         return customDamager;
-    }
-
-    public DamageLore getDamageLore() {
-        return damageLore;
     }
 
     public static NMLPlayerStats getNmlPlayerStats() {

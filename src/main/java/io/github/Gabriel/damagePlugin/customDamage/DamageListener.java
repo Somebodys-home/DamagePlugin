@@ -1,6 +1,7 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -10,6 +11,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.HashMap;
+
 public class DamageListener implements Listener {
     private final DamagePlugin plugin;
 
@@ -17,8 +20,13 @@ public class DamageListener implements Listener {
         this.plugin = plugin;
     }
 
+    @EventHandler
+    public void doCustomDamage(CustomDamageEvent event) {
+        CustomDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
+    }
+
     @EventHandler()
-    public void onEntityDamageByPlayerWithoutWeapon(EntityDamageByEntityEvent event) {
+    public void onDamageWithoutWeapon(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity livingEntity) || !(event.getDamager() instanceof Player player)) return;
         if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.DRY_OUT) return;
 
@@ -38,7 +46,9 @@ public class DamageListener implements Listener {
             event.setCancelled(true);
 
             if (weapon.getType() == Material.AIR || !damageManager.doesHaveDamageStats(weapon)) {
-                CustomDamager.doDamage(livingEntity, player, 1, DamageType.PHYSICAL);
+                HashMap<DamageType, Double> fist = new HashMap<>();
+                fist.put(DamageType.PHYSICAL, 1.0);
+                Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist));
             }
 
         } finally {

@@ -5,6 +5,8 @@ import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -43,7 +45,6 @@ public class CustomDamager {
         }
 
         Stats targetStats = profile.getStats();
-
         HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         if (targetStats != null) {
@@ -118,86 +119,6 @@ public class CustomDamager {
                 target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
                 target.damage(totalDamage, damager);
             }
-        }
-    }
-
-    // for single type damage
-    public static void doDamage(LivingEntity target, LivingEntity damager, double damage, DamageType damageType) {
-        Profile targetProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
-
-        if (targetProfile == null) {
-            if (damager instanceof Player player) {
-                player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
-            }
-
-            target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-            target.damage(damage, damager);
-            return;
-        }
-
-        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
-
-        // if damaging a player / has playerstats
-        Stats targetStats = targetProfile.getStats();
-        int evasion = targetStats.getEvasion();
-        int random = (int) (Math.random() * 100) + 1;
-
-        if (random <= evasion || evasion >= 100) {
-            target.sendMessage("your evasion triggered! (" + evasion + "%)");
-        } else {
-            if (targetStats.getDefense() != 0) {
-                resistedTypes.put(ItemStat.DEFENSE, targetStats.getDefense());
-            }
-            if (targetStats.getPhysicalResist() != 0) {
-                resistedTypes.put(ItemStat.PHYSICALRESIST, targetStats.getPhysicalResist());
-            }
-            if (targetStats.getFireResist() != 0) {
-                resistedTypes.put(ItemStat.FIRERESIST, targetStats.getFireResist());
-            }
-            if (targetStats.getColdResist() != 0) {
-                resistedTypes.put(ItemStat.COLDRESIST, targetStats.getColdResist());
-            }
-            if (targetStats.getEarthResist() != 0) {
-                resistedTypes.put(ItemStat.EARTHRESIST, targetStats.getEarthResist());
-            }
-            if (targetStats.getLightningResist() != 0) {
-                resistedTypes.put(ItemStat.LIGHTNINGRESIST, targetStats.getLightningResist());
-            }
-            if (targetStats.getAirResist() != 0) {
-                resistedTypes.put(ItemStat.AIRRESIST, targetStats.getAirResist());
-            }
-            if (targetStats.getLightResist() != 0) {
-                resistedTypes.put(ItemStat.LIGHTRESIST, targetStats.getLightResist());
-            }
-            if (targetStats.getDarkResist() != 0) {
-                resistedTypes.put(ItemStat.DARKRESIST, targetStats.getDarkResist());
-            }
-
-            if (!resistedTypes.isEmpty()) { // has A resistance
-                if (damageType != DamageType.PURE) {
-                    damage -= resistedTypes.get(ItemStat.DEFENSE);
-                }
-
-                switch (damageType) {
-                    case PHYSICAL -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case FIRE -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case COLD -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case EARTH -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case LIGHTNING -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case AIR -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case LIGHT -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                    case DARK -> damage -= resistedTypes.get(ItemStat.DEFENSE);
-                }
-            }
-
-            damageInstance.put(target.getUniqueId(), new DamageInstance(damageType, damage));
-
-            if (damager instanceof Player player) {
-                player.sendMessage(DamageType.getDamageColor(damageType) + "You did " + damage + " " + DamageType.getDamageString(damageType) + " damage!");
-            }
-
-            target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-            target.damage(damage, damager);
         }
     }
 }
