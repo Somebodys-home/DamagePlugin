@@ -1,6 +1,7 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
+import io.github.NoOne.nMLItems.ItemSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -41,11 +42,11 @@ public class DamageListener implements Listener {
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageManager damageManager = new DamageManager();
+            DamageConverter damageConverter = new DamageConverter();
 
             event.setCancelled(true);
 
-            if (weapon.getType() == Material.AIR || !damageManager.doesHaveDamageStats(weapon)) {
+            if (weapon.getType() == Material.AIR || !ItemSystem.hasDamageStats(weapon)) {
                 HashMap<DamageType, Double> fist = new HashMap<>();
                 fist.put(DamageType.PHYSICAL, 1.0);
                 Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist));

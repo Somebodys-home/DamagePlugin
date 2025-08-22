@@ -1,5 +1,6 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
+import io.github.NoOne.nMLItems.ItemStat;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
