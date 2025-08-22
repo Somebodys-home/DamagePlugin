@@ -13,110 +13,124 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CustomDamager {
-    private static DamagePlugin plugin;
+    private static DamagePlugin damagePlugin;
     public record DamageInstance(DamageType type, double damage) {}
-    private static final Map<UUID, DamageInstance> damageInstance = new HashMap<>();
+    private static final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
 
-    public CustomDamager(DamagePlugin plugin) {
-        this.plugin = plugin;
+    public CustomDamager(DamagePlugin damagePlugin) {
+        this.damagePlugin = damagePlugin;
     }
 
     // todo: get rid of damage messages eventually
-    // for multiple damage types
     public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
-        Profile profile = new ProfileManager(plugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
+        Profile targetProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
+        Stats targetStats = targetProfile.getStats();
+        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
-        if (profile == null) {
-            double totalDamage = 0;
-            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-                damageInstance.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
-                totalDamage += entry.getValue();
+        // for things without a profile, like vanilla mobs
+        if (targetProfile == null || targetStats == null) {
+            applyDamage(target, damager, damageSplits);
+        }
 
-                if (damager instanceof Player player && entry.getValue() > 0) {
-                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
-                }
-            }
-
-            target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-            target.damage(totalDamage, damager);
+        // evasion
+        int evasion = targetStats.getEvasion();
+        int random = (int) (Math.random() * 100) + 1;
+        if (random <= evasion || evasion >= 100) {
+            target.sendMessage("your evasion triggered! (" + evasion + "%)");
             return;
         }
 
-        Stats targetStats = profile.getStats();
-        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
+        // elemental resistances
+        if (targetStats.getDefense() != 0) {
+            resistedTypes.put(ItemStat.DEFENSE, targetStats.getDefense());
+        }
+        if (targetStats.getPhysicalResist() != 0) {
+            resistedTypes.put(ItemStat.PHYSICALRESIST, targetStats.getPhysicalResist());
+        }
+        if (targetStats.getFireResist() != 0) {
+            resistedTypes.put(ItemStat.FIRERESIST, targetStats.getFireResist());
+        }
+        if (targetStats.getColdResist() != 0) {
+            resistedTypes.put(ItemStat.COLDRESIST, targetStats.getColdResist());
+        }
+        if (targetStats.getEarthResist() != 0) {
+            resistedTypes.put(ItemStat.EARTHRESIST, targetStats.getEarthResist());
+        }
+        if (targetStats.getLightningResist() != 0) {
+            resistedTypes.put(ItemStat.LIGHTNINGRESIST, targetStats.getLightningResist());
+        }
+        if (targetStats.getAirResist() != 0) {
+            resistedTypes.put(ItemStat.AIRRESIST, targetStats.getAirResist());
+        }
+        if (targetStats.getLightResist() != 0) {
+            resistedTypes.put(ItemStat.LIGHTRESIST, targetStats.getLightResist());
+        }
+        if (targetStats.getDarkResist() != 0) {
+            resistedTypes.put(ItemStat.DARKRESIST, targetStats.getDarkResist());
+        }
 
-        if (targetStats != null) {
-            int evasion = targetStats.getEvasion();
-            int random = (int) (Math.random() * 100) + 1;
+        if (!resistedTypes.isEmpty()) { // has any resistances
+            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+                double value = entry.getValue();
 
-            if (random <= evasion || evasion >= 100) {
-                target.sendMessage("your evasion triggered! (" + evasion + "%)");
-            } else {
-                if (targetStats.getDefense() != 0) {
-                    resistedTypes.put(ItemStat.DEFENSE, targetStats.getDefense());
-                }
-                if (targetStats.getPhysicalResist() != 0) {
-                    resistedTypes.put(ItemStat.PHYSICALRESIST, targetStats.getPhysicalResist());
-                }
-                if (targetStats.getFireResist() != 0) {
-                    resistedTypes.put(ItemStat.FIRERESIST, targetStats.getFireResist());
-                }
-                if (targetStats.getColdResist() != 0) {
-                    resistedTypes.put(ItemStat.COLDRESIST, targetStats.getColdResist());
-                }
-                if (targetStats.getEarthResist() != 0) {
-                    resistedTypes.put(ItemStat.EARTHRESIST, targetStats.getEarthResist());
-                }
-                if (targetStats.getLightningResist() != 0) {
-                    resistedTypes.put(ItemStat.LIGHTNINGRESIST, targetStats.getLightningResist());
-                }
-                if (targetStats.getAirResist() != 0) {
-                    resistedTypes.put(ItemStat.AIRRESIST, targetStats.getAirResist());
-                }
-                if (targetStats.getLightResist() != 0) {
-                    resistedTypes.put(ItemStat.LIGHTRESIST, targetStats.getLightResist());
-                }
-                if (targetStats.getDarkResist() != 0) {
-                    resistedTypes.put(ItemStat.DARKRESIST, targetStats.getDarkResist());
-                }
-
-                double totalDamage = 0;
-                if (!resistedTypes.isEmpty()) { // has A resistance
-                    for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-                        double value = entry.getValue();
-
-                        if (entry.getKey() != DamageType.PURE) {
-                            value -= resistedTypes.getOrDefault(ItemStat.DEFENSE, 0);
-                        }
-
-                        switch (entry.getKey()) {
-                            case PHYSICAL -> value -= resistedTypes.getOrDefault(ItemStat.PHYSICALRESIST, 0);
-                            case FIRE -> value -= resistedTypes.getOrDefault(ItemStat.FIRERESIST, 0);
-                            case COLD -> value -= resistedTypes.getOrDefault(ItemStat.COLDRESIST, 0);
-                            case EARTH -> value -= resistedTypes.getOrDefault(ItemStat.EARTHRESIST, 0);
-                            case LIGHTNING -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTNINGRESIST, 0);
-                            case AIR -> value -= resistedTypes.getOrDefault(ItemStat.AIRRESIST, 0);
-                            case LIGHT -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTRESIST, 0);
-                            case DARK -> value -= resistedTypes.getOrDefault(ItemStat.DARKRESIST, 0);
-                        }
-
-                        value = Math.max(0, value); // Ensure no negative damage
-                        entry.setValue(value);
-                    }
+                if (entry.getKey() != DamageType.PURE) {
+                    value -= resistedTypes.getOrDefault(ItemStat.DEFENSE, 0);
                 }
 
-                for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-                    damageInstance.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
-                    totalDamage += entry.getValue();
-
-                    if (damager instanceof Player player && entry.getValue() > 0) {
-                        player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
-                    }
+                switch (entry.getKey()) {
+                    case PHYSICAL -> value -= resistedTypes.getOrDefault(ItemStat.PHYSICALRESIST, 0);
+                    case FIRE -> value -= resistedTypes.getOrDefault(ItemStat.FIRERESIST, 0);
+                    case COLD -> value -= resistedTypes.getOrDefault(ItemStat.COLDRESIST, 0);
+                    case EARTH -> value -= resistedTypes.getOrDefault(ItemStat.EARTHRESIST, 0);
+                    case LIGHTNING -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTNINGRESIST, 0);
+                    case AIR -> value -= resistedTypes.getOrDefault(ItemStat.AIRRESIST, 0);
+                    case LIGHT -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTRESIST, 0);
+                    case DARK -> value -= resistedTypes.getOrDefault(ItemStat.DARKRESIST, 0);
                 }
 
-                target.setMetadata("recursive_block", new FixedMetadataValue(plugin, true));
-                target.damage(totalDamage, damager);
+                value = Math.max(0, value); // Ensure no negative damage
+                entry.setValue(value);
             }
         }
+
+        applyDamage(target, damager, damageSplits);
+    }
+
+    private static void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+        Profile damagerProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(damager.getUniqueId());
+        Stats damagerStats = damagerProfile.getStats();
+        double totalDamage = 0;
+
+        for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+            boolean critHit = false;
+
+            if (damagerStats != null) {
+                int critChance = damagerStats.getCritChance();
+                int random = (int) (Math.random() * 100) + 1;
+
+                if (random <= critChance) {
+                    critHit = true;
+                }
+            }
+
+            if (critHit) {
+                entry.setValue(entry.getValue() * ((double) damagerStats.getCritDamage()) / 100);
+            }
+
+            damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
+            totalDamage += entry.getValue();
+
+            if (damager instanceof Player player && entry.getValue() > 0) {
+                if (critHit) {
+                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage! (CRIT)");
+                } else {
+                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
+                }
+
+            }
+        }
+
+        target.setMetadata("recursive_block", new FixedMetadataValue(damagePlugin, true));
+        target.damage(totalDamage, damager);
     }
 }
