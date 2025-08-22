@@ -78,7 +78,7 @@ public class DamageConverter {
         return null;
     }
 
-    public static HashMap<DamageType, Double> convertDamageTypeMap2Stats(HashMap<ItemStat, Double> statMap) {
+    public static HashMap<DamageType, Double> convertStatMap2DamageTypes(HashMap<ItemStat, Double> statMap) {
         HashMap<DamageType, Double> damageMap = new HashMap<>();
 
         for (Map.Entry<ItemStat, Double> entry : statMap.entrySet()) {
@@ -88,7 +88,7 @@ public class DamageConverter {
         return damageMap;
     }
 
-    public static HashMap<ItemStat, Double> convertStatMap2DamageTypes(HashMap<DamageType, Double> statMap) {
+    public static HashMap<ItemStat, Double> convertDamageTypeMap2Stats(HashMap<DamageType, Double> statMap) {
         HashMap<ItemStat, Double> damageMap = new HashMap<>();
 
         for (Map.Entry<DamageType, Double> entry : statMap.entrySet()) {
