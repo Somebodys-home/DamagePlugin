@@ -120,6 +120,7 @@ public class CustomDamager {
             damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
             totalDamage += entry.getValue();
 
+            // remove this line eventually
             if (damager instanceof Player player && entry.getValue() > 0) {
                 if (critHit) {
                     player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage! (CRIT)");
