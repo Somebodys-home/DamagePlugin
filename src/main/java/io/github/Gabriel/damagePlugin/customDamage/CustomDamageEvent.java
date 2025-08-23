@@ -13,7 +13,6 @@ public class CustomDamageEvent extends Event {
     private final LivingEntity target;
     private final LivingEntity damager;
     private final HashMap<DamageType, Double> damageSplits;
-    private final int ALDIJAFLKDJALFKJDALJFLAD = 1;
 
     public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits) {
         this.target = target;
