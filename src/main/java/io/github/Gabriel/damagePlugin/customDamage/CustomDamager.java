@@ -24,13 +24,15 @@ public class CustomDamager {
     // todo: get rid of damage messages eventually
     public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile targetProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
-        Stats targetStats = targetProfile.getStats();
-        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         // for things without a profile, like vanilla mobs
-        if (targetProfile == null || targetStats == null) {
+        if (targetProfile == null) {
             applyDamage(target, damager, damageSplits);
         }
+
+        assert targetProfile != null;
+        Stats targetStats = targetProfile.getStats();
+        HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         // evasion
         int evasion = targetStats.getEvasion();
