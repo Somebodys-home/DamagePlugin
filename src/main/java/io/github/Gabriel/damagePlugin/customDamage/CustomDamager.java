@@ -28,9 +28,9 @@ public class CustomDamager {
         // for things without a profile, like vanilla mobs
         if (targetProfile == null) {
             applyDamage(target, damager, damageSplits);
+            return;
         }
 
-        assert targetProfile != null;
         Stats targetStats = targetProfile.getStats();
         HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
