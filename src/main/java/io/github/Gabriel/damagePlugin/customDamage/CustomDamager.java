@@ -102,19 +102,19 @@ public class CustomDamager {
         Profile damagerProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(damager.getUniqueId());
         Stats damagerStats = damagerProfile.getStats();
         double totalDamage = 0;
+        boolean critHit = false;
+
+        // critical hit case
+        if (damagerStats != null) {
+            int critChance = damagerStats.getCritChance();
+            int random = (int) (Math.random() * 100) + 1;
+
+            if (random <= critChance) {
+                critHit = true;
+            }
+        }
 
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-            boolean critHit = false;
-
-            if (damagerStats != null) {
-                int critChance = damagerStats.getCritChance();
-                int random = (int) (Math.random() * 100) + 1;
-
-                if (random <= critChance) {
-                    critHit = true;
-                }
-            }
-
             if (critHit) {
                 entry.setValue(entry.getValue() * ((double) damagerStats.getCritDamage()) / 100);
             }

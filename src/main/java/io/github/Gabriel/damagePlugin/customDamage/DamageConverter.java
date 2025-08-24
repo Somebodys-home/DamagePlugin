@@ -1,6 +1,8 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.NoOne.nMLItems.ItemStat;
+import io.github.NoOne.nMLItems.ItemSystem;
+
 import java.util.HashMap;
 import java.util.Map;
 import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
@@ -82,7 +84,12 @@ public class DamageConverter {
         HashMap<DamageType, Double> damageMap = new HashMap<>();
 
         for (Map.Entry<ItemStat, Double> entry : statMap.entrySet()) {
-            damageMap.put(convertStat2DamageType(entry.getKey()), entry.getValue());
+            if (entry.getKey() == PHYSICALDAMAGE || entry.getKey() == FIREDAMAGE || entry.getKey() == COLDDAMAGE || entry.getKey() == EARTHDAMAGE ||
+                entry.getKey() == LIGHTNINGDAMAGE || entry.getKey() == AIRDAMAGE || entry.getKey() == LIGHTDAMAGE || entry.getKey() == DARKDAMAGE ||
+                entry.getKey() == PUREDAMAGE) {
+
+                damageMap.put(convertStat2DamageType(entry.getKey()), entry.getValue());
+            }
         }
 
         return damageMap;
