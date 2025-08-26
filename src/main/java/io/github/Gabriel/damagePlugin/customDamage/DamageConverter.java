@@ -2,6 +2,8 @@ package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLItems.ItemSystem;
+import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +41,40 @@ public class DamageConverter {
                 return DARK;
             }
             case PUREDAMAGE -> {
+                return PURE;
+            }
+        }
+
+        return null;
+    }
+
+    public static DamageType convertPlayerStat2DamageType(String stat) {
+        switch (stat) {
+            case "physicaldamage" -> {
+                return PHYSICAL;
+            }
+            case "firedamage" -> {
+                return FIRE;
+            }
+            case "colddamage" -> {
+                return COLD;
+            }
+            case "earthdamage" -> {
+                return EARTH;
+            }
+            case "lightningdamage" -> {
+                return LIGHTNING;
+            }
+            case "airdamage" -> {
+                return AIR;
+            }
+            case "lightdamage" -> {
+                return LIGHT;
+            }
+            case "darkdamage" -> {
+                return DARK;
+            }
+            case "puredamage" -> {
                 return PURE;
             }
         }
@@ -100,6 +136,16 @@ public class DamageConverter {
 
         for (Map.Entry<DamageType, Double> entry : statMap.entrySet()) {
             damageMap.put(convertDamageType2Stat(entry.getKey()), entry.getValue());
+        }
+
+        return damageMap;
+    }
+
+    public static HashMap<DamageType, Double> convertPlayerStats2Damage(Stats stats) {
+        HashMap<DamageType, Double> damageMap = new HashMap<>();
+
+        for (Map.Entry<String, Integer> statEntry : stats.getAllDamageStats().entrySet()) {
+            damageMap.put(convertPlayerStat2DamageType(statEntry.getKey()), statEntry.getValue().doubleValue());
         }
 
         return damageMap;
