@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,10 +22,9 @@ public class DamageListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
         if (!event.isCancelled()) {
-            System.out.print("cancelled? " + event.isCancelled());
             CustomDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
         }
     }
