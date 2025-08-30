@@ -23,7 +23,10 @@ public class DamageListener implements Listener {
 
     @EventHandler
     public void doCustomDamage(CustomDamageEvent event) {
-        CustomDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
+        if (!event.isCancelled()) {
+            System.out.print("cancelled? " + event.isCancelled());
+            CustomDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
+        }
     }
 
     @EventHandler()
