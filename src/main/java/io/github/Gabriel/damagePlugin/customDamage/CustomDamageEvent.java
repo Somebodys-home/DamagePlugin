@@ -17,7 +17,7 @@ public class CustomDamageEvent extends Event implements Cancellable {
         this.target = target;
         this.damager = damager;
         this.damageSplits = damageSplits;
-        this.cancelled = false; // default not cancelled
+        this.cancelled = false;
     }
 
     @Override
