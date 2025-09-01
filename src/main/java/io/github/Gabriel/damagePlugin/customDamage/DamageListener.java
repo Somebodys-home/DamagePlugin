@@ -35,17 +35,16 @@ public class DamageListener implements Listener {
         if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.DRY_OUT) return;
 
         // Stops recursive loops in their tracks
-        if (livingEntity.hasMetadata("recursive_block")) {
+        if (livingEntity.hasMetadata("punched")) {
             event.setCancelled(false);
-            livingEntity.removeMetadata("recursive_block", plugin);
+            livingEntity.removeMetadata("punched", plugin);
             return;
         }
 
-        livingEntity.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
+        //livingEntity.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
 
         try {
             ItemStack weapon = player.getInventory().getItemInMainHand();
-            DamageConverter damageConverter = new DamageConverter();
 
             event.setCancelled(true);
 
@@ -56,7 +55,7 @@ public class DamageListener implements Listener {
             }
 
         } finally {
-            livingEntity.removeMetadata("custom-damage-processing", plugin);
+            //livingEntity.removeMetadata("custom-damage-processing", plugin);
         }
     }
 }

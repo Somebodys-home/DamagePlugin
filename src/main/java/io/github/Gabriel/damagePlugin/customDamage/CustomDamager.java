@@ -132,7 +132,8 @@ public class CustomDamager {
             }
         }
 
-        target.setMetadata("recursive_block", new FixedMetadataValue(damagePlugin, true));
+        // in damagelistener
+        target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
     }
 }
