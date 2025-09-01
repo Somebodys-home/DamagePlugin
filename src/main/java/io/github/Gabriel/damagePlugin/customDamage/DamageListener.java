@@ -51,7 +51,7 @@ public class DamageListener implements Listener {
             if (weapon.getType() == Material.AIR || !ItemSystem.hasDamageStats(weapon)) {
                 HashMap<DamageType, Double> fist = new HashMap<>();
                 fist.put(DamageType.PHYSICAL, 1.0);
-                Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist));
+                Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist, "basic"));
             }
 
         } finally {
