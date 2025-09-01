@@ -21,7 +21,6 @@ public class CustomDamager {
         this.damagePlugin = damagePlugin;
     }
 
-    // todo: get rid of damage messages eventually
     public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile targetProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
 
@@ -98,6 +97,7 @@ public class CustomDamager {
         applyDamage(target, damager, damageSplits);
     }
 
+    // todo: get rid of damage messages eventually
     private static void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile damagerProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(damager.getUniqueId());
         Stats damagerStats = damagerProfile.getStats();
@@ -115,20 +115,24 @@ public class CustomDamager {
         }
 
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+            double value = entry.getValue();
+
             if (critHit) {
-                entry.setValue(entry.getValue() * ((double) damagerStats.getCritDamage()) / 100);
+                value *= (damagerStats.getCritDamage() / 100.0);
             }
 
-            damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), entry.getValue()));
-            totalDamage += entry.getValue();
+            damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), value));
+            totalDamage += value;
 
-            if (damager instanceof Player player && entry.getValue() > 0) {
+            double displayValue = Math.round(value * 10.0) / 10.0;
+            if (damager instanceof Player player && value > 0) {
                 if (critHit) {
-                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage! (CRIT)");
+                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) +
+                            "You did " + displayValue + " " + DamageType.getDamageString(entry.getKey()) + " damage! (CRIT)");
                 } else {
-                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) + "You did " + entry.getValue() + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
+                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) +
+                            "You did " + displayValue + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
                 }
-
             }
         }
 
