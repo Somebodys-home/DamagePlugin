@@ -41,21 +41,13 @@ public class DamageListener implements Listener {
             return;
         }
 
-        //livingEntity.setMetadata("custom-damage-processing", new FixedMetadataValue(plugin, true));
+        ItemStack weapon = player.getInventory().getItemInMainHand();
+        event.setCancelled(true);
 
-        try {
-            ItemStack weapon = player.getInventory().getItemInMainHand();
-
-            event.setCancelled(true);
-
-            if (weapon.getType() == Material.AIR || !ItemSystem.hasDamageStats(weapon)) {
-                HashMap<DamageType, Double> fist = new HashMap<>();
-                fist.put(DamageType.PHYSICAL, 1.0);
-                Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist));
-            }
-
-        } finally {
-            //livingEntity.removeMetadata("custom-damage-processing", plugin);
+        if (weapon.getType() == Material.AIR || !ItemSystem.hasDamageStats(weapon)) {
+            HashMap<DamageType, Double> fist = new HashMap<>();
+            fist.put(DamageType.PHYSICAL, 1.0);
+            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist));
         }
     }
 }
