@@ -1,9 +1,7 @@
 package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.NoOne.nMLItems.ItemStat;
-import io.github.NoOne.nMLItems.ItemSystem;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,6 +144,14 @@ public class DamageConverter {
 
         for (Map.Entry<String, Integer> statEntry : stats.getAllDamageStats().entrySet()) {
             damageMap.put(convertPlayerStat2DamageType(statEntry.getKey()), statEntry.getValue().doubleValue());
+        }
+
+        return damageMap;
+    }
+
+    public static HashMap<DamageType, Double> multiplyDamageMap(HashMap<DamageType, Double> damageMap, double multiplier) {
+        for (Map.Entry<DamageType, Double> damageEntry : damageMap.entrySet()) {
+            damageEntry.setValue(damageEntry.getValue() * multiplier);
         }
 
         return damageMap;
