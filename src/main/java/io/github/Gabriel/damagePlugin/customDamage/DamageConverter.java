@@ -5,6 +5,8 @@ import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+
 import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
@@ -147,6 +149,20 @@ public class DamageConverter {
         }
 
         return damageMap;
+    }
+
+    public static HashMap<DamageType, Double> convertPlayerStat2Damage(Stats stats, String stat) {
+        HashMap<DamageType, Double> damage = new HashMap<>();
+        HashMap<String, Integer> damageMap = stats.getAllDamageStats();
+
+        for (Map.Entry<String, Integer> damageEntry : damageMap.entrySet()) {
+            if (Objects.equals(damageEntry.getKey(), stat)) {
+                damage.put(convertPlayerStat2DamageType(damageEntry.getKey()), damageEntry.getValue().doubleValue());
+                return damage;
+            }
+        }
+
+        return damage;
     }
 
     public static HashMap<DamageType, Double> multiplyDamageMap(HashMap<DamageType, Double> damageMap, double multiplier) {
