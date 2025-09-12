@@ -21,7 +21,7 @@ public final class DamagePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         damagePlugin = this;
-        noDamageManager = new NoDamageManager(this);
+        noDamageManager = new NoDamageManager();
         customDamager = new CustomDamager(this);
         damageConverter = new DamageConverter();
 
