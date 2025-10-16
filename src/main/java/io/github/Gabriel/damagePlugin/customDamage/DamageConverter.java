@@ -15,105 +15,57 @@ public class DamageConverter {
     public DamageConverter() {}
 
     public static DamageType convertStat2DamageType(ItemStat stat) {
+        DamageType damageType = null;
+
         switch (stat) {
-            case PHYSICALDAMAGE -> {
-                return PHYSICAL;
-            }
-            case FIREDAMAGE -> {
-                return FIRE;
-            }
-            case COLDDAMAGE -> {
-                return COLD;
-            }
-            case EARTHDAMAGE -> {
-                return EARTH;
-            }
-            case LIGHTNINGDAMAGE -> {
-                return LIGHTNING;
-            }
-            case AIRDAMAGE -> {
-                return AIR;
-            }
-            case LIGHTDAMAGE -> {
-                return LIGHT;
-            }
-            case DARKDAMAGE -> {
-                return DARK;
-            }
-            case PUREDAMAGE -> {
-                return PURE;
-            }
+            case PHYSICALDAMAGE -> damageType = PHYSICAL;
+            case FIREDAMAGE -> damageType = FIRE;
+            case COLDDAMAGE -> damageType = COLD;
+            case EARTHDAMAGE -> damageType = EARTH;
+            case LIGHTNINGDAMAGE -> damageType = LIGHTNING;
+            case AIRDAMAGE -> damageType = AIR;
+            case RADIANTDAMAGE -> damageType = RADIANT;
+            case NECROTICDAMAGE -> damageType = NECROTIC;
+            case PUREDAMAGE -> damageType = PURE;
         }
 
-        return null;
+        return damageType;
     }
 
     public static DamageType convertPlayerStat2DamageType(String stat) {
+        DamageType damageType = null;
+
         switch (stat) {
-            case "physicaldamage" -> {
-                return PHYSICAL;
-            }
-            case "firedamage" -> {
-                return FIRE;
-            }
-            case "colddamage" -> {
-                return COLD;
-            }
-            case "earthdamage" -> {
-                return EARTH;
-            }
-            case "lightningdamage" -> {
-                return LIGHTNING;
-            }
-            case "airdamage" -> {
-                return AIR;
-            }
-            case "lightdamage" -> {
-                return LIGHT;
-            }
-            case "darkdamage" -> {
-                return DARK;
-            }
-            case "puredamage" -> {
-                return PURE;
-            }
+            case "physicaldamage" -> damageType = PHYSICAL;
+            case "firedamage" -> damageType = FIRE;
+            case "colddamage" -> damageType = COLD;
+            case "earthdamage" -> damageType = EARTH;
+            case "lightningdamage" -> damageType = LIGHTNING;
+            case "airdamage" -> damageType = AIR;
+            case "radiantdamage" -> damageType = RADIANT;
+            case "necroticdamage" -> damageType = NECROTIC;
+            case "puredamage" -> damageType = PURE;
         }
 
-        return null;
+        return damageType;
     }
 
     public static ItemStat convertDamageType2Stat(DamageType damageType) {
+        ItemStat itemStat = null;
+
         switch (damageType) {
-            case PHYSICAL -> {
-                return PHYSICALDAMAGE;
-            }
-            case FIRE -> {
-                return FIREDAMAGE;
-            }
-            case COLD -> {
-                return COLDDAMAGE;
-            }
-            case EARTH -> {
-                return EARTHDAMAGE;
-            }
-            case LIGHTNING -> {
-                return LIGHTNINGDAMAGE;
-            }
-            case AIR -> {
-                return AIRDAMAGE;
-            }
-            case LIGHT -> {
-                return LIGHTDAMAGE;
-            }
-            case DARK -> {
-                return DARKDAMAGE;
-            }
-            case PURE -> {
-                return PUREDAMAGE;
-            }
+            case PHYSICAL -> itemStat = PHYSICALDAMAGE;
+            case FIRE -> itemStat = FIREDAMAGE;
+            case COLD -> itemStat = COLDDAMAGE;
+            case EARTH -> itemStat = EARTHDAMAGE;
+            case LIGHTNING -> itemStat = LIGHTNINGDAMAGE;
+            case AIR -> itemStat = AIRDAMAGE;
+            case RADIANT -> itemStat = RADIANTDAMAGE;
+            case NECROTIC -> itemStat = NECROTICDAMAGE;
+            case PURE -> itemStat = PUREDAMAGE;
         }
 
-        return null;
+        return itemStat;
     }
 
     public static HashMap<DamageType, Double> convertStatMap2DamageTypes(HashMap<ItemStat, Double> statMap) {
@@ -121,7 +73,7 @@ public class DamageConverter {
 
         for (Map.Entry<ItemStat, Double> entry : statMap.entrySet()) {
             if (entry.getKey() == PHYSICALDAMAGE || entry.getKey() == FIREDAMAGE || entry.getKey() == COLDDAMAGE || entry.getKey() == EARTHDAMAGE ||
-                entry.getKey() == LIGHTNINGDAMAGE || entry.getKey() == AIRDAMAGE || entry.getKey() == LIGHTDAMAGE || entry.getKey() == DARKDAMAGE ||
+                entry.getKey() == LIGHTNINGDAMAGE || entry.getKey() == AIRDAMAGE || entry.getKey() == RADIANTDAMAGE || entry.getKey() == NECROTICDAMAGE ||
                 entry.getKey() == PUREDAMAGE) {
 
                 damageMap.put(convertStat2DamageType(entry.getKey()), entry.getValue());
@@ -144,7 +96,7 @@ public class DamageConverter {
     public static HashMap<DamageType, Double> convertPlayerStats2Damage(Stats stats) {
         HashMap<DamageType, Double> damageMap = new HashMap<>();
 
-        for (Map.Entry<String, Integer> statEntry : stats.getAllDamageStats().entrySet()) {
+        for (Map.Entry<String, Integer> statEntry : stats.getAllDamages().entrySet()) {
             damageMap.put(convertPlayerStat2DamageType(statEntry.getKey()), statEntry.getValue().doubleValue());
         }
 
@@ -153,7 +105,7 @@ public class DamageConverter {
 
     public static HashMap<DamageType, Double> convertPlayerStat2Damage(Stats stats, String stat) {
         HashMap<DamageType, Double> damage = new HashMap<>();
-        HashMap<String, Integer> damageMap = stats.getAllDamageStats();
+        HashMap<String, Integer> damageMap = stats.getAllDamages();
 
         for (Map.Entry<String, Integer> damageEntry : damageMap.entrySet()) {
             if (Objects.equals(damageEntry.getKey(), stat)) {

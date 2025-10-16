@@ -9,41 +9,26 @@ public enum DamageType {
     EARTH,
     LIGHTNING,
     AIR,
-    LIGHT,
-    DARK,
+    RADIANT,
+    NECROTIC,
     PURE;
 
     public static String getDamageString(DamageType type) {
+        String damage = null;
+
         switch (type) {
-            case PHYSICAL -> {
-                return "Physical";
-            }
-            case FIRE -> {
-                return "Fire";
-            }
-            case COLD -> {
-                return "Cold";
-            }
-            case EARTH -> {
-                return "Earth";
-            }
-            case LIGHTNING -> {
-                return "Lightning";
-            }
-            case AIR -> {
-                return "Air";
-            }
-            case LIGHT -> {
-                return "Light";
-            }
-            case DARK -> {
-                return "Dark";
-            }
-            case PURE -> {
-                return "Pure";
-            }
-            default -> { return null; }
+            case PHYSICAL -> damage = "Physical";
+            case FIRE -> damage = "Fire";
+            case COLD -> damage = "Cold";
+            case EARTH -> damage = "Earth";
+            case LIGHTNING -> damage = "Lightning";
+            case AIR -> damage = "Air";
+            case RADIANT -> damage = "Radiant";
+            case NECROTIC -> damage = "Dark";
+            case PURE -> damage = "Pure";
         }
+
+        return damage;
     }
 
     public static ChatColor getDamageColor(DamageType type) {
@@ -56,8 +41,8 @@ public enum DamageType {
             case EARTH -> color = ChatColor.DARK_GREEN;
             case LIGHTNING -> color = ChatColor.YELLOW;
             case AIR -> color = ChatColor.GRAY;
-            case LIGHT, PURE -> color = ChatColor.WHITE;
-            case DARK -> color = ChatColor.DARK_PURPLE;
+            case RADIANT, PURE -> color = ChatColor.WHITE;
+            case NECROTIC -> color = ChatColor.DARK_PURPLE;
         }
 
         return color;

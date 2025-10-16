@@ -11,36 +11,21 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DamagePlugin extends JavaPlugin {
-    private static DamagePlugin damagePlugin;
+    private ProfileManager profileManager;
     private NoDamageManager noDamageManager;
     private CustomDamager customDamager;
-    private static NMLPlayerStats nmlPlayerStats;
-    private ProfileManager profileManager;
     private DamageConverter damageConverter;
 
     @Override
     public void onEnable() {
-        damagePlugin = this;
+        profileManager = JavaPlugin.getPlugin(NMLPlayerStats.class).getProfileManager();
+
         noDamageManager = new NoDamageManager();
         customDamager = new CustomDamager(this);
         damageConverter = new DamageConverter();
 
-        Plugin plugin = Bukkit.getPluginManager().getPlugin("NMLPlayerStats");
-        if (plugin instanceof NMLPlayerStats statsPlugin) {
-            nmlPlayerStats = statsPlugin;
-            profileManager = nmlPlayerStats.getProfileManager();
-        } else {
-            getLogger().severe("Failed to find NMLPlayerStats! Disabling...");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
-    }
-
-    public static DamagePlugin getInstance() {
-        return damagePlugin;
     }
 
     public NoDamageManager getNoDamageManager() {
@@ -49,10 +34,6 @@ public final class DamagePlugin extends JavaPlugin {
 
     public CustomDamager getCustomDamager() {
         return customDamager;
-    }
-
-    public static NMLPlayerStats getNmlPlayerStats() {
-        return nmlPlayerStats;
     }
 
     public ProfileManager getProfileManager() {

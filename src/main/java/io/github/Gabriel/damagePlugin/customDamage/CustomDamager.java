@@ -12,17 +12,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static io.github.NoOne.nMLItems.ItemStat.*;
+
 public class CustomDamager {
     private static DamagePlugin damagePlugin;
+    private static ProfileManager profileManager;
     public record DamageInstance(DamageType type, double damage) {}
     private static final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
 
     public CustomDamager(DamagePlugin damagePlugin) {
         this.damagePlugin = damagePlugin;
+        profileManager = damagePlugin.getProfileManager();
     }
 
     public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
-        Profile targetProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(target.getUniqueId());
+        Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
         // for things without a profile, like vanilla mobs
         if (targetProfile == null) {
@@ -43,31 +47,31 @@ public class CustomDamager {
 
         // elemental resistances
         if (targetStats.getDefense() != 0) {
-            resistedTypes.put(ItemStat.DEFENSE, targetStats.getDefense());
+            resistedTypes.put(DEFENSE, targetStats.getDefense());
         }
         if (targetStats.getPhysicalResist() != 0) {
-            resistedTypes.put(ItemStat.PHYSICALRESIST, targetStats.getPhysicalResist());
+            resistedTypes.put(PHYSICALRESIST, targetStats.getPhysicalResist());
         }
         if (targetStats.getFireResist() != 0) {
-            resistedTypes.put(ItemStat.FIRERESIST, targetStats.getFireResist());
+            resistedTypes.put(FIRERESIST, targetStats.getFireResist());
         }
         if (targetStats.getColdResist() != 0) {
-            resistedTypes.put(ItemStat.COLDRESIST, targetStats.getColdResist());
+            resistedTypes.put(COLDRESIST, targetStats.getColdResist());
         }
         if (targetStats.getEarthResist() != 0) {
-            resistedTypes.put(ItemStat.EARTHRESIST, targetStats.getEarthResist());
+            resistedTypes.put(EARTHRESIST, targetStats.getEarthResist());
         }
         if (targetStats.getLightningResist() != 0) {
-            resistedTypes.put(ItemStat.LIGHTNINGRESIST, targetStats.getLightningResist());
+            resistedTypes.put(LIGHTNINGRESIST, targetStats.getLightningResist());
         }
         if (targetStats.getAirResist() != 0) {
-            resistedTypes.put(ItemStat.AIRRESIST, targetStats.getAirResist());
+            resistedTypes.put(AIRRESIST, targetStats.getAirResist());
         }
-        if (targetStats.getLightResist() != 0) {
-            resistedTypes.put(ItemStat.LIGHTRESIST, targetStats.getLightResist());
+        if (targetStats.getRadiantResist() != 0) {
+            resistedTypes.put(RADIANTRESIST, targetStats.getRadiantResist());
         }
-        if (targetStats.getDarkResist() != 0) {
-            resistedTypes.put(ItemStat.DARKRESIST, targetStats.getDarkResist());
+        if (targetStats.getNecroticResist() != 0) {
+            resistedTypes.put(NECROTICRESIST, targetStats.getNecroticResist());
         }
 
         if (!resistedTypes.isEmpty()) { // has any resistances
@@ -75,18 +79,18 @@ public class CustomDamager {
                 double value = entry.getValue();
 
                 if (entry.getKey() != DamageType.PURE) {
-                    value -= resistedTypes.getOrDefault(ItemStat.DEFENSE, 0);
+                    value -= resistedTypes.getOrDefault(DEFENSE, 0);
                 }
 
                 switch (entry.getKey()) {
-                    case PHYSICAL -> value -= resistedTypes.getOrDefault(ItemStat.PHYSICALRESIST, 0);
-                    case FIRE -> value -= resistedTypes.getOrDefault(ItemStat.FIRERESIST, 0);
-                    case COLD -> value -= resistedTypes.getOrDefault(ItemStat.COLDRESIST, 0);
-                    case EARTH -> value -= resistedTypes.getOrDefault(ItemStat.EARTHRESIST, 0);
-                    case LIGHTNING -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTNINGRESIST, 0);
-                    case AIR -> value -= resistedTypes.getOrDefault(ItemStat.AIRRESIST, 0);
-                    case LIGHT -> value -= resistedTypes.getOrDefault(ItemStat.LIGHTRESIST, 0);
-                    case DARK -> value -= resistedTypes.getOrDefault(ItemStat.DARKRESIST, 0);
+                    case PHYSICAL -> value -= resistedTypes.getOrDefault(PHYSICALRESIST, 0);
+                    case FIRE -> value -= resistedTypes.getOrDefault(FIRERESIST, 0);
+                    case COLD -> value -= resistedTypes.getOrDefault(COLDRESIST, 0);
+                    case EARTH -> value -= resistedTypes.getOrDefault(EARTHRESIST, 0);
+                    case LIGHTNING -> value -= resistedTypes.getOrDefault(LIGHTNINGRESIST, 0);
+                    case AIR -> value -= resistedTypes.getOrDefault(AIRRESIST, 0);
+                    case RADIANT -> value -= resistedTypes.getOrDefault(RADIANTRESIST, 0);
+                    case NECROTIC -> value -= resistedTypes.getOrDefault(NECROTICRESIST, 0);
                 }
 
                 value = Math.max(0, value); // Ensure no negative damage
@@ -99,7 +103,7 @@ public class CustomDamager {
 
     // todo: get rid of damage messages eventually
     private static void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
-        Profile damagerProfile = new ProfileManager(DamagePlugin.getNmlPlayerStats()).getPlayerProfile(damager.getUniqueId());
+        Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
         Stats damagerStats = damagerProfile.getStats();
         double totalDamage = 0;
         boolean critHit = false;
