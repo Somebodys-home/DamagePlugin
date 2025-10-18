@@ -24,7 +24,7 @@ public enum DamageType {
             case LIGHTNING -> damage = "Lightning";
             case AIR -> damage = "Air";
             case RADIANT -> damage = "Radiant";
-            case NECROTIC -> damage = "Dark";
+            case NECROTIC -> damage = "Necrotic";
             case PURE -> damage = "Pure";
         }
 
