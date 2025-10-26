@@ -135,11 +135,11 @@ public class DamageConverter {
         return damageMap;
     }
 
-    public static HashMap<DamageType, Integer> convertStringIntMap2DamageTypes(HashMap<String, Integer> statMap) {
-        HashMap<DamageType, Integer> damageMap = new HashMap<>();
+    public static HashMap<DamageType, Double> convertStringIntMap2DamageTypes(HashMap<String, Integer> statMap) {
+        HashMap<DamageType, Double> damageMap = new HashMap<>();
 
         for (Map.Entry<String, Integer> entry : statMap.entrySet()) {
-            damageMap.put(convertString2DamageType(entry.getKey()), entry.getValue());
+            damageMap.put(convertString2DamageType(entry.getKey()), entry.getValue().doubleValue());
         }
 
         return damageMap;
