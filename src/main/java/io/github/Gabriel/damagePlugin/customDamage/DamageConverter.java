@@ -125,7 +125,7 @@ public class DamageConverter {
         return damageMap;
     }
 
-    public static HashMap<DamageType, Double> convertStringMap2Stats(HashMap<String, Double> statMap) {
+    public static HashMap<DamageType, Double> convertStringMap2DamageTypes(HashMap<String, Double> statMap) {
         HashMap<DamageType, Double> damageMap = new HashMap<>();
 
         for (Map.Entry<String, Double> entry : statMap.entrySet()) {
