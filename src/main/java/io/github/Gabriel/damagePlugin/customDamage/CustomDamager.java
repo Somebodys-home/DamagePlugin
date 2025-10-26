@@ -27,9 +27,10 @@ public class CustomDamager {
 
     public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
+        Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
 
-        // for things without a profile, like vanilla mobs
-        if (targetProfile == null) {
+        // for things without a player profile, like mobs
+        if (targetProfile == null || damagerProfile == null) {
             applyDamage(target, damager, damageSplits);
             return;
         }
