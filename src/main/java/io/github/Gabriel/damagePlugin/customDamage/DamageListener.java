@@ -25,7 +25,7 @@ public class DamageListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
-        if (event.hasRecursiveBlock()) return;
+        if (event.getTarget().hasMetadata("damage_processing")) return;
         if (!event.isCancelled()) {
             customDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
         }
