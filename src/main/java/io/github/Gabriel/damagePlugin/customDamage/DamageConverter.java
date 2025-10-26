@@ -32,7 +32,7 @@ public class DamageConverter {
         return damageType;
     }
 
-    public static DamageType convertPlayerStat2DamageType(String stat) {
+    public static DamageType convertString2DamageType(String stat) {
         DamageType damageType = null;
 
         switch (stat) {
@@ -97,7 +97,7 @@ public class DamageConverter {
         HashMap<DamageType, Double> damageMap = new HashMap<>();
 
         for (Map.Entry<String, Integer> statEntry : stats.getAllDamages().entrySet()) {
-            damageMap.put(convertPlayerStat2DamageType(statEntry.getKey()), statEntry.getValue().doubleValue());
+            damageMap.put(convertString2DamageType(statEntry.getKey()), statEntry.getValue().doubleValue());
         }
 
         return damageMap;
@@ -109,7 +109,7 @@ public class DamageConverter {
 
         for (Map.Entry<String, Integer> damageEntry : damageMap.entrySet()) {
             if (Objects.equals(damageEntry.getKey(), stat)) {
-                damage.put(convertPlayerStat2DamageType(damageEntry.getKey()), damageEntry.getValue().doubleValue());
+                damage.put(convertString2DamageType(damageEntry.getKey()), damageEntry.getValue().doubleValue());
                 return damage;
             }
         }
@@ -120,6 +120,16 @@ public class DamageConverter {
     public static HashMap<DamageType, Double> multiplyDamageMap(HashMap<DamageType, Double> damageMap, double multiplier) {
         for (Map.Entry<DamageType, Double> damageEntry : damageMap.entrySet()) {
             damageEntry.setValue(damageEntry.getValue() * multiplier);
+        }
+
+        return damageMap;
+    }
+
+    public static HashMap<DamageType, Double> convertStringMap2Stats(HashMap<String, Double> statMap) {
+        HashMap<DamageType, Double> damageMap = new HashMap<>();
+
+        for (Map.Entry<String, Double> entry : statMap.entrySet()) {
+            damageMap.put(convertString2DamageType(entry.getKey()), entry.getValue());
         }
 
         return damageMap;
