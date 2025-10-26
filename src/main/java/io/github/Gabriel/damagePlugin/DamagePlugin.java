@@ -4,6 +4,8 @@ import io.github.Gabriel.damagePlugin.customDamage.*;
 import io.github.Gabriel.damagePlugin.customDamage.CustomDamager;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageListener;
 import io.github.Gabriel.damagePlugin.noDamage.NoDamageManager;
+import io.github.NoOne.nMLMobs.NMLMobs;
+import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.NMLPlayerStats;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import org.bukkit.Bukkit;
@@ -12,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DamagePlugin extends JavaPlugin {
     private ProfileManager profileManager;
+    private MobStatsYMLManager mobStatsYMLManager;
     private NoDamageManager noDamageManager;
     private CustomDamager customDamager;
     private DamageConverter damageConverter;
@@ -19,6 +22,7 @@ public final class DamagePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         profileManager = JavaPlugin.getPlugin(NMLPlayerStats.class).getProfileManager();
+        mobStatsYMLManager = JavaPlugin.getPlugin(NMLMobs.class).getMobStatsYMLManager();
 
         noDamageManager = new NoDamageManager();
         customDamager = new CustomDamager(this);
@@ -42,5 +46,9 @@ public final class DamagePlugin extends JavaPlugin {
 
     public DamageConverter getDamageManager() {
         return damageConverter;
+    }
+
+    public MobStatsYMLManager getMobStatsYMLManager() {
+        return mobStatsYMLManager;
     }
 }

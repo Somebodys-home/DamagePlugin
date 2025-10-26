@@ -2,6 +2,8 @@ package io.github.Gabriel.damagePlugin.customDamage;
 
 import io.github.Gabriel.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLItems.ItemStat;
+import io.github.NoOne.nMLMobs.mobstats.MobStats;
+import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
@@ -15,22 +17,24 @@ import java.util.UUID;
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
 public class CustomDamager {
-    private static DamagePlugin damagePlugin;
-    private static ProfileManager profileManager;
+    private  DamagePlugin damagePlugin;
+    private  ProfileManager profileManager;
+    private  MobStatsYMLManager mobStatsYMLManager;
     public record DamageInstance(DamageType type, double damage) {}
-    private static final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
+    private  final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
 
     public CustomDamager(DamagePlugin damagePlugin) {
         this.damagePlugin = damagePlugin;
         profileManager = damagePlugin.getProfileManager();
+        mobStatsYMLManager = damagePlugin.getMobStatsYMLManager();
     }
 
-    public static void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    public  void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
-        Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
+        MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
 
         // for things without a player profile, like mobs
-        if (targetProfile == null || damagerProfile == null) {
+        if (targetProfile == null) {
             applyDamage(target, damager, damageSplits);
             return;
         }
@@ -99,11 +103,16 @@ public class CustomDamager {
             }
         }
 
-        applyDamage(target, damager, damageSplits);
+        // if the damager is a mob
+        if (mobStats != null) {
+            applyDamageFromMob(target, damager, mobStats, damageSplits);
+        } else {
+            applyDamage(target, damager, damageSplits);
+        }
     }
 
     // todo: get rid of damage messages eventually
-    private static void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    private  void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
         Stats damagerStats = damagerProfile.getStats();
         double totalDamage = 0;
@@ -139,6 +148,37 @@ public class CustomDamager {
                             "You did " + displayValue + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
                 }
             }
+        }
+
+        // in damagelistener
+        target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
+        target.damage(totalDamage, damager);
+    }
+
+    // todo: get rid of damage messages eventually
+    private  void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
+        double totalDamage = 0;
+        boolean critHit = false;
+
+        // critical hit case
+        if (mobStats != null) {
+            int critChance = mobStats.getCritChance();
+            int random = (int) (Math.random() * 100) + 1;
+
+            if (random <= critChance) {
+                critHit = true;
+            }
+        }
+
+        for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+            double value = entry.getValue();
+
+            if (critHit) {
+                value *= (mobStats.getCritDamage() / 100.0);
+            }
+
+            damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), value));
+            totalDamage += value;
         }
 
         // in damagelistener

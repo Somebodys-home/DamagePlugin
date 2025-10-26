@@ -6,3 +6,5 @@ authors: [ Gabriel Nicolas ]
 description: Plugin for No Man's Land for its custom damage types
 depend:
   - NMLItems
+  - NMLPlayerStats
+  - NMLMobs

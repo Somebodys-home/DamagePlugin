@@ -11,21 +11,22 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
 
 import java.util.HashMap;
 
 public class DamageListener implements Listener {
-    private final DamagePlugin plugin;
+    private DamagePlugin damagePlugin;
+    private CustomDamager customDamager;
 
-    public DamageListener(DamagePlugin plugin) {
-        this.plugin = plugin;
+    public DamageListener(DamagePlugin damagePlugin) {
+        this.damagePlugin = damagePlugin;
+        customDamager = damagePlugin.getCustomDamager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
         if (!event.isCancelled()) {
-            CustomDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
+            customDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
         }
     }
 
@@ -37,7 +38,7 @@ public class DamageListener implements Listener {
         // Stops recursive loops in their tracks
         if (livingEntity.hasMetadata("punched")) {
             event.setCancelled(false);
-            livingEntity.removeMetadata("punched", plugin);
+            livingEntity.removeMetadata("punched", damagePlugin);
             return;
         }
 

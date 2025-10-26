@@ -14,7 +14,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <plugins>
+        <plugins><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target></configuration></plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -95,6 +95,12 @@
             <groupId>com.github.Somebodys-home</groupId>
             <artifactId>NMLItems</artifactId>
             <version>e0361cc3f2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.Somebodys-home</groupId>
+            <artifactId>NMLMobs</artifactId>
+            <version>b4c83cf8d7</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
