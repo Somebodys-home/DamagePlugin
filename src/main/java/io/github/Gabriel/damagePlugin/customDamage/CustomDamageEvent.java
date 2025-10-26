@@ -12,12 +12,20 @@ public class CustomDamageEvent extends Event implements Cancellable {
     private final LivingEntity damager;
     private final HashMap<DamageType, Double> damageSplits;
     private boolean cancelled;
+    private boolean recursiveBlock;
 
     public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits) {
         this.target = target;
         this.damager = damager;
         this.damageSplits = damageSplits;
         this.cancelled = false;
+    }
+
+    public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits, boolean recursiveBlock) {
+        this.target = target;
+        this.damager = damager;
+        this.damageSplits = damageSplits;
+        this.recursiveBlock = recursiveBlock;
     }
 
     @Override
@@ -49,5 +57,9 @@ public class CustomDamageEvent extends Event implements Cancellable {
 
     public HashMap<DamageType, Double> getDamageSplits() {
         return damageSplits;
+    }
+
+    public boolean hasRecursiveBlock() {
+        return recursiveBlock;
     }
 }
