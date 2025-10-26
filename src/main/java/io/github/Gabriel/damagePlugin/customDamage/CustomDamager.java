@@ -160,6 +160,7 @@ public class CustomDamager {
         double totalDamage = 0;
         boolean critHit = false;
 
+
         // critical hit case
         if (mobStats != null) {
             int critChance = mobStats.getCritChance();
@@ -183,6 +184,11 @@ public class CustomDamager {
 
         // in damagelistener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
-        target.damage(totalDamage, damager);
+        CustomDamageEvent.setInsideCustomDamage(true);
+        try {
+            target.damage(totalDamage, damager);
+        } finally {
+            CustomDamageEvent.setInsideCustomDamage(false);
+        }
     }
 }
