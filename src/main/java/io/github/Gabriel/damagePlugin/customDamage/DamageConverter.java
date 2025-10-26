@@ -134,4 +134,14 @@ public class DamageConverter {
 
         return damageMap;
     }
+
+    public static HashMap<DamageType, Integer> convertStringIntMap2DamageTypes(HashMap<String, Integer> statMap) {
+        HashMap<DamageType, Integer> damageMap = new HashMap<>();
+
+        for (Map.Entry<String, Integer> entry : statMap.entrySet()) {
+            damageMap.put(convertString2DamageType(entry.getKey()), entry.getValue());
+        }
+
+        return damageMap;
+    }
 }
