@@ -11,7 +11,6 @@ public class CustomDamageEvent extends Event implements Cancellable {
     private final LivingEntity target;
     private final LivingEntity damager;
     private final HashMap<DamageType, Double> damageSplits;
-    private static final ThreadLocal<Boolean> INSIDE_CUSTOM_DAMAGE = ThreadLocal.withInitial(() -> false);
     private boolean cancelled;
 
     public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits) {
@@ -50,13 +49,5 @@ public class CustomDamageEvent extends Event implements Cancellable {
 
     public HashMap<DamageType, Double> getDamageSplits() {
         return damageSplits;
-    }
-
-    public static boolean isInsideCustomDamage() {
-        return INSIDE_CUSTOM_DAMAGE.get();
-    }
-
-    public static void setInsideCustomDamage(boolean v) {
-        INSIDE_CUSTOM_DAMAGE.set(v);
     }
 }

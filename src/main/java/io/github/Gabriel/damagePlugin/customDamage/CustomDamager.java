@@ -112,13 +112,9 @@ public class CustomDamager {
     }
 
     // todo: get rid of damage messages eventually
-    private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    private  void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
-        Stats damagerStats = null;
-        if (damagerProfile != null) {
-            damagerStats = damagerProfile.getStats();
-        }
-
+        Stats damagerStats = damagerProfile.getStats();
         double totalDamage = 0;
         boolean critHit = false;
 
@@ -135,7 +131,7 @@ public class CustomDamager {
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
             double value = entry.getValue();
 
-            if (critHit && damagerStats != null) {
+            if (critHit) {
                 value *= (damagerStats.getCritDamage() / 100.0);
             }
 
@@ -154,20 +150,15 @@ public class CustomDamager {
             }
         }
 
+        // in damagelistener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
-        CustomDamageEvent.setInsideCustomDamage(true);
-        try {
-            target.damage(totalDamage, damager);
-        } finally {
-            CustomDamageEvent.setInsideCustomDamage(false);
-        }
+        target.damage(totalDamage, damager);
     }
 
     // todo: get rid of damage messages eventually
     private  void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
         double totalDamage = 0;
         boolean critHit = false;
-
 
         // critical hit case
         if (mobStats != null) {
@@ -192,11 +183,6 @@ public class CustomDamager {
 
         // in damagelistener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
-        CustomDamageEvent.setInsideCustomDamage(true);
-        try {
-            target.damage(totalDamage, damager);
-        } finally {
-            CustomDamageEvent.setInsideCustomDamage(false);
-        }
+        target.damage(totalDamage, damager);
     }
 }
