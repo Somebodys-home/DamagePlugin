@@ -112,9 +112,13 @@ public class CustomDamager {
     }
 
     // todo: get rid of damage messages eventually
-    private  void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
-        Stats damagerStats = damagerProfile.getStats();
+        Stats damagerStats = null;
+        if (damagerProfile != null) {
+            damagerStats = damagerProfile.getStats();
+        }
+
         double totalDamage = 0;
         boolean critHit = false;
 
@@ -131,7 +135,7 @@ public class CustomDamager {
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
             double value = entry.getValue();
 
-            if (critHit) {
+            if (critHit && damagerStats != null) {
                 value *= (damagerStats.getCritDamage() / 100.0);
             }
 
@@ -150,9 +154,13 @@ public class CustomDamager {
             }
         }
 
-        // in damagelistener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
-        target.damage(totalDamage, damager);
+        CustomDamageEvent.setInsideCustomDamage(true);
+        try {
+            target.damage(totalDamage, damager);
+        } finally {
+            CustomDamageEvent.setInsideCustomDamage(false);
+        }
     }
 
     // todo: get rid of damage messages eventually

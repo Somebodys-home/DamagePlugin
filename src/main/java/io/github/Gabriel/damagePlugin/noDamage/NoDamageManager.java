@@ -6,9 +6,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class NoDamageManager {
-
-    public NoDamageManager() {}
-
     public void removeAttributes(ItemStack item) {
         if (item == null || item.getType().isAir()) {
             return;
