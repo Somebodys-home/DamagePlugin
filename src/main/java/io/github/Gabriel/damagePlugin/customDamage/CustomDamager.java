@@ -31,9 +31,7 @@ public class CustomDamager {
 
     public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, boolean isMobDamager) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
-        MobStats mobStats = null;
 
-        if (isMobDamager) mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
         if (targetProfile == null) { // for things without a player profile, like mobs
             applyDamage(target, damager, damageSplits);
             return;
@@ -104,7 +102,8 @@ public class CustomDamager {
         }
 
         // if the damager is a mob
-        if (mobStats != null) {
+        if (isMobDamager) {
+            MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
             applyDamageFromMob(target, damager, mobStats, damageSplits);
         } else {
             applyDamage(target, damager, damageSplits);
