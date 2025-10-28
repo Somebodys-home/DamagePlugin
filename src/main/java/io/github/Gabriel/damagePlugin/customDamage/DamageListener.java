@@ -26,7 +26,7 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
         if (!event.isCancelled()) {
-            customDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits());
+            customDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits(), event.isMobDamager());
         }
     }
 

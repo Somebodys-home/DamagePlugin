@@ -17,11 +17,11 @@ import java.util.UUID;
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
 public class CustomDamager {
-    private  DamagePlugin damagePlugin;
-    private  ProfileManager profileManager;
-    private  MobStatsYMLManager mobStatsYMLManager;
+    private DamagePlugin damagePlugin;
+    private ProfileManager profileManager;
+    private MobStatsYMLManager mobStatsYMLManager;
     public record DamageInstance(DamageType type, double damage) {}
-    private  final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
+    private final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
 
     public CustomDamager(DamagePlugin damagePlugin) {
         this.damagePlugin = damagePlugin;
@@ -29,12 +29,12 @@ public class CustomDamager {
         mobStatsYMLManager = damagePlugin.getMobStatsYMLManager();
     }
 
-    public  void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, boolean isMobDamager) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
-        MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
+        MobStats mobStats = null;
 
-        // for things without a player profile, like mobs
-        if (targetProfile == null) {
+        if (isMobDamager) mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
+        if (targetProfile == null) { // for things without a player profile, like mobs
             applyDamage(target, damager, damageSplits);
             return;
         }
