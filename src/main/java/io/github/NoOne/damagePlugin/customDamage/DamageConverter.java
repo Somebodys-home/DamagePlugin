@@ -1,4 +1,4 @@
-package io.github.Gabriel.damagePlugin.customDamage;
+package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.github.Gabriel.damagePlugin.customDamage.DamageType.*;
+import static io.github.NoOne.damagePlugin.customDamage.DamageType.*;
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
 public class DamageConverter {

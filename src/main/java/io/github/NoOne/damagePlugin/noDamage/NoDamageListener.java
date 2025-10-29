@@ -1,6 +1,6 @@
-package io.github.Gabriel.damagePlugin.noDamage;
+package io.github.NoOne.damagePlugin.noDamage;
 
-import io.github.Gabriel.damagePlugin.DamagePlugin;
+import io.github.NoOne.damagePlugin.DamagePlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;

@@ -1,6 +1,6 @@
-package io.github.Gabriel.damagePlugin.customDamage;
+package io.github.NoOne.damagePlugin.customDamage;
 
-import io.github.Gabriel.damagePlugin.DamagePlugin;
+import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;

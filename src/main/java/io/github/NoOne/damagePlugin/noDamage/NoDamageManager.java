@@ -1,4 +1,4 @@
-package io.github.Gabriel.damagePlugin.noDamage;
+package io.github.NoOne.damagePlugin.noDamage;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.inventory.ItemFlag;

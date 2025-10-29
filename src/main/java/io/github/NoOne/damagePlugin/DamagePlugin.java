@@ -1,9 +1,9 @@
-package io.github.Gabriel.damagePlugin;
+package io.github.NoOne.damagePlugin;
 
-import io.github.Gabriel.damagePlugin.customDamage.*;
-import io.github.Gabriel.damagePlugin.customDamage.CustomDamager;
-import io.github.Gabriel.damagePlugin.noDamage.NoDamageListener;
-import io.github.Gabriel.damagePlugin.noDamage.NoDamageManager;
+import io.github.NoOne.damagePlugin.customDamage.*;
+import io.github.NoOne.damagePlugin.customDamage.CustomDamager;
+import io.github.NoOne.damagePlugin.noDamage.NoDamageListener;
+import io.github.NoOne.damagePlugin.noDamage.NoDamageManager;
 import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.NMLPlayerStats;

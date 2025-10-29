@@ -1,4 +1,4 @@
-package io.github.Gabriel.damagePlugin.customDamage;
+package io.github.NoOne.damagePlugin.customDamage;
 
 import org.bukkit.ChatColor;
 
