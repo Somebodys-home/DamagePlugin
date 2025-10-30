@@ -2,6 +2,8 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLItems.ItemSystem;
+import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
+import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -17,17 +19,31 @@ import java.util.HashMap;
 public class DamageListener implements Listener {
     private DamagePlugin damagePlugin;
     private CustomDamager customDamager;
+    private ProfileManager profileManager;
 
     public DamageListener(DamagePlugin damagePlugin) {
         this.damagePlugin = damagePlugin;
         customDamager = damagePlugin.getCustomDamager();
+        profileManager = damagePlugin.getProfileManager();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
-        if (!event.isCancelled()) {
-            customDamager.doDamage(event.getTarget(), event.getDamager(), event.getDamageSplits(), event.isMobDamager());
+        LivingEntity target = event.getTarget();
+        Stats targetStats = profileManager.getPlayerProfile(target.getUniqueId()).getStats();
+
+        if (targetStats != null) { // evasion
+            int evasion = targetStats.getEvasion();
+            int random = (int) (Math.random() * 100) + 1;
+
+            if (random <= evasion || evasion >= 100) {
+                target.sendMessage("your evasion triggered! (" + evasion + "%)");
+                event.setCancelled(true);
+                return;
+            }
         }
+
+        if (!event.isCancelled()) customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), event.isMobDamager());
     }
 
     @EventHandler()

@@ -40,14 +40,6 @@ public class CustomDamager {
         Stats targetStats = targetProfile.getStats();
         HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
-        // evasion
-        int evasion = targetStats.getEvasion();
-        int random = (int) (Math.random() * 100) + 1;
-        if (random <= evasion || evasion >= 100) {
-            target.sendMessage("your evasion triggered! (" + evasion + "%)");
-            return;
-        }
-
         // elemental resistances
         if (targetStats.getDefense() != 0) {
             resistedTypes.put(DEFENSE, targetStats.getDefense());
@@ -111,9 +103,8 @@ public class CustomDamager {
     }
 
     // todo: get rid of damage messages eventually
-    private  void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
-        Profile damagerProfile = profileManager.getPlayerProfile(damager.getUniqueId());
-        Stats damagerStats = damagerProfile.getStats();
+    private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+        Stats damagerStats = profileManager.getPlayerProfile(damager.getUniqueId()).getStats();
         double totalDamage = 0;
         boolean critHit = false;
 
@@ -155,7 +146,7 @@ public class CustomDamager {
     }
 
     // todo: get rid of damage messages eventually
-    private  void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
+    private void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
         double totalDamage = 0;
         boolean critHit = false;
 
