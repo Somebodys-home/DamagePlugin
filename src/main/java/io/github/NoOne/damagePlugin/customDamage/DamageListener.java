@@ -2,6 +2,7 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLItems.ItemSystem;
+import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
 import org.bukkit.Bukkit;
@@ -30,9 +31,11 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
-        Stats targetStats = profileManager.getPlayerProfile(target.getUniqueId()).getStats();
+        Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
-        if (targetStats != null) { // evasion
+        // evasion
+        if (targetProfile != null) {
+            Stats targetStats = targetProfile.getStats();
             int evasion = targetStats.getEvasion();
             int random = (int) (Math.random() * 100) + 1;
 
@@ -64,7 +67,7 @@ public class DamageListener implements Listener {
         if (weapon.getType() == Material.AIR || !ItemSystem.hasDamageStats(weapon)) {
             HashMap<DamageType, Double> fist = new HashMap<>();
             fist.put(DamageType.PHYSICAL, 1.0);
-            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist));
+            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist, false));
         }
     }
 }
