@@ -121,28 +121,16 @@ public class CustomDamager {
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
             double value = entry.getValue();
 
-            if (critHit) {
-                value *= (damagerStats.getCritDamage() / 100.0);
-            }
+            if (critHit) value *= (damagerStats.getCritDamage() / 100.0);
 
             damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), value));
             totalDamage += value;
-
-            double displayValue = Math.round(value * 10.0) / 10.0;
-            if (damager instanceof Player player && value > 0) {
-                if (critHit) {
-                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) +
-                            "You did " + displayValue + " " + DamageType.getDamageString(entry.getKey()) + " damage! (CRIT)");
-                } else {
-                    player.sendMessage(DamageType.getDamageColor(entry.getKey()) +
-                            "You did " + displayValue + " " + DamageType.getDamageString(entry.getKey()) + " damage!");
-                }
-            }
         }
 
         // in damagelistener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
+        DamageHologramGenerator.createDamageHologram(damagePlugin, target, damageSplits);
     }
 
     // todo: get rid of damage messages eventually

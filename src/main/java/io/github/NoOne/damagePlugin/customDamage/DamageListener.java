@@ -33,6 +33,10 @@ public class DamageListener implements Listener {
         LivingEntity target = event.getTarget();
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
+        if (target.hasMetadata("hologram")) {
+            event.setCancelled(true);
+        }
+
         // evasion
         if (targetProfile != null) {
             Stats targetStats = targetProfile.getStats();

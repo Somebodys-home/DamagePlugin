@@ -13,10 +13,10 @@ public enum DamageType {
     NECROTIC,
     PURE;
 
-    public static String getDamageString(DamageType type) {
+    public static String getDamageString(DamageType damageType) {
         String damage = null;
 
-        switch (type) {
+        switch (damageType) {
             case PHYSICAL -> damage = "Physical";
             case FIRE -> damage = "Fire";
             case COLD -> damage = "Cold";
@@ -31,10 +31,10 @@ public enum DamageType {
         return damage;
     }
 
-    public static ChatColor getDamageColor(DamageType type) {
+    public static ChatColor getDamageColor(DamageType damageType) {
         ChatColor color = null;
 
-        switch (type) {
+        switch (damageType) {
             case PHYSICAL -> color = ChatColor.DARK_RED;
             case FIRE -> color = ChatColor.RED;
             case COLD -> color = ChatColor.AQUA;
@@ -46,5 +46,23 @@ public enum DamageType {
         }
 
         return color;
+    }
+
+    public static String getDamageEmoji(DamageType damageType) {
+        String emoji = null;
+
+        switch (damageType) {
+            case PHYSICAL -> emoji = "⚔";
+            case FIRE -> emoji = "\uD83D\uDD25";
+            case COLD -> emoji = "❄";
+            case EARTH -> emoji = "\uD83E\uDEA8";
+            case LIGHTNING -> emoji = "\uD83D\uDDF2";
+            case AIR -> emoji = "☁";
+            case RADIANT -> emoji = "✦";
+            case NECROTIC -> emoji = "\uD83C\uDF00";
+            case PURE -> emoji = "\uD83D\uDCA2";
+        }
+
+        return emoji;
     }
 }

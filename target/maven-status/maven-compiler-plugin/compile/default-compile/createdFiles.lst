@@ -1,9 +1,11 @@
+io\github\NoOne\damagePlugin\customDamage\DamageHologramGenerator$1.class
 io\github\NoOne\damagePlugin\customDamage\DamageConverter$1.class
 io\github\NoOne\damagePlugin\noDamage\NoDamageManager.class
 io\github\NoOne\damagePlugin\customDamage\CustomDamager.class
 io\github\NoOne\damagePlugin\customDamage\DamageListener.class
 io\github\NoOne\damagePlugin\customDamage\DamageConverter.class
 io\github\NoOne\damagePlugin\customDamage\CustomDamager$DamageInstance.class
+io\github\NoOne\damagePlugin\customDamage\DamageHologramGenerator.class
 io\github\NoOne\damagePlugin\DamagePlugin.class
 io\github\NoOne\damagePlugin\noDamage\NoDamageListener.class
 io\github\NoOne\damagePlugin\customDamage\CustomDamageEvent.class
