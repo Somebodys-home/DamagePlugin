@@ -130,7 +130,7 @@ public class CustomDamager {
         // in damagelistener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
-        DamageHologramGenerator.createDamageHologram(damagePlugin, target, damageSplits);
+        if (target.getNoDamageTicks() == 20) DamageHologramGenerator.createDamageHologram(damagePlugin, target, damageSplits);
     }
 
     // todo: get rid of damage messages eventually
