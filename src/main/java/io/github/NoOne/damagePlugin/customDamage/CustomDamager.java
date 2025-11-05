@@ -102,7 +102,6 @@ public class CustomDamager {
         }
     }
 
-    // todo: get rid of damage messages eventually
     private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Stats damagerStats = profileManager.getPlayerProfile(damager.getUniqueId()).getStats();
         double totalDamage = 0;
@@ -127,13 +126,12 @@ public class CustomDamager {
             totalDamage += value;
         }
 
-        // in damagelistener
+        // in damage listener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
-        if (target.getNoDamageTicks() == 20) DamageHologramGenerator.createDamageHologram(damagePlugin, target, damageSplits);
+        DamageHologramGenerator.createDamageHologram(damagePlugin, target, damageSplits);
     }
 
-    // todo: get rid of damage messages eventually
     private void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
         double totalDamage = 0;
         boolean critHit = false;

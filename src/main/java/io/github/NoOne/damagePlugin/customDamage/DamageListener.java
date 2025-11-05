@@ -28,29 +28,28 @@ public class DamageListener implements Listener {
         profileManager = damagePlugin.getProfileManager();
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
-        if (target.hasMetadata("hologram")) {
-            event.setCancelled(true);
-        }
+        if (target.hasMetadata("hologram") || target.getNoDamageTicks() != 0) event.setCancelled(true);
+        if (!event.isCancelled()) {
+            if (targetProfile != null) { // evasion
+                Stats targetStats = targetProfile.getStats();
+                int evasion = targetStats.getEvasion();
+                int random = (int) (Math.random() * 100) + 1;
 
-        // evasion
-        if (targetProfile != null) {
-            Stats targetStats = targetProfile.getStats();
-            int evasion = targetStats.getEvasion();
-            int random = (int) (Math.random() * 100) + 1;
-
-            if (random <= evasion || evasion >= 100) {
-                target.sendMessage("your evasion triggered! (" + evasion + "%)");
-                event.setCancelled(true);
-                return;
+                if (random <= evasion || evasion >= 100) {
+                    target.sendMessage("your evasion triggered! (" + evasion + "%)");
+                    event.setCancelled(true);
+                    return;
+                }
             }
-        }
 
-        if (!event.isCancelled()) customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), event.isMobDamager());
+            customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), event.isMobDamager());
+            target.setNoDamageTicks(event.getNoDamageTicks());
+        }
     }
 
     @EventHandler()
