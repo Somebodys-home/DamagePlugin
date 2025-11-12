@@ -12,11 +12,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
@@ -110,8 +108,26 @@ public class CustomDamager {
         double totalDamage = 0;
         boolean critHit = false;
 
-        // critical hit case
-        if (damagerStats != null) critHit = ThreadLocalRandom.current().nextInt(1, 100) <= damagerStats.getCritChance();
+        // sorting damage by highest to lowest
+        effectiveDamageSplits = effectiveDamageSplits.entrySet().stream()
+                .sorted(Map.Entry.<DamageType, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
+        // crit chance & elemental damage
+        if (damagerStats != null) {
+            int elementalDamage = damagerStats.getElementalDamage();
+            Map.Entry<DamageType, Double> highestDamage = effectiveDamageSplits.entrySet().iterator().next();
+
+            critHit = ThreadLocalRandom.current().nextDouble(1, 100) <= damagerStats.getCritChance();
+            highestDamage.setValue(highestDamage.getValue() + elementalDamage);
+            effectiveDamageSplits.put(highestDamage.getKey(), highestDamage.getValue());
+        }
+
         if (critHit) {
             double critMultiplier = damagerStats.getCritDamage() / 100.0;
 
@@ -134,7 +150,7 @@ public class CustomDamager {
         boolean critHit = false;
 
         // critical hit case
-        if (mobStats != null) critHit = ThreadLocalRandom.current().nextInt(1, 100) <= mobStats.getCritChance();
+        if (mobStats != null) critHit = ThreadLocalRandom.current().nextDouble(1, 100) <= mobStats.getCritChance();
         if (critHit) {
             double critMultiplier = mobStats.getCritDamage() / 100.0;
 
