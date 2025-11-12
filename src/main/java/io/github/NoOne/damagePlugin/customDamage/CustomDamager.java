@@ -124,7 +124,12 @@ public class CustomDamager {
             Map.Entry<DamageType, Double> highestDamage = effectiveDamageSplits.entrySet().iterator().next();
 
             critHit = ThreadLocalRandom.current().nextDouble(1, 100) <= damagerStats.getCritChance();
-            highestDamage.setValue(highestDamage.getValue() + elementalDamage);
+
+            // elemental damage doesn't apply to physical or pure damage
+            if (highestDamage.getKey() != DamageType.PHYSICAL && highestDamage.getKey() != DamageType.PURE) {
+                highestDamage.setValue(highestDamage.getValue() + elementalDamage);
+            }
+
             effectiveDamageSplits.put(highestDamage.getKey(), highestDamage.getValue());
         }
 
