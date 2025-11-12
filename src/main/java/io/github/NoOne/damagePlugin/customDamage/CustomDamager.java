@@ -7,12 +7,16 @@ import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
@@ -20,8 +24,6 @@ public class CustomDamager {
     private DamagePlugin damagePlugin;
     private ProfileManager profileManager;
     private MobStatsYMLManager mobStatsYMLManager;
-    public record DamageInstance(DamageType type, double damage) {}
-    private final Map<UUID, DamageInstance> damageInstanceMap = new HashMap<>();
 
     public CustomDamager(DamagePlugin damagePlugin) {
         this.damagePlugin = damagePlugin;
@@ -103,58 +105,40 @@ public class CustomDamager {
     }
 
     private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+        Map<DamageType, Double> effectiveDamageSplits = new EnumMap<>(damageSplits); // shallow copy for enum keys
         Stats damagerStats = profileManager.getPlayerProfile(damager.getUniqueId()).getStats();
         double totalDamage = 0;
         boolean critHit = false;
 
         // critical hit case
-        if (damagerStats != null) {
-            int critChance = damagerStats.getCritChance();
-            int random = (int) (Math.random() * 100) + 1;
+        if (damagerStats != null) critHit = ThreadLocalRandom.current().nextInt(1, 100) <= damagerStats.getCritChance();
+        if (critHit) {
+            double critMultiplier = damagerStats.getCritDamage() / 100.0;
 
-            if (random <= critChance) {
-                critHit = true;
-            }
+            effectiveDamageSplits.replaceAll((k, v) -> v * critMultiplier);
         }
 
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-            double value = entry.getValue();
-
-            if (critHit) value *= (damagerStats.getCritDamage() / 100.0);
-
-            damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), value));
-            totalDamage += value;
+           totalDamage += entry.getValue();
         }
 
         // in damage listener
         target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
-        DamageHologramGenerator.createDamageHologram(damagePlugin, target, damageSplits);
+        DamageHologramGenerator.createDamageHologram(damagePlugin, damager, target, effectiveDamageSplits, critHit);
     }
 
     private void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
+        Map<DamageType, Double> effectiveDamageSplits = new EnumMap<>(damageSplits); // shallow copy for enum keys
         double totalDamage = 0;
         boolean critHit = false;
 
         // critical hit case
-        if (mobStats != null) {
-            int critChance = mobStats.getCritChance();
-            int random = (int) (Math.random() * 100) + 1;
+        if (mobStats != null) critHit = ThreadLocalRandom.current().nextInt(1, 100) <= mobStats.getCritChance();
+        if (critHit) {
+            double critMultiplier = mobStats.getCritDamage() / 100.0;
 
-            if (random <= critChance) {
-                critHit = true;
-            }
-        }
-
-        for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
-            double value = entry.getValue();
-
-            if (critHit) {
-                value *= (mobStats.getCritDamage() / 100.0);
-            }
-
-            damageInstanceMap.put(target.getUniqueId(), new DamageInstance(entry.getKey(), value));
-            totalDamage += value;
+            effectiveDamageSplits.replaceAll((k, v) -> v * critMultiplier);
         }
 
         // in damagelistener

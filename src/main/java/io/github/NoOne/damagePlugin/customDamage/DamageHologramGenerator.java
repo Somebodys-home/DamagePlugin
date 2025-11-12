@@ -7,6 +7,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class DamageHologramGenerator {
-    public static void createDamageHologram(DamagePlugin damagePlugin, LivingEntity damaged, Map<DamageType, Double> damageSplits) {
+    public static void createDamageHologram(DamagePlugin damagePlugin, LivingEntity damager, LivingEntity damaged, Map<DamageType, Double> damageSplits, boolean critHit) {
         Map<DamageType, Double> sortedDamageSplits = damageSplits.entrySet()
                 .stream()
                 .sorted(Map.Entry.<DamageType, Double>comparingByValue().reversed())
@@ -25,10 +26,15 @@ public class DamageHologramGenerator {
                         LinkedHashMap::new // preserve order
                 ));
 
-        Location location = damaged.getLocation().add(
-                ThreadLocalRandom.current().nextDouble(-1, 1),
-                ThreadLocalRandom.current().nextDouble(.5, damaged.getHeight()),
-                ThreadLocalRandom.current().nextDouble(-1, 1));
+        Vector direction = damaged.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().multiply(-1.5);
+        Location location = damaged.getLocation().add(direction).add(0, damaged.getHeight() * 0.5, 0);
+        double xFactor = ThreadLocalRandom.current().nextDouble(-.35, .65);
+        double yFactor = ThreadLocalRandom.current().nextDouble(-.33, .33);
+        double zFactor = ThreadLocalRandom.current().nextDouble(-.35, .65);
+
+        location.setX(location.getX() + xFactor);
+        location.setY(location.getY() + yFactor);
+        location.setZ(location.getZ() + zFactor);
 
         ArmorStand hologram = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
         String name = "";
@@ -39,7 +45,12 @@ public class DamageHologramGenerator {
                     ? String.valueOf((int) displayValue)
                     : String.valueOf(displayValue);
 
-            name += DamageType.getDamageColor(damageEntry.getKey()) + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
+            if (critHit) {
+                name += DamageType.getDamageColor(damageEntry.getKey()) + "§l" + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
+            } else {
+                name += DamageType.getDamageColor(damageEntry.getKey()) + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
+            }
+
         }
 
         hologram.setMetadata("hologram", new FixedMetadataValue(damagePlugin, true));
@@ -48,7 +59,6 @@ public class DamageHologramGenerator {
         hologram.setVisible(false);
         hologram.setGravity(false);
         hologram.setMarker(true); // Removes hitbox.
-        hologram.setSmall(true); // Makes the text appear smaller and cleaner.
         hologram.setInvulnerable(true);
 
         new BukkitRunnable() {
