@@ -2,6 +2,7 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLItems.ItemSystem;
+import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
 import org.bukkit.Bukkit;
@@ -30,11 +31,12 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
-        Stats targetStats = profileManager.getPlayerStats(target.getUniqueId());
+        Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
         if (target.hasMetadata("hologram") || target.getNoDamageTicks() != 0) event.setCancelled(true);
         if (!event.isCancelled()) {
-            if (targetStats != null) { // evasion
+            if (targetProfile != null) { // evasion
+                Stats targetStats = targetProfile.getStats();
                 int evasion = targetStats.getEvasion();
                 int random = (int) (Math.random() * 100) + 1;
 

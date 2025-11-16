@@ -4,10 +4,14 @@ import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
+import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -26,13 +30,14 @@ public class CustomDamager {
     }
 
     public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, boolean isMobDamager) {
-        Stats targetStats = profileManager.getPlayerStats(target.getUniqueId());
+        Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
-        if (targetStats == null) { // for things without a player profile, like mobs
+        if (targetProfile == null) { // for things without a player profile, like mobs
             applyDamage(target, damager, damageSplits);
             return;
         }
 
+        Stats targetStats = targetProfile.getStats();
         HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         // elemental resistances
@@ -99,7 +104,7 @@ public class CustomDamager {
 
     private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
         Map<DamageType, Double> effectiveDamageSplits = new EnumMap<>(damageSplits); // shallow copy for enum keys
-        Stats damagerStats = profileManager.getPlayerStats(damager.getUniqueId());
+        Stats damagerStats = profileManager.getPlayerProfile(damager.getUniqueId()).getStats();
         double totalDamage = 0;
         boolean critHit = false;
 
