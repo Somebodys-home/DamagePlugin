@@ -8,5 +8,6 @@ io\github\NoOne\damagePlugin\customDamage\DamageHologramGenerator.class
 io\github\NoOne\damagePlugin\DamagePlugin.class
 io\github\NoOne\damagePlugin\noDamage\NoDamageListener.class
 io\github\NoOne\damagePlugin\customDamage\CustomDamageEvent.class
+io\github\NoOne\damagePlugin\customDamage\DamageConverter$2.class
 io\github\NoOne\damagePlugin\customDamage\DamageType.class
 io\github\NoOne\damagePlugin\customDamage\CustomDamager$1.class
