@@ -95,10 +95,14 @@ public class DamageConverter {
 
     public static HashMap<DamageType, Double> convertPlayerStats2Damage(Stats stats) {
         HashMap<DamageType, Double> damageMap = new HashMap<>();
-        Map.Entry<String, Integer> entry = stats.getHighestElementalDamage().entrySet().iterator().next();
-        HashMap<DamageType, Double> highestElementalDamage = new HashMap<>(){{
-            put(convertString2DamageType(entry.getKey()), Double.valueOf(entry.getValue()) + stats.getElementalDamage());
-        }};
+        HashMap<DamageType, Double> highestElementalDamage = new HashMap<>();
+
+        if (!stats.getHighestElementalDamage().isEmpty()) {
+            Map.Entry<String, Integer> finalEntry = stats.getHighestElementalDamage().entrySet().iterator().next();
+            highestElementalDamage = new HashMap<>(){{
+                put(convertString2DamageType(finalEntry.getKey()), Double.valueOf(finalEntry.getValue()) + stats.getElementalDamage());
+            }};
+        }
 
         for (Map.Entry<String, Integer> statEntry : stats.getAllDamages().entrySet()) {
             damageMap.put(convertString2DamageType(statEntry.getKey()), statEntry.getValue().doubleValue());
