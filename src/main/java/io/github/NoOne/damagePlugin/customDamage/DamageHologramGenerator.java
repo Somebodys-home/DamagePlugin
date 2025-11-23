@@ -2,6 +2,7 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -51,6 +52,11 @@ public class DamageHologramGenerator {
                 name += DamageType.getDamageColor(damageEntry.getKey()) + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
             }
 
+        }
+
+        if (critHit) {
+            damager.getWorld().playSound(damager, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
+            damager.getWorld().playSound(damager, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
         }
 
         hologram.setMetadata("hologram", new FixedMetadataValue(damagePlugin, true));
