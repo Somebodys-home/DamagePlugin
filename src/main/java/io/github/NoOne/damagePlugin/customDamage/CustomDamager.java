@@ -144,7 +144,6 @@ public class CustomDamager {
         }
 
         // in damage listener
-        target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
         DamageHologramGenerator.createDamageHologram(damagePlugin, damager, target, effectiveDamageSplits, critHit);
     }
@@ -163,7 +162,6 @@ public class CustomDamager {
         }
 
         // in damagelistener
-        target.setMetadata("punched", new FixedMetadataValue(damagePlugin, true));
         target.damage(totalDamage, damager);
     }
 }

@@ -51,26 +51,4 @@ public class DamageListener implements Listener {
             target.setNoDamageTicks(0);
         }
     }
-
-    @EventHandler()
-    public void onDamageWithoutWeapon(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity livingEntity) || !(event.getDamager() instanceof Player player)) return;
-        if (event.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.DRY_OUT) return;
-
-        // Stops recursive loops in their tracks
-        if (livingEntity.hasMetadata("punched")) {
-            event.setCancelled(false);
-            livingEntity.removeMetadata("punched", damagePlugin);
-            return;
-        }
-
-        ItemStack weapon = player.getInventory().getItemInMainHand();
-        event.setCancelled(true);
-
-        if (weapon.getType() == Material.AIR || !ItemSystem.hasDamageStats(weapon)) {
-            HashMap<DamageType, Double> fist = new HashMap<>();
-            fist.put(DamageType.PHYSICAL, 1.0);
-            Bukkit.getPluginManager().callEvent(new CustomDamageEvent(livingEntity, player, fist, false));
-        }
-    }
 }
