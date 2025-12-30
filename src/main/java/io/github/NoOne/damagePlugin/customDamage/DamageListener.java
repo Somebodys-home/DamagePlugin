@@ -18,12 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public class DamageListener implements Listener {
-    private DamagePlugin damagePlugin;
     private CustomDamager customDamager;
     private ProfileManager profileManager;
 
     public DamageListener(DamagePlugin damagePlugin) {
-        this.damagePlugin = damagePlugin;
         customDamager = damagePlugin.getCustomDamager();
         profileManager = damagePlugin.getProfileManager();
     }
