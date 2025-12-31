@@ -26,7 +26,7 @@ public class DamageListener implements Listener {
         profileManager = damagePlugin.getProfileManager();
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
 
