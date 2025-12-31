@@ -46,7 +46,12 @@ public class DamageListener implements Listener {
             }
 
             customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), event.isMobDamager());
-            target.setNoDamageTicks(0);
+
+            if (event.isMobDamager()) {
+                target.setNoDamageTicks(20);
+            } else {
+                target.setNoDamageTicks(0);
+            }
         }
     }
 }

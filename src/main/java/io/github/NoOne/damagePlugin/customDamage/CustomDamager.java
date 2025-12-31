@@ -161,6 +161,6 @@ public class CustomDamager {
             effectiveDamageSplits.replaceAll((k, v) -> v * critMultiplier);
         }
 
-        target.damage(totalDamage, damager);
+        target.damage(totalDamage);
     }
 }
