@@ -7,10 +7,8 @@ import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
-import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,11 +27,11 @@ public class CustomDamager {
         mobStatsYMLManager = damagePlugin.getMobStatsYMLManager();
     }
 
-    public void doDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits, boolean isMobDamager) {
+    public void doDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits, boolean isMobDamager) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
         if (targetProfile == null) { // for things without a player profile, like mobs
-            applyDamage(target, damager, damageSplits);
+            applyDamage(target, attacker, damageSplits);
             return;
         }
 
@@ -95,16 +93,16 @@ public class CustomDamager {
 
         // if the damager is a mob
         if (isMobDamager) {
-            MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(damager.getName());
-            applyDamageFromMob(target, damager, mobStats, damageSplits);
+            MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(attacker.getName());
+            applyDamageFromMob(target, attacker, mobStats, damageSplits);
         } else {
-            applyDamage(target, damager, damageSplits);
+            applyDamage(target, attacker, damageSplits);
         }
     }
 
-    private void applyDamage(LivingEntity target, LivingEntity damager, Map<DamageType, Double> damageSplits) {
+    private void applyDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits) {
         Map<DamageType, Double> effectiveDamageSplits = new EnumMap<>(damageSplits); // shallow copy for enum keys
-        Stats damagerStats = profileManager.getPlayerProfile(damager.getUniqueId()).getStats();
+        Stats damagerStats = profileManager.getPlayerProfile(attacker.getUniqueId()).getStats();
         double totalDamage = 0;
         boolean critHit = false;
 
@@ -143,12 +141,11 @@ public class CustomDamager {
            totalDamage += entry.getValue();
         }
 
-        // in damage listener
-        target.damage(totalDamage, damager);
-        DamageHologramGenerator.createDamageHologram(damagePlugin, damager, target, effectiveDamageSplits, critHit);
+        target.damage(totalDamage, attacker);
+        DamageHologramGenerator.createDamageHologram(damagePlugin, attacker, target, effectiveDamageSplits, critHit);
     }
 
-    private void applyDamageFromMob(LivingEntity target, LivingEntity damager, MobStats mobStats, Map<DamageType, Double> damageSplits) {
+    private void applyDamageFromMob(LivingEntity target, LivingEntity attacker, MobStats mobStats, Map<DamageType, Double> damageSplits) {
         Map<DamageType, Double> effectiveDamageSplits = new EnumMap<>(damageSplits); // shallow copy for enum keys
         double totalDamage = 0;
         boolean critHit = false;
@@ -161,6 +158,15 @@ public class CustomDamager {
             effectiveDamageSplits.replaceAll((k, v) -> v * critMultiplier);
         }
 
+        for (double damage : effectiveDamageSplits.values()) {
+            totalDamage += damage;
+        }
+
+        // knockback
+        Vector knockbackDirection = target.getLocation().toVector().subtract(attacker.getLocation().toVector()).normalize();
+        Vector knockback = knockbackDirection.multiply(.4).setY(.35);
+
         target.damage(totalDamage);
+        target.setVelocity(knockback);
     }
 }
