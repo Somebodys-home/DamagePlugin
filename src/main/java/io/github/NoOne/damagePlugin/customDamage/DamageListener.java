@@ -30,7 +30,7 @@ public class DamageListener implements Listener {
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
 
-        if (target.hasMetadata("hologram") || target.getNoDamageTicks() > 0) event.setCancelled(true);
+        if (target.hasMetadata("hologram") || target.hasMetadata("garden_crop") || target.getNoDamageTicks() > 0) event.setCancelled(true);
         if (!event.isCancelled()) {
             if (event.isMobDamager()) {
                 if (target instanceof Player player) {
