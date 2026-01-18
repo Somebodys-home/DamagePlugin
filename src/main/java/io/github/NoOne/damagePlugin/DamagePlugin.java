@@ -8,8 +8,6 @@ import io.github.NoOne.nMLMobs.NMLMobs;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.NMLPlayerStats;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DamagePlugin extends JavaPlugin {
@@ -17,7 +15,7 @@ public final class DamagePlugin extends JavaPlugin {
     private MobStatsYMLManager mobStatsYMLManager;
     private NoDamageManager noDamageManager;
     private CustomDamager customDamager;
-    private DamageConverter damageConverter;
+    private DamageHelper damageHelper;
 
     @Override
     public void onEnable() {
@@ -26,7 +24,7 @@ public final class DamagePlugin extends JavaPlugin {
 
         noDamageManager = new NoDamageManager();
         customDamager = new CustomDamager(this);
-        damageConverter = new DamageConverter();
+        damageHelper = new DamageHelper();
 
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
@@ -44,8 +42,8 @@ public final class DamagePlugin extends JavaPlugin {
         return profileManager;
     }
 
-    public DamageConverter getDamageManager() {
-        return damageConverter;
+    public DamageHelper getDamageManager() {
+        return damageHelper;
     }
 
     public MobStatsYMLManager getMobStatsYMLManager() {

@@ -2,6 +2,7 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.nMLItems.ItemStat;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +11,7 @@ import java.util.Objects;
 import static io.github.NoOne.damagePlugin.customDamage.DamageType.*;
 import static io.github.NoOne.nMLItems.ItemStat.*;
 
-public class DamageConverter {
-
-    public DamageConverter() {}
-
+public class DamageHelper {
     public static DamageType convertStat2DamageType(ItemStat stat) {
         DamageType damageType = null;
 
@@ -152,5 +150,9 @@ public class DamageConverter {
         }
 
         return damageMap;
+    }
+
+    public static boolean isMobDamageable(LivingEntity livingEntity) {
+        return !livingEntity.hasMetadata("hologram") && !livingEntity.hasMetadata("garden_crop") && livingEntity.getNoDamageTicks() <= 0;
     }
 }

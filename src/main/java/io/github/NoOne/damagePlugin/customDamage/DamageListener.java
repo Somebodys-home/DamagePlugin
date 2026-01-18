@@ -1,21 +1,13 @@
 package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
-import io.github.NoOne.nMLItems.ItemSystem;
-import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
-
-import java.util.HashMap;
 
 public class DamageListener implements Listener {
     private CustomDamager customDamager;
@@ -30,7 +22,7 @@ public class DamageListener implements Listener {
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
 
-        if (target.hasMetadata("hologram") || target.hasMetadata("garden_crop") || target.getNoDamageTicks() > 0) event.setCancelled(true);
+        if (!DamageHelper.isMobDamageable(target)) event.setCancelled(true);
         if (!event.isCancelled()) {
             if (event.isMobDamager()) {
                 if (target instanceof Player player) {
