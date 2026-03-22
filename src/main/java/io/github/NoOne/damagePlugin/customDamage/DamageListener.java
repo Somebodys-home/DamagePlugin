@@ -22,7 +22,7 @@ public class DamageListener implements Listener {
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
 
-        if (!DamageHelper.isMobDamageable(target)) event.setCancelled(true);
+        if (!DamageHelper.isMobDamageable(target) || event.getDamageSplits().isEmpty()) event.setCancelled(true);
         if (!event.isCancelled()) {
             if (event.isMobDamager()) {
                 if (target instanceof Player player) {
