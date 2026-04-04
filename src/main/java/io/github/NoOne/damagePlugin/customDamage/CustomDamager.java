@@ -7,6 +7,7 @@ import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
@@ -135,6 +136,8 @@ public class CustomDamager {
             double critMultiplier = damagerStats.getCritDamage() / 100.0;
 
             effectiveDamageSplits.replaceAll((k, v) -> v * critMultiplier);
+            attacker.getWorld().playSound(attacker, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
+            attacker.getWorld().playSound(attacker, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
         }
 
         for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {

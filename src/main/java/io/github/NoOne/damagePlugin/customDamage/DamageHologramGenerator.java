@@ -26,8 +26,12 @@ public class DamageHologramGenerator {
                         (e1, e2) -> e1, // merge function (not used)
                         LinkedHashMap::new // preserve order
                 ));
+        Vector direction = damaged.getLocation().toVector().subtract(damager.getLocation().toVector());
 
-        Vector direction = damaged.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize().multiply(-1.5);
+        if (direction.length() > 0) {
+            direction.normalize().multiply(-1.5);
+        }
+
         Location location = damaged.getLocation().add(direction).add(0, damaged.getHeight() * 0.5, 0);
         double xFactor = ThreadLocalRandom.current().nextDouble(-.35, .65);
         double yFactor = ThreadLocalRandom.current().nextDouble(-.33, .33);
@@ -52,11 +56,6 @@ public class DamageHologramGenerator {
                 name += DamageType.getDamageColor(damageEntry.getKey()) + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
             }
 
-        }
-
-        if (critHit) {
-            damager.getWorld().playSound(damager, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
-            damager.getWorld().playSound(damager, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
         }
 
         hologram.setMetadata("hologram", new FixedMetadataValue(damagePlugin, true));
