@@ -125,11 +125,13 @@ public class DamageHelper {
     }
 
     public static HashMap<DamageType, Double> multiplyDamageMap(HashMap<DamageType, Double> damageMap, double multiplier) {
-        for (Map.Entry<DamageType, Double> damageEntry : damageMap.entrySet()) {
+        HashMap<DamageType, Double> copy =  new HashMap<>(damageMap);
+
+        for (Map.Entry<DamageType, Double> damageEntry : copy.entrySet()) {
             damageEntry.setValue(damageEntry.getValue() * multiplier);
         }
 
-        return damageMap;
+        return copy;
     }
 
     public static HashMap<DamageType, Double> convertStringMap2DamageTypes(HashMap<String, Double> statMap) {
