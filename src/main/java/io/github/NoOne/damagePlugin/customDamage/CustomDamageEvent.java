@@ -12,14 +12,16 @@ public class CustomDamageEvent extends Event implements Cancellable {
     private final LivingEntity damager;
     private final HashMap<DamageType, Double> damageSplits;
     private boolean cancelled;
-    private boolean mobDamager = false;
-    private int noDamageTicks = 20;
+    private boolean mobDamager;
+    private int noDamageTicks;
 
     public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits) {
         this.target = target;
         this.damager = damager;
         this.damageSplits = damageSplits;
         this.cancelled = false;
+        mobDamager = false;
+        noDamageTicks = 0;
     }
 
     public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits, int noDamageTicks) {
@@ -28,6 +30,7 @@ public class CustomDamageEvent extends Event implements Cancellable {
         this.damageSplits = damageSplits;
         this.cancelled = false;
         this.noDamageTicks = noDamageTicks;
+        mobDamager = false;
     }
 
     public CustomDamageEvent(LivingEntity target, LivingEntity damager, HashMap<DamageType, Double> damageSplits, boolean mobDamager) {
@@ -36,6 +39,7 @@ public class CustomDamageEvent extends Event implements Cancellable {
         this.damageSplits = damageSplits;
         this.cancelled = false;
         this.mobDamager = mobDamager;
+        noDamageTicks = 0;
     }
 
     @Override
