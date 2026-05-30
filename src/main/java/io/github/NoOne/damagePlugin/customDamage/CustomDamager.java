@@ -28,11 +28,11 @@ public class CustomDamager {
         mobStatsYMLManager = damagePlugin.getMobStatsYMLManager();
     }
 
-    public void doDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits, boolean isMobDamager) {
+    public void doDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits, boolean isMobDamager, int noDamageTicks) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
 
         if (targetProfile == null) { // for things without a player profile, like mobs
-            applyDamage(target, attacker, damageSplits);
+            applyDamage(target, attacker, damageSplits, noDamageTicks);
             return;
         }
 
@@ -97,11 +97,11 @@ public class CustomDamager {
             MobStats mobStats = mobStatsYMLManager.getMobStatsFromYml(attacker.getName());
             applyDamageFromMob(target, attacker, mobStats, damageSplits);
         } else {
-            applyDamage(target, attacker, damageSplits);
+            applyDamage(target, attacker, damageSplits, noDamageTicks);
         }
     }
 
-    private void applyDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits) {
+    private void applyDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits, int noDamageTicks) {
         Map<DamageType, Double> effectiveDamageSplits = new EnumMap<>(damageSplits); // shallow copy for enum keys
         Stats damagerStats = profileManager.getPlayerProfile(attacker.getUniqueId()).getStats();
         double totalDamage = 0;
@@ -140,11 +140,12 @@ public class CustomDamager {
             attacker.getWorld().playSound(attacker, Sound.ENTITY_PLAYER_ATTACK_CRIT, 2f, 1f);
         }
 
-        for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+        for (Map.Entry<DamageType, Double> entry : effectiveDamageSplits.entrySet()) {
            totalDamage += entry.getValue();
         }
 
         target.damage(totalDamage, attacker);
+        target.setNoDamageTicks(noDamageTicks);
         DamageHologramGenerator.createDamageHologram(damagePlugin, attacker, target, effectiveDamageSplits, critHit);
     }
 
