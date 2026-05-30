@@ -22,25 +22,23 @@ public class DamageListener implements Listener {
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
 
-        if (!DamageHelper.isMobDamageable(target) || event.getDamageSplits().isEmpty()) event.setCancelled(true);
-        if (!event.isCancelled()) {
-            if (event.isMobDamager()) {
-                if (target instanceof Player player) {
-                    Stats targetStats = profileManager.getPlayerProfile(player.getUniqueId()).getStats();
-                    int evasion = targetStats.getEvasion();
-                    int random = (int) (Math.random() * 100) + 1;
+        if (!DamageHelper.isMobDamageable(target) || event.getDamageSplits().isEmpty()) return;
+        if (event.isMobDamager()) {
+            if (target instanceof Player player) {
+                Stats targetStats = profileManager.getPlayerProfile(player.getUniqueId()).getStats();
+                int evasion = targetStats.getEvasion();
+                int random = (int) (Math.random() * 100) + 1;
 
-                    if (random <= evasion || evasion >= 100) { // evasion
-                        player.sendMessage("your evasion triggered! (" + evasion + "%)");
-                        event.setCancelled(true);
-                        return;
-                    }
-
-                    customDamager.doDamage(player, event.getDamager(), event.getDamageSplits(), true, event.getNoDamageTicks());
+                if (random <= evasion || evasion >= 100) { // evasion
+                    player.sendMessage("your evasion triggered! (" + evasion + "%)");
+                    event.setCancelled(true);
+                    return;
                 }
-            } else {
-                customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), false, event.getNoDamageTicks());
+
+                customDamager.doDamage(player, event.getDamager(), event.getDamageSplits(), true, event.getNoDamageTicks());
             }
+        } else {
+            customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), false, event.getNoDamageTicks());
         }
     }
 }
