@@ -22,7 +22,7 @@ public class DamageListener implements Listener {
     public void doCustomDamage(CustomDamageEvent event) {
         LivingEntity target = event.getTarget();
 
-        if (!DamageHelper.isMobDamageable(target) || event.getDamageSplits().isEmpty()) return;
+        if (!DamageHelper.isMobDamageable(target) || event.getDamageSplits().isEmpty() || target.hasMetadata("hologram")) return;
         if (event.isMobDamager()) {
             if (target instanceof Player player) {
                 Stats targetStats = profileManager.getPlayerProfile(player.getUniqueId()).getStats();
