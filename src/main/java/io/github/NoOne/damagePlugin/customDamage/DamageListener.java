@@ -3,11 +3,15 @@ package io.github.NoOne.damagePlugin.customDamage;
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DamageListener implements Listener {
     private CustomDamager customDamager;
@@ -39,6 +43,22 @@ public class DamageListener implements Listener {
             }
         } else {
             customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), false, event.getNoDamageTicks());
+        }
+    }
+
+    @EventHandler
+    public void noFallDamage(EntityDamageEvent event) {
+        if (event.getEntity().hasMetadata("no_fall_damage") && event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void noFireworkDamage(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Firework firework) {
+            if (firework.hasMetadata("no_damage")) {
+                event.setCancelled(true);
+            }
         }
     }
 }
