@@ -30,8 +30,33 @@ public class CustomDamager {
 
     public void doDamage(LivingEntity target, LivingEntity attacker, Map<DamageType, Double> damageSplits, boolean isMobDamager, int noDamageTicks) {
         Profile targetProfile = profileManager.getPlayerProfile(target.getUniqueId());
+        Profile attackerProfile = profileManager.getPlayerProfile(attacker.getUniqueId());
 
-        if (targetProfile == null) { // for things without a player profile, like mobs
+        // sorting the damage map from highest to lowest
+        damageSplits = damageSplits.entrySet().stream()
+                .sorted(Map.Entry.<DamageType, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                )
+        );
+
+        if (attackerProfile != null) { // if attacker has stats, apply raw elemental damage to damage map
+            Stats attackerStats = attackerProfile.getStats();
+            int elementalDamage = attackerStats.getElementalDamage();
+            Map.Entry<DamageType, Double> highestDamage = damageSplits.entrySet().iterator().next();
+
+            // elemental damage doesn't apply to physical or pure damage
+            if (highestDamage.getKey() != DamageType.PHYSICAL && highestDamage.getKey() != DamageType.PURE) {
+                highestDamage.setValue(highestDamage.getValue() + elementalDamage);
+            }
+
+            damageSplits.put(highestDamage.getKey(), highestDamage.getValue());
+        }
+
+        if (targetProfile == null) { // if target doesn't have stats, just apply damage now
             applyDamage(target, attacker, damageSplits, noDamageTicks);
             return;
         }
@@ -40,54 +65,37 @@ public class CustomDamager {
         HashMap<ItemStat, Integer> resistedTypes = new HashMap<>();
 
         // elemental resistances
-        if (targetStats.getDefense() != 0) {
-            resistedTypes.put(DEFENSE, targetStats.getDefense());
-        }
-        if (targetStats.getPhysicalResist() != 0) {
-            resistedTypes.put(PHYSICALRESIST, targetStats.getPhysicalResist());
-        }
-        if (targetStats.getFireResist() != 0) {
-            resistedTypes.put(FIRERESIST, targetStats.getFireResist());
-        }
-        if (targetStats.getColdResist() != 0) {
-            resistedTypes.put(COLDRESIST, targetStats.getColdResist());
-        }
-        if (targetStats.getEarthResist() != 0) {
-            resistedTypes.put(EARTHRESIST, targetStats.getEarthResist());
-        }
-        if (targetStats.getLightningResist() != 0) {
-            resistedTypes.put(LIGHTNINGRESIST, targetStats.getLightningResist());
-        }
-        if (targetStats.getAirResist() != 0) {
-            resistedTypes.put(AIRRESIST, targetStats.getAirResist());
-        }
-        if (targetStats.getRadiantResist() != 0) {
-            resistedTypes.put(RADIANTRESIST, targetStats.getRadiantResist());
-        }
-        if (targetStats.getNecroticResist() != 0) {
-            resistedTypes.put(NECROTICRESIST, targetStats.getNecroticResist());
-        }
+        if (targetStats.getDefense() != 0) resistedTypes.put(DEFENSE, targetStats.getDefense());
+        if (targetStats.getPhysicalResist() != 0) resistedTypes.put(PHYSICALRESIST, targetStats.getPhysicalResist());
+        if (targetStats.getFireResist() != 0) resistedTypes.put(FIRERESIST, targetStats.getFireResist());
+        if (targetStats.getColdResist() != 0) resistedTypes.put(COLDRESIST, targetStats.getColdResist());
+        if (targetStats.getEarthResist() != 0) resistedTypes.put(EARTHRESIST, targetStats.getEarthResist());
+        if (targetStats.getLightningResist() != 0) resistedTypes.put(LIGHTNINGRESIST, targetStats.getLightningResist());
+        if (targetStats.getAirResist() != 0) resistedTypes.put(AIRRESIST, targetStats.getAirResist());
+        if (targetStats.getRadiantResist() != 0) resistedTypes.put(RADIANTRESIST, targetStats.getRadiantResist());
+        if (targetStats.getNecroticResist() != 0) resistedTypes.put(NECROTICRESIST, targetStats.getNecroticResist());
 
-        if (!resistedTypes.isEmpty()) { // has any resistances
-            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) {
+        if (!resistedTypes.isEmpty()) { // if target has any resistances
+            for (Map.Entry<DamageType, Double> entry : damageSplits.entrySet()) { // for every damage type
                 double value = entry.getValue();
+                double damageReductionPercent = 0;
 
-                if (entry.getKey() != DamageType.PURE) {
-                    value -= resistedTypes.getOrDefault(DEFENSE, 0);
+                if (entry.getKey() != DamageType.PURE) { // apply defense reduction on everything except pure damage
+                    damageReductionPercent += resistedTypes.getOrDefault(DEFENSE, 0) * .005; // .5% : 1
                 }
 
-                switch (entry.getKey()) {
-                    case PHYSICAL -> value -= resistedTypes.getOrDefault(PHYSICALRESIST, 0);
-                    case FIRE -> value -= resistedTypes.getOrDefault(FIRERESIST, 0);
-                    case COLD -> value -= resistedTypes.getOrDefault(COLDRESIST, 0);
-                    case EARTH -> value -= resistedTypes.getOrDefault(EARTHRESIST, 0);
-                    case LIGHTNING -> value -= resistedTypes.getOrDefault(LIGHTNINGRESIST, 0);
-                    case AIR -> value -= resistedTypes.getOrDefault(AIRRESIST, 0);
-                    case RADIANT -> value -= resistedTypes.getOrDefault(RADIANTRESIST, 0);
-                    case NECROTIC -> value -= resistedTypes.getOrDefault(NECROTICRESIST, 0);
+                switch (entry.getKey()) { // then go into elemental resistances (1% : 1)
+                    case PHYSICAL -> damageReductionPercent += resistedTypes.getOrDefault(PHYSICALRESIST, 0) * .01;
+                    case FIRE -> damageReductionPercent += resistedTypes.getOrDefault(FIRERESIST, 0) * .01;
+                    case COLD -> damageReductionPercent += resistedTypes.getOrDefault(COLDRESIST, 0) * .01;
+                    case EARTH -> damageReductionPercent += resistedTypes.getOrDefault(EARTHRESIST, 0) * .01;
+                    case LIGHTNING -> damageReductionPercent += resistedTypes.getOrDefault(LIGHTNINGRESIST, 0) * .01;
+                    case AIR -> damageReductionPercent += resistedTypes.getOrDefault(AIRRESIST, 0) * .01;
+                    case RADIANT -> damageReductionPercent += resistedTypes.getOrDefault(RADIANTRESIST, 0) * .01;
+                    case NECROTIC -> damageReductionPercent += resistedTypes.getOrDefault(NECROTICRESIST, 0) * .01;
                 }
 
-                value = Math.max(0, value); // Ensure no negative damage
+                value = Math.max(0, value * damageReductionPercent);
                 entry.setValue(value);
             }
         }
@@ -107,31 +115,8 @@ public class CustomDamager {
         double totalDamage = 0;
         boolean critHit = false;
 
-        // sorting damage by highest to lowest
-        effectiveDamageSplits = effectiveDamageSplits.entrySet().stream()
-                .sorted(Map.Entry.<DamageType, Double>comparingByValue().reversed())
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (e1, e2) -> e1,
-                        LinkedHashMap::new
-                ));
-
-        // crit chance & elemental damage
-        if (damagerStats != null) {
-            int elementalDamage = damagerStats.getElementalDamage();
-            Map.Entry<DamageType, Double> highestDamage = effectiveDamageSplits.entrySet().iterator().next();
-
-            critHit = ThreadLocalRandom.current().nextDouble(1, 100) <= damagerStats.getCritChance();
-
-            // elemental damage doesn't apply to physical or pure damage
-            if (highestDamage.getKey() != DamageType.PHYSICAL && highestDamage.getKey() != DamageType.PURE) {
-                highestDamage.setValue(highestDamage.getValue() + elementalDamage);
-            }
-
-            effectiveDamageSplits.put(highestDamage.getKey(), highestDamage.getValue());
-        }
-
+        // crit chance
+        if (damagerStats != null) critHit = ThreadLocalRandom.current().nextDouble(1, 100) <= damagerStats.getCritChance();
         if (critHit) {
             double critMultiplier = damagerStats.getCritDamage() / 100.0;
 
