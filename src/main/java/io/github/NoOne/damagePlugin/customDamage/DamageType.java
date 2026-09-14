@@ -1,7 +1,5 @@
 package io.github.NoOne.damagePlugin.customDamage;
 
-import org.bukkit.ChatColor;
-
 public enum DamageType {
     PHYSICAL,
     FIRE,
@@ -13,56 +11,44 @@ public enum DamageType {
     NECROTIC,
     PURE;
 
-    public static String getDamageString(DamageType damageType) {
-        String damage = null;
-
-        switch (damageType) {
-            case PHYSICAL -> damage = "Physical";
-            case FIRE -> damage = "Fire";
-            case COLD -> damage = "Cold";
-            case EARTH -> damage = "Earth";
-            case LIGHTNING -> damage = "Lightning";
-            case AIR -> damage = "Air";
-            case RADIANT -> damage = "Radiant";
-            case NECROTIC -> damage = "Necrotic";
-            case PURE -> damage = "Pure";
-        }
-
-        return damage;
+    public static String toString(DamageType damageType) {
+        return switch (damageType) {
+            case PHYSICAL -> "Physical";
+            case FIRE -> "Fire";
+            case COLD -> "Cold";
+            case EARTH -> "Earth";
+            case LIGHTNING -> "Lightning";
+            case AIR -> "Air";
+            case RADIANT -> "Radiant";
+            case NECROTIC -> "Necrotic";
+            case PURE -> "Pure";
+        };
     }
 
-    public static ChatColor getDamageColor(DamageType damageType) {
-        ChatColor color = null;
-
-        switch (damageType) {
-            case PHYSICAL -> color = ChatColor.DARK_RED;
-            case FIRE -> color = ChatColor.RED;
-            case COLD -> color = ChatColor.AQUA;
-            case EARTH -> color = ChatColor.DARK_GREEN;
-            case LIGHTNING -> color = ChatColor.YELLOW;
-            case AIR -> color = ChatColor.GRAY;
-            case RADIANT, PURE -> color = ChatColor.WHITE;
-            case NECROTIC -> color = ChatColor.DARK_PURPLE;
-        }
-
-        return color;
+    public static String toChatColor(DamageType damageType) {
+        return switch (damageType) {
+            case PHYSICAL -> "§4";
+            case FIRE -> "§c";
+            case COLD -> "§b";
+            case EARTH -> "§2";
+            case LIGHTNING -> "§e";
+            case AIR -> "§7";
+            case RADIANT, PURE -> "§f";
+            case NECROTIC -> "§5";
+        };
     }
 
-    public static String getDamageEmoji(DamageType damageType) {
-        String emoji = null;
-
-        switch (damageType) {
-            case PHYSICAL -> emoji = "⚔";
-            case FIRE -> emoji = "\uD83D\uDD25";
-            case COLD -> emoji = "❄";
-            case EARTH -> emoji = "\uD83E\uDEA8";
-            case LIGHTNING -> emoji = "\uD83D\uDDF2";
-            case AIR -> emoji = "☁";
-            case RADIANT -> emoji = "✦";
-            case NECROTIC -> emoji = "\uD83C\uDF00";
-            case PURE -> emoji = "\uD83D\uDCA2";
-        }
-
-        return emoji;
+    public static String toEmoji(DamageType damageType) {
+        return switch (damageType) {
+            case PHYSICAL -> "⚔";
+            case FIRE -> "\uD83D\uDD25";
+            case COLD -> "❄";
+            case EARTH -> "\uD83E\uDEA8";
+            case LIGHTNING -> "\uD83D\uDDF2";
+            case AIR -> "☁";
+            case RADIANT -> "✦";
+            case NECROTIC -> "\uD83C\uDF00";
+            case PURE -> "\uD83D\uDCA2";
+        };
     }
 }

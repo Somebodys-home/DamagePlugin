@@ -2,7 +2,6 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -51,9 +50,9 @@ public class DamageHologramGenerator {
                     : String.valueOf(displayValue);
 
             if (critHit) {
-                name += DamageType.getDamageColor(damageEntry.getKey()) + "§l" + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
+                name += DamageType.toChatColor(damageEntry.getKey()) + "§l" + formatted + " " + DamageType.toEmoji(damageEntry.getKey()) + " ";
             } else {
-                name += DamageType.getDamageColor(damageEntry.getKey()) + formatted + " " + DamageType.getDamageEmoji(damageEntry.getKey()) + " ";
+                name += DamageType.toChatColor(damageEntry.getKey()) + formatted + " " + DamageType.toEmoji(damageEntry.getKey()) + " ";
             }
 
         }
