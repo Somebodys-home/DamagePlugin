@@ -2,29 +2,53 @@ package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class DamageHologramGenerator {
-    public static void createDamageHologram(DamagePlugin damagePlugin, LivingEntity damager, LivingEntity damaged, Map<DamageType, Double> damageSplits, boolean critHit) {
+    public static HashMap<TextDisplay, Integer> damageDisplays = new HashMap<>();
+
+    public static void startDamageDisplayTask() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Iterator<Map.Entry<TextDisplay, Integer>> it = damageDisplays.entrySet().iterator();
+
+                while (it.hasNext()) {
+                    Map.Entry<TextDisplay, Integer> entry = it.next();
+                    TextDisplay textDisplay = entry.getKey();
+                    int secondsLeft = entry.getValue() - 1;
+
+                    if (secondsLeft <= 0) {
+                        textDisplay.remove();
+                        damageDisplays.remove(textDisplay);
+                    } else {
+                        damageDisplays.put(textDisplay, secondsLeft);
+                    }
+                }
+            }
+        }.runTaskTimer(DamagePlugin.getInstance(), 0, 1);
+    }
+    public static void createDamageHologram(LivingEntity damager, LivingEntity damaged, Map<DamageType, Double> damageSplits, boolean critHit) {
         Map<DamageType, Double> sortedDamageSplits = damageSplits.entrySet()
                 .stream()
                 .sorted(Map.Entry.<DamageType, Double>comparingByValue().reversed())
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
-                        (e1, e2) -> e1, // merge function (not used)
+                        (e1, e2) -> e1,
                         LinkedHashMap::new // preserve order
                 ));
+
+        // making location
         Vector direction = damaged.getLocation().toVector().subtract(damager.getLocation().toVector());
 
         if (direction.length() > 0) {
@@ -39,15 +63,15 @@ public class DamageHologramGenerator {
         location.setX(location.getX() + xFactor);
         location.setY(location.getY() + yFactor);
         location.setZ(location.getZ() + zFactor);
+        location.setYaw(0);
+        location.setPitch(0);
 
-        ArmorStand hologram = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+        // making name
         String name = "";
 
         for (Map.Entry<DamageType, Double> damageEntry : sortedDamageSplits.entrySet()) {
             double displayValue = Math.round(damageEntry.getValue() * 10.0) / 10.0;
-            String formatted = (displayValue % 1 == 0)
-                    ? String.valueOf((int) displayValue)
-                    : String.valueOf(displayValue);
+            String formatted = displayValue == (int) displayValue ? String.valueOf((int) displayValue) : String.valueOf(displayValue);
 
             if (critHit) {
                 name += DamageType.toChatColor(damageEntry.getKey()) + "§l" + formatted + " " + DamageType.toEmoji(damageEntry.getKey()) + " ";
@@ -57,19 +81,12 @@ public class DamageHologramGenerator {
 
         }
 
-        hologram.setMetadata("hologram", new FixedMetadataValue(damagePlugin, true));
-        hologram.setCustomName(name);
-        hologram.setCustomNameVisible(true);
-        hologram.setVisible(false);
-        hologram.setGravity(false);
-        hologram.setMarker(true); // Removes hitbox.
-        hologram.setInvulnerable(true);
+        String finalName = name;
+        TextDisplay display = location.getWorld().spawn(location, TextDisplay.class, entity -> {
+            entity.setText(finalName);
+            entity.setBillboard(Display.Billboard.VERTICAL);
+        });
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                hologram.remove();
-            }
-        }.runTaskLater(damagePlugin, 40L);
+        damageDisplays.put(display, 40); // 40 tick timer b4 its removed
     }
 }

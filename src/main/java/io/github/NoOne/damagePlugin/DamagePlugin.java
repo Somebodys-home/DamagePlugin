@@ -11,6 +11,7 @@ import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class DamagePlugin extends JavaPlugin {
+    private static DamagePlugin instance;
     private ProfileManager profileManager;
     private MobStatsYMLManager mobStatsYMLManager;
     private NoDamageManager noDamageManager;
@@ -19,15 +20,21 @@ public final class DamagePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         profileManager = JavaPlugin.getPlugin(NMLPlayerStats.class).getProfileManager();
         mobStatsYMLManager = JavaPlugin.getPlugin(NMLMobs.class).getMobStatsYMLManager();
 
         noDamageManager = new NoDamageManager();
         customDamager = new CustomDamager(this);
         damageHelper = new DamageHelper();
+        DamageHologramGenerator.startDamageDisplayTask();
 
         getServer().getPluginManager().registerEvents(new NoDamageListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
+    }
+
+    public static DamagePlugin getInstance() {
+        return instance;
     }
 
     public NoDamageManager getNoDamageManager() {

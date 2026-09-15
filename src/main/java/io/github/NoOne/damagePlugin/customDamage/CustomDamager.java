@@ -131,7 +131,7 @@ public class CustomDamager {
 
         target.damage(totalDamage, attacker);
         target.setNoDamageTicks(noDamageTicks);
-        DamageHologramGenerator.createDamageHologram(damagePlugin, attacker, target, effectiveDamageSplits, critHit);
+        DamageHologramGenerator.createDamageHologram(attacker, target, effectiveDamageSplits, critHit);
     }
 
     private void applyDamageFromMob(LivingEntity target, LivingEntity attacker, MobStats mobStats, Map<DamageType, Double> damageSplits) {
