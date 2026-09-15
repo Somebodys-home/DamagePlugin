@@ -41,8 +41,10 @@ public class DamageListener implements Listener {
 
                 customDamager.doDamage(player, event.getDamager(), event.getDamageSplits(), true, event.getNoDamageTicks());
             }
-        } else {
-            customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), false, event.getNoDamageTicks());
+        } else { // player is damager
+            if (!target.equals(event.getDamager())) {
+                customDamager.doDamage(target, event.getDamager(), event.getDamageSplits(), false, event.getNoDamageTicks());
+            }
         }
     }
 
