@@ -29,7 +29,7 @@ public class DamageHologramGenerator {
 
                     if (secondsLeft <= 0) {
                         textDisplay.remove();
-                        damageDisplays.remove(textDisplay);
+                        it.remove();
                     } else {
                         damageDisplays.put(textDisplay, secondsLeft);
                     }
