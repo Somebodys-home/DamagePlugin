@@ -1,7 +1,7 @@
 package io.github.NoOne.damagePlugin.customDamage;
 
 import io.github.NoOne.damagePlugin.DamagePlugin;
-import io.github.NoOne.nMLItems.ItemStat;
+import io.github.NoOne.nMLItems.enums.ItemStat;
 import io.github.NoOne.nMLMobs.mobstats.MobStats;
 import io.github.NoOne.nMLMobs.mobstats.MobStatsYMLManager;
 import io.github.NoOne.nMLPlayerStats.profileSystem.Profile;
@@ -11,19 +11,21 @@ import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import static io.github.NoOne.nMLItems.ItemStat.*;
+import static io.github.NoOne.nMLItems.enums.ItemStat.*;
+
 
 public class CustomDamager {
-    private DamagePlugin damagePlugin;
     private ProfileManager profileManager;
     private MobStatsYMLManager mobStatsYMLManager;
 
     public CustomDamager(DamagePlugin damagePlugin) {
-        this.damagePlugin = damagePlugin;
         profileManager = damagePlugin.getProfileManager();
         mobStatsYMLManager = damagePlugin.getMobStatsYMLManager();
     }
@@ -81,21 +83,21 @@ public class CustomDamager {
                 double damageReductionPercent = 0;
 
                 if (entry.getKey() != DamageType.PURE) { // apply defense reduction on everything except pure damage
-                    damageReductionPercent += resistedTypes.getOrDefault(DEFENSE, 0) * .005; // .5% : 1
+                    damageReductionPercent += resistedTypes.getOrDefault(DEFENSE, 0) * .5; // .5% : 1
                 }
 
                 switch (entry.getKey()) { // then go into elemental resistances (1% : 1)
-                    case PHYSICAL -> damageReductionPercent += resistedTypes.getOrDefault(PHYSICALRESIST, 0) * .01;
-                    case FIRE -> damageReductionPercent += resistedTypes.getOrDefault(FIRERESIST, 0) * .01;
-                    case COLD -> damageReductionPercent += resistedTypes.getOrDefault(COLDRESIST, 0) * .01;
-                    case EARTH -> damageReductionPercent += resistedTypes.getOrDefault(EARTHRESIST, 0) * .01;
-                    case LIGHTNING -> damageReductionPercent += resistedTypes.getOrDefault(LIGHTNINGRESIST, 0) * .01;
-                    case AIR -> damageReductionPercent += resistedTypes.getOrDefault(AIRRESIST, 0) * .01;
-                    case RADIANT -> damageReductionPercent += resistedTypes.getOrDefault(RADIANTRESIST, 0) * .01;
-                    case NECROTIC -> damageReductionPercent += resistedTypes.getOrDefault(NECROTICRESIST, 0) * .01;
+                    case PHYSICAL -> damageReductionPercent += resistedTypes.getOrDefault(PHYSICALRESIST, 0);
+                    case FIRE -> damageReductionPercent += resistedTypes.getOrDefault(FIRERESIST, 0);
+                    case COLD -> damageReductionPercent += resistedTypes.getOrDefault(COLDRESIST, 0);
+                    case EARTH -> damageReductionPercent += resistedTypes.getOrDefault(EARTHRESIST, 0);
+                    case LIGHTNING -> damageReductionPercent += resistedTypes.getOrDefault(LIGHTNINGRESIST, 0);
+                    case AIR -> damageReductionPercent += resistedTypes.getOrDefault(AIRRESIST, 0);
+                    case RADIANT -> damageReductionPercent += resistedTypes.getOrDefault(RADIANTRESIST, 0);
+                    case NECROTIC -> damageReductionPercent += resistedTypes.getOrDefault(NECROTICRESIST, 0);
                 }
 
-                value = Math.max(0, value * damageReductionPercent);
+                value = Math.max(0, Math.round(value * (1 - damageReductionPercent)));
                 entry.setValue(value);
             }
         }

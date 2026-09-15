@@ -1,6 +1,6 @@
 package io.github.NoOne.damagePlugin.customDamage;
 
-import io.github.NoOne.nMLItems.ItemStat;
+import io.github.NoOne.nMLItems.enums.ItemStat;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
 import org.bukkit.entity.LivingEntity;
 
@@ -9,61 +9,51 @@ import java.util.Map;
 import java.util.Objects;
 
 import static io.github.NoOne.damagePlugin.customDamage.DamageType.*;
-import static io.github.NoOne.nMLItems.ItemStat.*;
+import static io.github.NoOne.nMLItems.enums.ItemStat.*;
 
 public class DamageHelper {
     public static DamageType convertStat2DamageType(ItemStat stat) {
-        DamageType damageType = null;
-
-        switch (stat) {
-            case PHYSICALDAMAGE -> damageType = PHYSICAL;
-            case FIREDAMAGE -> damageType = FIRE;
-            case COLDDAMAGE -> damageType = COLD;
-            case EARTHDAMAGE -> damageType = EARTH;
-            case LIGHTNINGDAMAGE -> damageType = LIGHTNING;
-            case AIRDAMAGE -> damageType = AIR;
-            case RADIANTDAMAGE -> damageType = RADIANT;
-            case NECROTICDAMAGE -> damageType = NECROTIC;
-            case PUREDAMAGE -> damageType = PURE;
-        }
-
-        return damageType;
+        return switch (stat) {
+            case PHYSICALDAMAGE -> PHYSICAL;
+            case FIREDAMAGE -> FIRE;
+            case COLDDAMAGE -> COLD;
+            case EARTHDAMAGE -> EARTH;
+            case LIGHTNINGDAMAGE -> LIGHTNING;
+            case AIRDAMAGE -> AIR;
+            case RADIANTDAMAGE -> RADIANT;
+            case NECROTICDAMAGE -> NECROTIC;
+            case PUREDAMAGE -> PURE;
+            default -> null;
+        };
     }
 
     public static DamageType convertString2DamageType(String stat) {
-        DamageType damageType = null;
-
-        switch (stat) {
-            case "physicaldamage" -> damageType = PHYSICAL;
-            case "firedamage" -> damageType = FIRE;
-            case "colddamage" -> damageType = COLD;
-            case "earthdamage" -> damageType = EARTH;
-            case "lightningdamage" -> damageType = LIGHTNING;
-            case "airdamage" -> damageType = AIR;
-            case "radiantdamage" -> damageType = RADIANT;
-            case "necroticdamage" -> damageType = NECROTIC;
-            case "puredamage" -> damageType = PURE;
-        }
-
-        return damageType;
+        return switch (stat) {
+            case "physicaldamage" -> PHYSICAL;
+            case "firedamage" -> FIRE;
+            case "colddamage" -> COLD;
+            case "earthdamage" -> EARTH;
+            case "lightningdamage" -> LIGHTNING;
+            case "airdamage" -> AIR;
+            case "radiantdamage" -> RADIANT;
+            case "necroticdamage" -> NECROTIC;
+            case "puredamage" -> PURE;
+            default -> null;
+        };
     }
 
     public static ItemStat convertDamageType2Stat(DamageType damageType) {
-        ItemStat itemStat = null;
-
-        switch (damageType) {
-            case PHYSICAL -> itemStat = PHYSICALDAMAGE;
-            case FIRE -> itemStat = FIREDAMAGE;
-            case COLD -> itemStat = COLDDAMAGE;
-            case EARTH -> itemStat = EARTHDAMAGE;
-            case LIGHTNING -> itemStat = LIGHTNINGDAMAGE;
-            case AIR -> itemStat = AIRDAMAGE;
-            case RADIANT -> itemStat = RADIANTDAMAGE;
-            case NECROTIC -> itemStat = NECROTICDAMAGE;
-            case PURE -> itemStat = PUREDAMAGE;
-        }
-
-        return itemStat;
+        return switch (damageType) {
+            case PHYSICAL -> PHYSICALDAMAGE;
+            case FIRE -> FIREDAMAGE;
+            case COLD -> COLDDAMAGE;
+            case EARTH -> EARTHDAMAGE;
+            case LIGHTNING -> LIGHTNINGDAMAGE;
+            case AIR -> AIRDAMAGE;
+            case RADIANT -> RADIANTDAMAGE;
+            case NECROTIC -> NECROTICDAMAGE;
+            case PURE -> PUREDAMAGE;
+        };
     }
 
     public static HashMap<DamageType, Double> convertStatMap2DamageTypes(HashMap<ItemStat, Double> statMap) {

@@ -3,7 +3,6 @@ package io.github.NoOne.damagePlugin.customDamage;
 import io.github.NoOne.damagePlugin.DamagePlugin;
 import io.github.NoOne.nMLPlayerStats.profileSystem.ProfileManager;
 import io.github.NoOne.nMLPlayerStats.statSystem.Stats;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
