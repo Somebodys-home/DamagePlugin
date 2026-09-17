@@ -145,6 +145,7 @@ public class DamageHelper {
     }
 
     public static boolean isMobDamageable(LivingEntity livingEntity) {
-        return !livingEntity.hasMetadata("hologram") && !livingEntity.hasMetadata("garden_crop") && livingEntity.getNoDamageTicks() <= 0;
+        return !livingEntity.hasMetadata("hologram") && !livingEntity.hasMetadata("garden_crop") &&
+                !livingEntity.hasMetadata("invincible") && livingEntity.getNoDamageTicks() <= 0;
     }
 }
